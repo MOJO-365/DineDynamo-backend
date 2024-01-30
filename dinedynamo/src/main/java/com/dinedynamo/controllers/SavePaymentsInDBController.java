@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -48,7 +49,7 @@ public class SavePaymentsInDBController
 
     }
 
-    @PutMapping("dinedynamo/edit-payment")
+    @PutMapping("/dinedynamo/edit-payment")
     ResponseEntity<ApiResponse> editPayment(@RequestBody EditPaymentInDBDTO editPaymentInDBDTO){
 
         String paymentId = editPaymentInDBDTO.getPaymentId();
@@ -74,5 +75,12 @@ public class SavePaymentsInDBController
 
     }
 
+
+    @PostMapping("/dinedynamo/get-all-payments")
+    ResponseEntity<ApiResponse> getAllPayments(){
+        List<SuccessfullPayment> payments = savePaymentsInDBRepository.findAll();
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",payments),HttpStatus.OK);
+    }
 
 }
