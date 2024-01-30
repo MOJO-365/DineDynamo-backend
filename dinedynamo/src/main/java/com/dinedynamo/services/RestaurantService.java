@@ -22,4 +22,17 @@ public class RestaurantService {
         Pageable pageable = PageRequest.of(page, size);
         return restaurantRepository.findAll(pageable);
     }
+
+
+    public boolean validateRestaurantFieldsForSignUp(Restaurant restaurant){
+        if(restaurant.getRestaurantEmail() == null || restaurant.getRestaurantPassword() == null){
+            return false;
+        }
+
+        if(restaurant.getRestaurantName()== null || restaurant.getRestaurantCity() == null || restaurant.getRestaurantLocation() == null){
+            return false;
+        }
+
+        return true;
+    }
 }

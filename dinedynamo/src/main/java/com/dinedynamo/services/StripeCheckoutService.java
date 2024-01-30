@@ -60,8 +60,10 @@ public class StripeCheckoutService
                 .setSuccessUrl(successUrl)
                 .setCancelUrl(cancelUrl)
                 .addAllLineItem(lineItems)
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+//                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+//                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
+
                 .build();
 
         Session session = Session.create(params);
@@ -69,6 +71,7 @@ public class StripeCheckoutService
         PaymentResponse paymentResponse = new PaymentResponse();
         paymentResponse.setSessionId(session.getId());
         paymentResponse.setSuccessUrl(session.getSuccessUrl());
+        paymentResponse.setUrl(session.getUrl());
         System.out.println("Session created");
         return paymentResponse;
     }

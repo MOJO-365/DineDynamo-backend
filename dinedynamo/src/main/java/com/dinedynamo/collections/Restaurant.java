@@ -1,9 +1,14 @@
 package com.dinedynamo.collections;
 
+
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 @Data
@@ -16,10 +21,15 @@ public class Restaurant
 {
     @Id
     String restaurantId;
+
+
     String restaurantName;
     @Indexed(unique = true)
+
     String restaurantEmail;
+
     String restaurantPassword;
+
     String restaurantLocation;
 
     String restaurantCity;
@@ -30,11 +40,11 @@ public class Restaurant
 
     int restaurantppr;
 
+    LocalDateTime startTime;
 
+    LocalDateTime endTime;
 
-
-//   Tables[restId,capacity, qty] - qty: how many tables of this capacity
-
+    String termsAndConditionsForTableReservation;
 
 
 }

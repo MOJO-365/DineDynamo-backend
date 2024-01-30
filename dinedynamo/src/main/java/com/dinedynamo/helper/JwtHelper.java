@@ -16,7 +16,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import com.dinedynamo.collections.Customer;
 import com.dinedynamo.collections.Restaurant;
-import com.dinedynamo.collections.SignInRequestBody;
+import com.dinedynamo.dto.SignInRequestBody;
 import com.dinedynamo.config.UserDetailsServiceImpl;
 import com.dinedynamo.repositories.CustomerRepository;
 import com.dinedynamo.repositories.RestaurantRepository;

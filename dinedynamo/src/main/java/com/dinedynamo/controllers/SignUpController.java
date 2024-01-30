@@ -8,16 +8,25 @@ import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.CustomerRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 
+import com.dinedynamo.services.RestaurantService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 
 @CrossOrigin("*")
+
 public class SignUpController
 {
+
+    @Autowired
+    RestaurantService restaurantService;
 
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -37,9 +46,14 @@ public class SignUpController
     public ResponseEntity<ApiResponse> restaurantSignUp(@RequestBody Restaurant restaurant)
     {
 
-        System.out.println(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()));
+        boolean isRestaurantValid = restaurantService.validateRestaurantFieldsForSignUp(restaurant);
+        if(!isRestaurantValid){
+            System.out.println("REQUEST-BODY RESTAURANT DOES NOT HAVE MANDATORY FIELDS");
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success"),HttpStatus.OK);
 
-        //System.out.println();
+        }
+
+
         if(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null) == null)
         {
 

@@ -13,4 +13,6 @@ public class PaymentResponse
     String sessionId;
 
     String successUrl;
+
+    String url;
 }

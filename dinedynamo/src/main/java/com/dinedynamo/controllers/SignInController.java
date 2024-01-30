@@ -4,6 +4,7 @@ package com.dinedynamo.controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.*;
 import com.dinedynamo.config.UserDetailsServiceImpl;
+import com.dinedynamo.dto.SignInRequestBody;
 import com.dinedynamo.helper.JwtHelper;
 import com.dinedynamo.repositories.CustomerRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;

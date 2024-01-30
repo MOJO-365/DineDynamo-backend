@@ -1,9 +1,8 @@
 package com.dinedynamo.controllers;
 
 
-import com.cloudinary.Api;
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.EditAllTablesRequestBody;
+import com.dinedynamo.dto.EditAllTablesRequestBody;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.Table;
 import com.dinedynamo.repositories.RestaurantRepository;

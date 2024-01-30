@@ -1,8 +1,8 @@
 package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.RefreshJWTRequest;
-import com.dinedynamo.collections.SignInRequestBody;
+import com.dinedynamo.dto.RefreshJWTRequest;
+import com.dinedynamo.dto.SignInRequestBody;
 import com.dinedynamo.config.UserDetailsServiceImpl;
 import com.dinedynamo.helper.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
