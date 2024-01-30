@@ -21,7 +21,5 @@ public class Customer
     @Indexed(unique = true)
     String customerEmail;
     String customerPassword;
-    String customerPhone;
-
 
 }

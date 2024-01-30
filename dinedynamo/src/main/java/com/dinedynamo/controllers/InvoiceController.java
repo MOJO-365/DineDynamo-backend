@@ -6,7 +6,13 @@ import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.InvoiceRepository;
 import com.dinedynamo.repositories.OrderRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -196,6 +204,7 @@ public class InvoiceController {
         }
     }
 
+
     private void addHorizontalLine(Document document) throws DocumentException
     {
         int lineLength = 38;
@@ -203,11 +212,17 @@ public class InvoiceController {
         document.add(new Paragraph(line, FontFactory.getFont(FontFactory.COURIER_BOLD, 12)));
     }
 
+
     private void addOrderDetailsToPDF(Document document, Order order) throws DocumentException
     {
-        Font titleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 16);
+        // Font titleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 16);
         Font subtitleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 14);
         Font normalFont = FontFactory.getFont(FontFactory.COURIER, 13);
+
+        String fontUrl = "src/main/resources/Castellar.ttf";
+        FontFactory.register(fontUrl);
+
+        Font castellar = FontFactory.getFont("Castellar", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16, Font.BOLD, BaseColor.BLACK);
 
         Paragraph dateParagraph = new Paragraph(new Date().toString(), new Font(Font.FontFamily.COURIER, 8));
         dateParagraph.setAlignment(Element.ALIGN_RIGHT);
@@ -221,13 +236,14 @@ public class InvoiceController {
             Restaurant restaurant = optionalRestaurant.get();
             title.add(Chunk.NEWLINE);
 
-            Paragraph restaurantName = new Paragraph(restaurant.getRestaurantName(), new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK));
+            Paragraph restaurantName = new Paragraph(restaurant.getRestaurantName(), castellar);
             restaurantName.setAlignment(Element.ALIGN_CENTER);
             title.add(restaurantName);
 
+
             title.add(Chunk.NEWLINE);
 
-            Paragraph locationParagraph = new Paragraph(restaurant.getRestaurantLocation(), new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK));
+            Paragraph locationParagraph = new Paragraph(restaurant.getRestaurantLocation(), new Font(Font.FontFamily.COURIER, 10, Font.NORMAL, BaseColor.BLACK));
             locationParagraph.setAlignment(Element.ALIGN_LEFT);
             title.add(locationParagraph);
         }
@@ -239,7 +255,7 @@ public class InvoiceController {
 
         title.add(Chunk.NEWLINE);
 
-        Paragraph taxInvoiceParagraph = new Paragraph("TAX INVOICE", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.DARK_GRAY));
+        Paragraph taxInvoiceParagraph = new Paragraph("TAX INVOICE", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK));
         taxInvoiceParagraph.setAlignment(Element.ALIGN_CENTER);
         title.add(taxInvoiceParagraph);
 
@@ -274,39 +290,66 @@ public class InvoiceController {
                     int totalQuantity = aggregatedQuantities.get(itemName);
 
                     document.add(new Paragraph(
-                            String.format("  %-15s", itemName) +
-                                    "\t  " + String.format("%-5s", totalQuantity) +
-                                    "\t  " + String.format("%-5s", "$" + price),
+                            String.format("%-24s", itemName) +
+                                    "\t  " + String.format("%-2s", totalQuantity) +
+                                    "\t  " + String.format("%-5s", "$" + price*totalQuantity),
                             normalFont));
 
-//                    grandTotal += price;
+                    grandTotal += price;
                     displayedItems.add(itemName);
                 }
             }
         }
 
+        Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f","GST:",grandTotal * 0.1),subtitleFont);
+        gstPar.setAlignment(Element.ALIGN_LEFT);
+        gstPar.setIndentationLeft(178);
+        document.add(gstPar);
 
-//        Paragraph gstPar = new Paragraph(String.format(" GST: $%.2f", grandTotal * 0.1), subtitleFont);
-//        gstPar.setAlignment(Element.ALIGN_LEFT);
-//        gstPar.setIndentationLeft(150);
-//        document.add(gstPar);
-//
-//        grandTotal += grandTotal * 0.1;
-//
-//        Paragraph grandTotalPar = new Paragraph(String.format(" Total(inc GST): $%.2f", grandTotal), subtitleFont);
-//        grandTotalPar.setAlignment(Element.ALIGN_LEFT);
-//        grandTotalPar.setIndentationLeft(50);
-//        document.add(grandTotalPar);
-//        addHorizontalLine(document);
+        grandTotal += grandTotal * 0.1;
 
-        document.add(Chunk.NEWLINE);
-        document.add(Chunk.NEWLINE);
+        Paragraph grandTotalPar = new Paragraph(String.format("%-4s $%.2f","Total(inc GST):",grandTotal),subtitleFont);
+        grandTotalPar.setAlignment(Element.ALIGN_LEFT);
+        grandTotalPar.setIndentationLeft(85);
+        document.add(grandTotalPar);
+
+        addHorizontalLine(document);
 
 
+
+
+        String websiteURL = "https://hello.com";
+        addQRCodeToPDF(document, websiteURL);
         Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
         web.setAlignment(Element.ALIGN_CENTER);
-        web.setSpacingBefore(5f);
-        web.setSpacingAfter(5f);
         document.add(web);
+
+
     }
+    private void addQRCodeToPDF(Document document, String content) throws DocumentException {
+        Paragraph qrCodeParagraph = new Paragraph();
+
+        try {
+
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 80, 80);
+
+            BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(qrCodeImage, "png", baos);
+            Image qrCode = Image.getInstance(baos.toByteArray());
+
+            qrCode.setAlignment(Element.ALIGN_CENTER);
+            qrCodeParagraph.add(qrCode);
+
+            document.add(qrCodeParagraph);
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -2,6 +2,7 @@ package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.dto.EditRestaurantDTO;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin("*")
@@ -65,11 +68,24 @@ public class RestaurantController
 
 
     @PutMapping("/dinedynamo/restaurant/editrestaurant")
-    public ResponseEntity<ApiResponse> editRestaurant(@RequestBody Restaurant newRestaurant){
+    public ResponseEntity<ApiResponse> editRestaurant(@RequestBody EditRestaurantDTO editRestaurantDTO){
 
-        restaurantRepository.save(newRestaurant);
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",newRestaurant),HttpStatus.OK);
+        System.out.println("RESTAURANT-ID: "+editRestaurantDTO.getRestaurantId());
+        String restaurantIdFromRequest = editRestaurantDTO.getRestaurantId();
+
+        Restaurant oldRestaurantDetails = restaurantRepository.findById(restaurantIdFromRequest).orElse(null);
+
+        if(oldRestaurantDetails == null){
+            throw new NoSuchElementException("This restaurant does not exist in database");
+        }
+
+        Restaurant newRestaurantDetails = editRestaurantDTO.getRestaurant();
+        newRestaurantDetails.setRestaurantId(restaurantIdFromRequest);
+
+        restaurantRepository.save(newRestaurantDetails);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",newRestaurantDetails),HttpStatus.OK);
 
     }
 
@@ -78,7 +94,12 @@ public class RestaurantController
     public ResponseEntity<Page<Restaurant>> getAllRestaurants(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size) {
+
         Page<Restaurant> restaurants = restaurantService.getAllRestaurants(page, size);
+        restaurants.getTotalPages();
+
+        System.out.println("TOTAL NO OF PAGES: "+restaurants.getTotalPages());
+
         return ResponseEntity.ok(restaurants);
     }
 
