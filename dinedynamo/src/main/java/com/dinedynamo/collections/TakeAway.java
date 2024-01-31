@@ -19,7 +19,7 @@ public class TakeAway {
     @Id
     private String  takeAwayId;
     private String  restaurantId;
-    private String  customerId;
+    private String customerEmail;
     private String  customerName;
     private String  customerPhone;
     private JSONArray OrderList;

@@ -318,7 +318,7 @@ public class InvoiceController {
 
 
 
-        String websiteURL = "https://hello.com";
+        String websiteURL = "https://your-website-url.com"; // Replace with your actual website URL
         addQRCodeToPDF(document, websiteURL);
         Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
         web.setAlignment(Element.ALIGN_CENTER);
@@ -330,24 +330,31 @@ public class InvoiceController {
         Paragraph qrCodeParagraph = new Paragraph();
 
         try {
-
+            // Generate QR Code
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 80, 80);
 
+            // Convert BitMatrix to image
             BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
 
+            // Convert BufferedImage to iText Image
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(qrCodeImage, "png", baos);
             Image qrCode = Image.getInstance(baos.toByteArray());
 
+            // Add QR Code image to the PDF
             qrCode.setAlignment(Element.ALIGN_CENTER);
             qrCodeParagraph.add(qrCode);
 
             document.add(qrCodeParagraph);
         } catch (WriterException e) {
+            // Handle WriterException (log it, print a message, etc.)
             e.printStackTrace();
+            // You may choose to throw a DocumentException or another appropriate exception here
         } catch (IOException e) {
+            // Handle IOException (log it, print a message, etc.)
             e.printStackTrace();
+            // You may choose to throw a DocumentException or another appropriate exception here
         }
     }
 
