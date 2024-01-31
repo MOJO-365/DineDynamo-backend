@@ -53,6 +53,9 @@ public class TableController
     }
 
 
+
+
+
     @PostMapping("/dinedynamo/restaurant/table/addtable")
     public ResponseEntity<ApiResponse> addTable(@RequestBody Table table) throws IOException {
         Restaurant restaurant = restaurantRepository.findById(table.getRestaurantId()).get();
@@ -65,6 +68,7 @@ public class TableController
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",table),HttpStatus.OK);
 
     }
+
 
     @DeleteMapping("/dinedynamo/restaurant/table/deletetable")
     public ResponseEntity<ApiResponse> deleteTable(@RequestBody Table table) throws IOException {
@@ -184,5 +188,18 @@ public class TableController
 
 
     }
+
+    @PostMapping("/dinedynamo/restaurant/table/merge-table")
+    public List<Table> mergeTables(@RequestParam int capacity){
+
+        return tableService.bestMergeTables(capacity);
+
+    }
+
+
+
+
+
+
 
 }

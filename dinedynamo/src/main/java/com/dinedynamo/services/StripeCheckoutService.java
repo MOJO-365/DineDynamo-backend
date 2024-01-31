@@ -5,6 +5,8 @@ import com.dinedynamo.collections.PaymentResponse;
 import com.dinedynamo.collections.Product;
 import com.stripe.exception.StripeException;
 
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.stereotype.Service;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
@@ -60,9 +62,10 @@ public class StripeCheckoutService
                 .setSuccessUrl(successUrl)
                 .setCancelUrl(cancelUrl)
                 .addAllLineItem(lineItems)
-//                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-//                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
+
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.PAYNOW)
 
                 .build();
 
