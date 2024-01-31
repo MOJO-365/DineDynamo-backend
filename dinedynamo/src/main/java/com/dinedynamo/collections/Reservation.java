@@ -30,7 +30,7 @@ public class Reservation {
 
     Date reservationTimeAndDate;
 
-    Date dineInTime;
+    LocalTime dineInTime;
 
     int guestCount;
 

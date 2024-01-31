@@ -63,7 +63,7 @@ public class TableReservationService
 
 
             System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
-            return true;
+            return false;
         }
 
 
@@ -75,20 +75,21 @@ public class TableReservationService
 
 
 
-    public Table isTableAvailable(String restaurantId, int guestCount,Date dineInDate ,Date dineInTime){
+    public Table isTableAvailable(String restaurantId, int guestCount,Date dineInDate ,LocalTime dineInTime){
 
 
         //fetch all the tables of this restaurantId and capacity equal to guestCount.
         List<Table> tables = tableRepository.findByRestaurantIdAndCapacity(restaurantId,guestCount);
 
 
+
         //If table of requested guestCount is not present in DB, apply merge logic
-        if(tables.isEmpty()){
-            // merge logic
-            System.out.println("TABLE WITH THIS CAPACITY IS NOT AVAILABLE BUT RESERVATION IS PROVIDED(Merge logic not applied)");
-            System.out.println("EMPTY TABLE OBJECT WILL BE SAVED FOR THIS RESERVATION");
-            return new Table();
-        }
+//        if(tables.isEmpty()){
+//            // merge logic
+//            System.out.println("TABLE WITH THIS CAPACITY IS NOT AVAILABLE BUT RESERVATION IS PROVIDED(Merge logic not applied)");
+//            System.out.println("EMPTY TABLE OBJECT WILL BE SAVED FOR THIS RESERVATION");
+//            return new Table();
+//        }
 
 
 
@@ -106,12 +107,12 @@ public class TableReservationService
 
         //False will be returned if no merge is possible or no table is available in the restaurant
         //if the requested reservation has the same dineInTime as that of already existing table, reject the reservation request
-        System.out.println("THE TABLES OF THIS CAPACITY ARE ALREADY RESERVED FOR THIS TIME");
+
         return null;
     }
 
 
-    public boolean isRestaurantAvailable(String restaurantId, Date dineInDate, Date dineInTime){
+    public boolean isRestaurantAvailable(String restaurantId, Date dineInDate, LocalTime dineInTime){
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
@@ -119,7 +120,7 @@ public class TableReservationService
 
 
 
-            if(restaurant.getStartTime().isBefore(LocalTime.ofSecondOfDay(dineInTime.getTime())) && restaurant.getEndTime().isAfter(LocalTime.ofSecondOfDay(dineInTime.getTime()))){
+            if(restaurant.getStartTime().isBefore(dineInTime) && restaurant.getEndTime().isAfter(dineInTime)){
 
                 System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
                 return true;
@@ -127,13 +128,13 @@ public class TableReservationService
         }
 
 
-        System.out.println("TIME OR DATE OF RESERVATION IS NOT APPROPRIATE AS PER RESTAURANT START-END TIME");
+        System.out.println("TIME OF RESERVATION IS NOT APPROPRIATE AS PER RESTAURANT START-END TIME");
         return false;
 
     }
 
 
-    public boolean isPresentInReservations(String tableId,Date dineInDate ,Date dineInTime){
+    public boolean isPresentInReservations(String tableId,Date dineInDate ,LocalTime dineInTime){
 
         Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndDineInTime(tableId,dineInDate,dineInTime).orElse(null);
 
