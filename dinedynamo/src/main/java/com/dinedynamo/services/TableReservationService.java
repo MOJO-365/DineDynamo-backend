@@ -69,7 +69,7 @@ public class TableReservationService
 
 
 
-    public Table isTableAvailable(String restaurantId, int guestCount,Date dineInDate ,LocalTime dineInTime){
+    public Table isTableAvailable(String restaurantId, int guestCount,Date dineInDate ,Date dineInTime){
 
 
         //fetch all the tables of this restaurantId and capacity equal to guestCount.
@@ -105,12 +105,12 @@ public class TableReservationService
     }
 
 
-    public boolean isRestaurantAvailable(String restaurantId, Date dineInDate, LocalTime dineInTime){
+    public boolean isRestaurantAvailable(String restaurantId, Date dineInDate, Date dineInTime){
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
         if(dineInDate.getDate() == (new Date().getDate()) ||  dineInDate.after(new Date())){
-            if(restaurant.getStartTime().isBefore(dineInTime) && restaurant.getEndTime().isAfter(dineInTime)){
+            if(restaurant.getStartTime().isBefore(LocalTime.ofSecondOfDay(dineInTime.getTime())) && restaurant.getEndTime().isAfter(LocalTime.ofSecondOfDay(dineInTime.getTime()))){
 
                 System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
                 return true;
@@ -124,7 +124,7 @@ public class TableReservationService
     }
 
 
-    public boolean isPresentInReservations(String tableId,Date dineInDate ,LocalTime dineInTime){
+    public boolean isPresentInReservations(String tableId,Date dineInDate ,Date dineInTime){
 
         Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndDineInTime(tableId,dineInDate,dineInTime).orElse(null);
 
