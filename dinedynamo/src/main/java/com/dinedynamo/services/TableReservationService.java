@@ -51,7 +51,7 @@ public class TableReservationService
         boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
 
         System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
-        Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
+        //Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
 
 
         if(!isRestaurantAvailable){
@@ -59,16 +59,16 @@ public class TableReservationService
             return false;
         }
 
-        if(table == null){
-
-
-            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
-            return false;
-        }
+//        if(table == null){
+//
+//
+//            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
+//            return false;
+//        }
 
 
         reservation.setReservationTimeAndDate(new Date());
-        reservation.setTableId(table.getTableId());
+        //reservation.setTableId(table.getTableId());
         tableReservationRepository.save(reservation);
         return true;
     }
@@ -117,8 +117,9 @@ public class TableReservationService
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
         LocalDate currentDate = LocalDate.now();
-        LocalDateTime localDateTime = LocalDateTime.of(currentDate,restaurant.getStartTime());
-        if(localDateTime.isBefore(dineInDateAndTIme) && localDateTime.isAfter(dineInDateAndTIme)){
+        LocalDateTime localStartDateTime = LocalDateTime.of(currentDate,restaurant.getStartTime());
+        LocalDateTime localEndDateTime = LocalDateTime.of(currentDate,restaurant.getEndTime());
+        if(localStartDateTime.isBefore(dineInDateAndTIme) && localEndDateTime.isAfter(dineInDateAndTIme)){
 
             System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
             return true;
