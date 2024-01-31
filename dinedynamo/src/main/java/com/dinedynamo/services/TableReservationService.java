@@ -9,8 +9,8 @@ import com.dinedynamo.repositories.TableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TableReservationService
                 reservation.getCustomerPhone() == null ||
                 reservation.getGuestCount() == 0 ||
                 reservation.getRestaurantId() == null ||
-                reservation.getDineInTime() == null
+                reservation.getDineInDateAndTime() == null
         ){
             return false;
         }
@@ -48,10 +48,10 @@ public class TableReservationService
      */
     public boolean save(Reservation reservation){
 
-        boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDate(),reservation.getDineInTime());
+        boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
 
         System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
-        Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDate(),reservation.getDineInTime());
+        Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
 
 
         if(!isRestaurantAvailable){
@@ -75,7 +75,7 @@ public class TableReservationService
 
 
 
-    public Table isTableAvailable(String restaurantId, int guestCount,Date dineInDate ,LocalTime dineInTime){
+    public Table isTableAvailable(String restaurantId, int guestCount,LocalDateTime dineInDateAndTIme){
 
 
         //fetch all the tables of this restaurantId and capacity equal to guestCount.
@@ -96,7 +96,7 @@ public class TableReservationService
         //check if this table is present in 'reservations' collection.
         for(Table table: tables){
 
-            boolean isPresentInReservations = isPresentInReservations(table.getTableId(),dineInDate ,dineInTime);
+            boolean isPresentInReservations = isPresentInReservations(table.getTableId(),dineInDateAndTIme);
 
             if(!isPresentInReservations){
 
@@ -112,20 +112,18 @@ public class TableReservationService
     }
 
 
-    public boolean isRestaurantAvailable(String restaurantId, Date dineInDate, LocalTime dineInTime){
+    public boolean isRestaurantAvailable(String restaurantId, LocalDateTime dineInDateAndTIme){
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
-        if(dineInDate.getDate() == (new Date().getDate()) ||  dineInDate.after(new Date())){
+        LocalDate currentDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.of(currentDate,restaurant.getStartTime());
+        if(localDateTime.isBefore(dineInDateAndTIme) && localDateTime.isAfter(dineInDateAndTIme)){
 
-
-
-            if(restaurant.getStartTime().isBefore(dineInTime) && restaurant.getEndTime().isAfter(dineInTime)){
-
-                System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
-                return true;
-            }
+            System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
+            return true;
         }
+
 
 
         System.out.println("TIME OF RESERVATION IS NOT APPROPRIATE AS PER RESTAURANT START-END TIME");
@@ -134,9 +132,9 @@ public class TableReservationService
     }
 
 
-    public boolean isPresentInReservations(String tableId,Date dineInDate ,LocalTime dineInTime){
+    public boolean isPresentInReservations(String tableId,LocalDateTime dineInDateAndTime){
 
-        Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndDineInTime(tableId,dineInDate,dineInTime).orElse(null);
+        Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndTime(tableId,dineInDateAndTime).orElse(null);
 
 
         if(reservation == null){
