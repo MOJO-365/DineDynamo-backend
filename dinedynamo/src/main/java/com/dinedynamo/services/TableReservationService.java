@@ -48,16 +48,16 @@ public class TableReservationService
      */
     public boolean save(Reservation reservation){
 
-        boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
+        //boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
 
-        System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
+        //System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
         //Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
 
 
-        if(!isRestaurantAvailable){
-            System.out.println("RESTAURANT NOT AVAILABLE");
-            return false;
-        }
+//        if(!isRestaurantAvailable){
+//            System.out.println("RESTAURANT NOT AVAILABLE");
+//            return false;
+//        }
 
 //        if(table == null){
 //
