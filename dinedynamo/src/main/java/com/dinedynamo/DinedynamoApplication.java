@@ -18,9 +18,6 @@ public class DinedynamoApplication
 		System.out.println("Hello, this application is up and running");
 
 
-
-
-
 	}
 
 
