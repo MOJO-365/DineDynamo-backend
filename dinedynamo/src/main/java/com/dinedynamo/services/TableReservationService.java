@@ -54,7 +54,13 @@ public class TableReservationService
         Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDate(),reservation.getDineInTime());
 
 
-        if(!isRestaurantAvailable || table == null){
+        if(!isRestaurantAvailable){
+            System.out.println("RESTAURANT NOT AVAILABLE");
+            return false;
+        }
+
+        if(table == null){
+
 
             System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
             return true;
@@ -110,6 +116,9 @@ public class TableReservationService
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
         if(dineInDate.getDate() == (new Date().getDate()) ||  dineInDate.after(new Date())){
+
+
+
             if(restaurant.getStartTime().isBefore(LocalTime.ofSecondOfDay(dineInTime.getTime())) && restaurant.getEndTime().isAfter(LocalTime.ofSecondOfDay(dineInTime.getTime()))){
 
                 System.out.println("TIME IS APT, RESTAURANT AVAILABLE");

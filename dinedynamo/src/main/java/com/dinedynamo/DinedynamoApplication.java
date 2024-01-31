@@ -16,7 +16,7 @@ public class DinedynamoApplication
 		SpringApplication.run(DinedynamoApplication.class, args);
 		System.out.println("Hello, this application is up and running");
 
-		System.out.println(LocalTime.now());
+		System.out.println();
 	}
 
 
