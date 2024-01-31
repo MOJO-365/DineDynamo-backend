@@ -119,8 +119,8 @@ public class TableReservationService
         LocalDate currentDate = LocalDate.now();
 
         LocalDateTime localStartDateTime = LocalDateTime.of(currentDate,restaurant.getStartTime());
-        //LocalDateTime localEndDateTime = LocalDateTime.of(currentDate,restaurant.getEndTime());
-        if(localStartDateTime.isBefore(dineInDateAndTIme)){
+        LocalDateTime localEndDateTime = LocalDateTime.of(dineInDateAndTIme.toLocalDate(),restaurant.getEndTime());
+        if(localStartDateTime.isBefore(dineInDateAndTIme) && localEndDateTime.isAfter(dineInDateAndTIme)){
 
             System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
             return true;
