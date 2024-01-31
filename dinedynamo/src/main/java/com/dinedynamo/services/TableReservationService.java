@@ -48,16 +48,16 @@ public class TableReservationService
      */
     public boolean save(Reservation reservation){
 
-        //boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
+        boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
 
         //System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
         //Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
 
 
-//        if(!isRestaurantAvailable){
-//            System.out.println("RESTAURANT NOT AVAILABLE");
-//            return false;
-//        }
+        if(!isRestaurantAvailable){
+            System.out.println("RESTAURANT NOT AVAILABLE");
+            return false;
+        }
 
 //        if(table == null){
 //
@@ -117,9 +117,10 @@ public class TableReservationService
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
         LocalDate currentDate = LocalDate.now();
+
         LocalDateTime localStartDateTime = LocalDateTime.of(currentDate,restaurant.getStartTime());
-        LocalDateTime localEndDateTime = LocalDateTime.of(currentDate,restaurant.getEndTime());
-        if(localStartDateTime.isBefore(dineInDateAndTIme) && localEndDateTime.isAfter(dineInDateAndTIme)){
+        //LocalDateTime localEndDateTime = LocalDateTime.of(currentDate,restaurant.getEndTime());
+        if(localStartDateTime.isBefore(dineInDateAndTIme)){
 
             System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
             return true;
