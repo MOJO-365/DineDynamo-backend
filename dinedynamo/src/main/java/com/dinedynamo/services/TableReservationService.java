@@ -26,7 +26,7 @@ public class TableReservationService
     TableRepository tableRepository;
 
     boolean validateReservationRequest(Reservation reservation){
-        if(reservation.getReservationTime() == null ||
+        if(reservation.getReservationTimeAndDate() == null ||
                 reservation.getCustomerName() == null ||
                 reservation.getCustomerPhone() == null ||
                 reservation.getGuestCount() == 0 ||
@@ -48,17 +48,20 @@ public class TableReservationService
      */
     public boolean save(Reservation reservation){
 
-        boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInTime());
+        boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDate(),reservation.getDineInTime());
 
-        Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInTime());
+        System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
+        Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDate(),reservation.getDineInTime());
 
 
         if(!isRestaurantAvailable || table == null){
-            return false;
+
+            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
+            return true;
         }
 
 
-        reservation.setReservationTime(new Date());
+        reservation.setReservationTimeAndDate(new Date());
         reservation.setTableId(table.getTableId());
         tableReservationRepository.save(reservation);
         return true;
@@ -66,7 +69,7 @@ public class TableReservationService
 
 
 
-    public Table isTableAvailable(String restaurantId, int guestCount, Date dineInTime){
+    public Table isTableAvailable(String restaurantId, int guestCount,Date dineInDate ,LocalTime dineInTime){
 
 
         //fetch all the tables of this restaurantId and capacity equal to guestCount.
@@ -86,7 +89,7 @@ public class TableReservationService
         //check if this table is present in 'reservations' collection.
         for(Table table: tables){
 
-            boolean isPresentInReservations = isPresentInReservations(table.getTableId(), dineInTime);
+            boolean isPresentInReservations = isPresentInReservations(table.getTableId(),dineInDate ,dineInTime);
 
             if(!isPresentInReservations){
 
@@ -102,28 +105,36 @@ public class TableReservationService
     }
 
 
-    public boolean isRestaurantAvailable(String restaurantId, Date dineInTime){
+    public boolean isRestaurantAvailable(String restaurantId, Date dineInDate, LocalTime dineInTime){
 
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
-        if(restaurant.getStartTime().isAfter(LocalTime.ofSecondOfDay(dineInTime.getSeconds())) || restaurant.getEndTime().isBefore(LocalTime.ofSecondOfDay(dineInTime.getSeconds()))){
-            return false;
+        if(dineInDate.getDate() == (new Date().getDate()) ||  dineInDate.after(new Date())){
+            if(restaurant.getStartTime().isBefore(dineInTime) && restaurant.getEndTime().isAfter(dineInTime)){
+
+                System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
+                return true;
+            }
         }
 
 
-        return true;
+        System.out.println("TIME OR DATE OF RESERVATION IS NOT APPROPRIATE AS PER RESTAURANT START-END TIME");
+        return false;
 
     }
 
 
-    public boolean isPresentInReservations(String tableId, Date dineInTime){
+    public boolean isPresentInReservations(String tableId,Date dineInDate ,LocalTime dineInTime){
 
-        Reservation reservation = tableReservationRepository.findByTableIdAndDineInTime(tableId,dineInTime).orElse(null);
+        Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndDineInTime(tableId,dineInDate,dineInTime).orElse(null);
+
 
         if(reservation == null){
+
             return true;
         }
 
+        System.out.println("TABLE ALREADY RESERVED");
         return false;
 
     }

@@ -35,6 +35,7 @@ public class TableReservationController
 
         boolean isReservationPossible = tableReservationService.save(reservation);
 
+        System.out.println("IS TABLE RESERVED: "+isReservationPossible);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",isReservationPossible),HttpStatus.OK);
 
     }
