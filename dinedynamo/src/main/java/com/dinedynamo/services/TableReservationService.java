@@ -61,8 +61,7 @@ public class TableReservationService
 
         if(table == null){
 
-
-            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
+            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE");
             return false;
         }
 
