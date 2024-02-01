@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -53,7 +56,6 @@ public class TableService
     }
 
 
-
     public Table delete(Table table) throws IOException {
 
         cloudinaryService.deleteImageFromCloudinary(table.getPublicIdOfQRImage());
@@ -61,6 +63,60 @@ public class TableService
         tableRepository.delete(table);
 
         return table;
+    }
+
+
+    public List<Table> bestMergeTables(int requestedCapacity){
+        List<Table> allTables = tableRepository.findAll();
+
+        // Sort tables by remaining capacity in descending order
+        allTables.sort(Comparator.comparingInt(Table::getCapacity).reversed());
+
+        int n = allTables.size();
+        int[][] dp = new int[n + 1][requestedCapacity + 1];
+
+        for (int i = 1; i <= n; i++) {
+            Table currentTable = allTables.get(i - 1);
+            for (int j = 0; j <= requestedCapacity; j++) {
+                if (currentTable.getCapacity() <= j) {
+                    // Include the current table and check the remaining capacity
+                    int includeTable = currentTable.getCapacity() + dp[i - 1][j - currentTable.getCapacity()];
+                    // Exclude the current table
+                    int excludeTable = dp[i - 1][j];
+                    dp[i][j] = Math.max(includeTable, excludeTable);
+                } else {
+                    // If the current table cannot be included, exclude it
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        int remainingCapacity = requestedCapacity;
+        List<Table> bestMergedTables = new ArrayList<>();
+
+        // Reconstruct the best combination
+        for (int i = n; i > 0 && remainingCapacity > 0; i--) {
+            if (dp[i][remainingCapacity] != dp[i - 1][remainingCapacity]) {
+                Table selectedTable = allTables.get(i - 1);
+                bestMergedTables.add(selectedTable);
+                remainingCapacity -= selectedTable.getCapacity();
+            }
+        }
+
+        // You may want to handle cases where the requested capacity cannot be met
+        if (bestMergedTables.isEmpty() || remainingCapacity > 0) {
+            // Handle the case where the requested capacity cannot be met with the available tables
+            // You might want to throw an exception or handle it based on your business rules
+            // For simplicity, we can clear the merged tables in case of failure
+            bestMergedTables = new ArrayList<>();
+        }
+
+        // Reverse the list to get the merged tables in the desired order
+        // (i.e., with the minimum wasted capacity at the end)
+        List<Table> reversedList = new ArrayList<>(bestMergedTables);
+        java.util.Collections.reverse(reversedList);
+        return reversedList;
+
     }
 
 }

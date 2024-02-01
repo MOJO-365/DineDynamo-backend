@@ -1,11 +1,13 @@
 package com.dinedynamo;
 
 
+import com.dinedynamo.repositories.TableRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalTime;
 
 
 @SpringBootApplication

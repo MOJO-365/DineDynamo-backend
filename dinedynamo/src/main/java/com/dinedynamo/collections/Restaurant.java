@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -40,11 +41,12 @@ public class Restaurant
 
     int restaurantppr;
 
-    LocalDateTime startTime;
+    LocalTime startTime;
 
-    LocalDateTime endTime;
+    LocalTime endTime;
 
     String termsAndConditionsForTableReservation;
+
 
 
 }
