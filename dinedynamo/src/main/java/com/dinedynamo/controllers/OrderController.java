@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
 import com.dinedynamo.repositories.CustomerRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
 
 @RestController
 @CrossOrigin("*")
-//@RequestMapping("/orders")
+
 public class OrderController {
 
     @Autowired
@@ -33,6 +34,7 @@ public class OrderController {
     private TableRepository tableRepository;
 
 
+    //for placing order
     @PostMapping("/dinedynamo/restaurant/orders/placeorder")
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody Order order) {
 
@@ -55,7 +57,36 @@ public class OrderController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
     }
 
- //restaurant orders
+
+    //Order prepared status true or false
+    @GetMapping("/dinedynamo/order/prepare")
+    public ResponseEntity<Object> getOrder(@RequestBody Order order) {
+        Optional<Order> existingOrderOptional = orderRepository.findById(order.getOrderId());
+
+        if (existingOrderOptional.isPresent()) {
+            Order existingOrder = existingOrderOptional.get();
+            processOrder(existingOrder);
+
+            return new ResponseEntity<>(existingOrder, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private void processOrder(Order order) {
+        List<Map<String, Object>> orderList = order.getOrderList();
+
+        for (Map<String, Object> orderItem : orderList) {
+            List<Map<String, Object>> items = (List<Map<String, Object>>) orderItem.get("items");
+
+            // this is for Removing prepared items from the list
+            items.removeIf(item -> Boolean.TRUE.equals(item.get("prepared")));
+        }
+    }
+
+
+
+    //get all orders restaurant using restaurantId
     @PostMapping("/dinedynamo/restaurant/orders/getallorders")
     public ResponseEntity<ApiResponse> getAllOrders(@RequestBody Restaurant restaurant){
 
@@ -77,7 +108,7 @@ public class OrderController {
     }
 
 
-
+    //delete order using particular orderId
     @DeleteMapping("/dinedynamo/restaurant/orders")
     public ResponseEntity<ApiResponse> deleteOrder(@RequestBody Order order) {
         Optional<Order> deleteOrder = orderRepository.findById(order.getOrderId());
@@ -90,6 +121,7 @@ public class OrderController {
         }
     }
 
+    //update order using orderId
     @PostMapping("/dinedynamo/restaurant/orders/updateorder")
     public ResponseEntity<ApiResponse> updateOrder( @RequestBody Order order) {
         try {
@@ -106,7 +138,7 @@ public class OrderController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failure", null), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "failure", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
