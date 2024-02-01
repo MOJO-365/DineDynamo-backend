@@ -1,6 +1,7 @@
 package com.dinedynamo.controllers;
 
 
+import com.cloudinary.Api;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Reservation;
 import com.dinedynamo.repositories.TableReservationRepository;
@@ -37,6 +38,22 @@ public class TableReservationController
 
         System.out.println("IS TABLE RESERVED: "+isReservationPossible);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",isReservationPossible),HttpStatus.OK);
+
+    }
+
+    @PostMapping("dinedynamo/customer/unreserve-table")
+    ResponseEntity<ApiResponse> unreserveTable(@RequestBody Reservation reservation){
+        String reservationId = reservation.getReservationId();
+
+        if(reservationId.equals(" ") || reservationId.equals("") || reservationId == null){
+            System.out.println("RESERVATION-ID IS EMPTY OR NULL IN REQUEST");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+
+        }
+
+        tableReservationRepository.delete(reservation);
+        System.out.println("RESERVATION DELETED FROM DB");
+        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",reservation),HttpStatus.OK);
 
     }
 }

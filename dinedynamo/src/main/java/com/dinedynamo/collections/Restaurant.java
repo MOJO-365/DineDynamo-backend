@@ -41,9 +41,9 @@ public class Restaurant
 
     int restaurantppr;
 
-    LocalTime startTime;
+    LocalDateTime startTime;
 
-    LocalTime endTime;
+    LocalDateTime endTime;
 
     String termsAndConditionsForTableReservation;
 

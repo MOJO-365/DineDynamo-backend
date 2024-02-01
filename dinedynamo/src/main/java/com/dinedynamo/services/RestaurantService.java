@@ -2,6 +2,7 @@ package com.dinedynamo.services;
 
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.RestaurantRepository;
+import jakarta.servlet.http.PushBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class RestaurantService {
 
-    private final RestaurantRepository restaurantRepository;
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
     public RestaurantService(RestaurantRepository restaurantRepository) {
@@ -33,6 +35,16 @@ public class RestaurantService {
             return false;
         }
 
+        return true;
+    }
+
+
+    public boolean isRestaurantPresentinDb(String restaurantId){
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        if(restaurant == null){
+            return false;
+        }
         return true;
     }
 }
