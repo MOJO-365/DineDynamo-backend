@@ -54,7 +54,7 @@ public class OrderController {
     //Order prepared status true or false
     @GetMapping("/dinedynamo/order/prepare")
     public ResponseEntity<Object> getOrder(@RequestBody Order order) {
-        Optional<Order> existingOrderOptional = orderRepository.findById(order.getOrderId());
+        Optional<Order> existingOrderOptional = orderRepository.findByTableId(order.getTableId());
 
         if (existingOrderOptional.isPresent()) {
             Order existingOrder = existingOrderOptional.get();

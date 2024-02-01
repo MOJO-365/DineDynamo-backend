@@ -1,6 +1,5 @@
 package com.dinedynamo.controllers;
 
-import com.dinedynamo.collections.Invoice;
 import com.dinedynamo.collections.Order;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.Table;
