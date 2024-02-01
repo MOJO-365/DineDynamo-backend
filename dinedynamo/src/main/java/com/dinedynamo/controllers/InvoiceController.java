@@ -1,6 +1,5 @@
 package com.dinedynamo.controllers;
 
-import com.dinedynamo.collections.Invoice;
 import com.dinedynamo.collections.Order;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.Table;
@@ -49,52 +48,6 @@ public class InvoiceController {
 
 
 
-//    @PostMapping("/dinedynamo/invoice/save")
-//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
-//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
-//
-//        if (existingOrder.isPresent()) {
-//            Order retrievedOrder = existingOrder.get();
-//
-//            try {
-//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
-//
-//                Invoice invoice = new Invoice();
-//                invoice.setTotalPrice(order.getTotalPrice());
-//                invoice.setPdfData(pdfBytes);
-//                invoiceRepository.save(invoice);
-//
-//                HttpHeaders headers = new HttpHeaders();
-//                headers.setContentType(MediaType.APPLICATION_PDF);
-//                headers.setContentDispositionFormData("inline", "invoice.pdf");
-//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-//            } catch (IOException | DocumentException e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
-
-    //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
-//        public ResponseEntity<byte[]> getInvoicePdf(@PathVariable String id) {
-//        Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
-//
-//        if (existingInvoice.isPresent()) {
-//            Invoice invoice = existingInvoice.get();
-//            byte[] pdfData = invoice.getPdfData();
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_PDF);
-//            headers.setContentDispositionFormData("inline", "invoice.pdf");
-//
-//            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 
     @PostMapping("/dinedynamo/invoice/getorder")
     public ResponseEntity<Order> getOrderList(@RequestBody Order order)
@@ -196,71 +149,74 @@ public class InvoiceController {
     }
     private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            // Calculate the required height based on the content
             float contentHeight = calculateContentHeight(order);
 
-            // Create the document with dynamic width and calculated height
             Document document = new Document(new Rectangle(PageSize.A6.getWidth(), contentHeight),10,10,10,10);
 
-            // Create a PdfWriter instance
+
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
-            // Open the document
             document.open();
 
-            // Add order details to PDF
             addOrderDetailsToPDF(document, order);
 
-            // Add QR Code and "Thank you for visiting" line
             String websiteURL = "https://hello.com";
             addQRCodeToPDF(document, websiteURL);
 
-            // Add "Thank you for visiting" line
             Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
             web.setAlignment(Element.ALIGN_CENTER);
             document.add(web);
 
-            // Close the document after adding content
             document.close();
 
-            // Return the raw PDF bytes without trimming
             return outputStream.toByteArray();
         }
     }
 
     private float calculateContentHeight(Order order) {
-        float baseContentHeight = 200; // Adjust this value based on your design
+        float baseContentHeight = 200;
         float orderDetailsHeight = calculateOrderDetailsHeight(order);
         float thankYouHeight = calculateThankYouHeight();
 
-        // Check if orderDetailsHeight exceeds a threshold
-        if (orderDetailsHeight > 500) {
-            // Add additional height (adjust this value based on your needs)
-            orderDetailsHeight += 50;
-            float totalContentHeight = baseContentHeight + orderDetailsHeight + thankYouHeight;
-        } else {
-            // Keep orderDetailsHeight unchanged
-        }
+        float totalContentHeight;
 
-        float totalContentHeight = baseContentHeight + orderDetailsHeight + thankYouHeight;
+        if (orderDetailsHeight > 400) {
+            totalContentHeight = calculateTotalHeightWithIncreasedPageSize(baseContentHeight, orderDetailsHeight, thankYouHeight);
+        } else {
+            totalContentHeight = baseContentHeight + orderDetailsHeight + thankYouHeight;
+        }
 
         return totalContentHeight;
     }
 
+    private float calculateTotalHeightWithIncreasedPageSize(float baseContentHeight, float orderDetailsHeight, float thankYouHeight) {
+
+        int pageSize = 400;
+
+        switch (pageSize) {
+            case 400:
+                return baseContentHeight + orderDetailsHeight + thankYouHeight;
+
+            case 600:
+
+                float additionalHeight = 200;
+                return baseContentHeight + orderDetailsHeight + thankYouHeight + additionalHeight;
+
+            default:
+                return baseContentHeight + orderDetailsHeight + thankYouHeight;
+        }
+    }
+
     private float calculateOrderDetailsHeight(Order order) {
-        // Add your logic to calculate the height of the order details content
-        // For example, iterate through order items and calculate the total height
-        // Replace the following line with your actual logic
-        return 300; // Replace with the calculated order details height
+
+        return 300;
     }
 
     private float calculateThankYouHeight() {
-        // Assuming a fixed height for the "Thank you for visiting" line
-        float thankYouHeight = 20; // Adjust this value based on your design
+        float thankYouHeight = 20;
 
         return thankYouHeight;
     }
-
 
 
 
@@ -414,4 +370,59 @@ public class InvoiceController {
     }
 
 
+
+
+
+
+
+
+
+
+//    @PostMapping("/dinedynamo/invoice/save")
+//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
+//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
+//
+//        if (existingOrder.isPresent()) {
+//            Order retrievedOrder = existingOrder.get();
+//
+//            try {
+//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
+//
+//                Invoice invoice = new Invoice();
+//                invoice.setTotalPrice(order.getTotalPrice());
+//                invoice.setPdfData(pdfBytes);
+//                invoiceRepository.save(invoice);
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_PDF);
+//                headers.setContentDispositionFormData("inline", "invoice.pdf");
+//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+//            } catch (IOException | DocumentException e) {
+//                e.printStackTrace();
+//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+
+
+    //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
+//        public ResponseEntity<byte[]> getInvoicePdf(@PathVariable String id) {
+//        Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
+//
+//        if (existingInvoice.isPresent()) {
+//            Invoice invoice = existingInvoice.get();
+//            byte[] pdfData = invoice.getPdfData();
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_PDF);
+//            headers.setContentDispositionFormData("inline", "invoice.pdf");
+//
+//            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 }
