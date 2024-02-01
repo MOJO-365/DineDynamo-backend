@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.security.SecureRandom;
 import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +25,7 @@ public class Order {
     private String restaurantId;
     private String tableId;
     private Double totalPrice;
+    private String dateTime;
     //private String orderStatus;
     private JSONArray OrderList;
 
