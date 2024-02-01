@@ -102,9 +102,6 @@ public class TableReservationService
 
         }
 
-        //False will be returned if no merge is possible or no table is available in the restaurant
-        //if the requested reservation has the same dineInTime as that of already existing table, reject the reservation request
-
         return null;
     }
 
@@ -138,11 +135,11 @@ public class TableReservationService
 
         if(reservation == null){
 
-            return true;
+            return false;
         }
 
         System.out.println("TABLES ARE ALREADY RESERVED FOR THIS TIME AS GUEST COUNT");
-        return false;
+        return true;
 
     }
 
