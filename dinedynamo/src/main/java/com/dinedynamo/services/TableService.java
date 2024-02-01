@@ -39,7 +39,7 @@ public class TableService
 
         tableRepository.save(table);
 
-
+        table = tableRepository.findById(table.getTableId()).orElse(null);
         //This means the QR code for table has not been generated even for once
         if(table.getPublicIdOfQRImage() == null){
             byte[] qrByteArray = genetateQRCodeService.generateQrCodeImage(table.getTableId(), 450, 450);
@@ -67,6 +67,8 @@ public class TableService
 
 
     public List<Table> bestMergeTables(int requestedCapacity){
+
+        //Here find all tables by restaurantId, not findAll()
         List<Table> allTables = tableRepository.findAll();
 
         // Sort tables by remaining capacity in descending order

@@ -29,7 +29,6 @@ public class Reservation {
 
     Date reservationTimeAndDate;
 
-
     int guestCount;
 
     String tableId;

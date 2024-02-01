@@ -26,8 +26,7 @@ public class TableReservationService
     TableRepository tableRepository;
 
     boolean validateReservationRequest(Reservation reservation){
-        if(reservation.getReservationTimeAndDate() == null ||
-                reservation.getCustomerName() == null ||
+        if(reservation.getCustomerName() == null ||
                 reservation.getCustomerPhone() == null ||
                 reservation.getGuestCount() == 0 ||
                 reservation.getRestaurantId() == null ||
