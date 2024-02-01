@@ -51,7 +51,7 @@ public class TableReservationService
         boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
 
         //System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
-        //Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
+        Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
 
 
         if(!isRestaurantAvailable){
@@ -59,16 +59,16 @@ public class TableReservationService
             return false;
         }
 
-//        if(table == null){
-//
-//
-//            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
-//            return false;
-//        }
+        if(table == null){
+
+
+            System.out.println("TABLE WITH THIS CAPACITY NOT AVAILABLE, BUT RESERVATION WILL BE DONE (After merge logic)");
+            return false;
+        }
 
 
         reservation.setReservationTimeAndDate(new Date());
-        //reservation.setTableId(table.getTableId());
+        reservation.setTableId(table.getTableId());
         tableReservationRepository.save(reservation);
         return true;
     }
@@ -84,12 +84,10 @@ public class TableReservationService
 
 
         //If table of requested guestCount is not present in DB, apply merge logic
-//        if(tables.isEmpty()){
-//            // merge logic
-//            System.out.println("TABLE WITH THIS CAPACITY IS NOT AVAILABLE BUT RESERVATION IS PROVIDED(Merge logic not applied)");
-//            System.out.println("EMPTY TABLE OBJECT WILL BE SAVED FOR THIS RESERVATION");
-//            return new Table();
-//        }
+        if(tables.isEmpty()){
+            // merge logic
+           return null;
+        }
 
 
 
@@ -118,9 +116,9 @@ public class TableReservationService
 
         LocalDate currentDate = LocalDate.now();
 
-        LocalDateTime localStartDateTime = LocalDateTime.of(currentDate,restaurant.getStartTime());
-        LocalDateTime localEndDateTime = LocalDateTime.of(dineInDateAndTIme.toLocalDate(),restaurant.getEndTime());
-        if(localStartDateTime.isBefore(dineInDateAndTIme) && localEndDateTime.isAfter(dineInDateAndTIme)){
+        LocalDateTime localStartDateTimeOfRestaurant = LocalDateTime.of(currentDate,restaurant.getStartTime());
+        LocalDateTime localEndDateTimeOfRestaurant = LocalDateTime.of(dineInDateAndTIme.toLocalDate(),restaurant.getEndTime());
+        if(localStartDateTimeOfRestaurant.isBefore(dineInDateAndTIme) && localEndDateTimeOfRestaurant.isAfter(dineInDateAndTIme)){
 
             System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
             return true;
@@ -144,7 +142,7 @@ public class TableReservationService
             return true;
         }
 
-        System.out.println("TABLE ALREADY RESERVED");
+        System.out.println("TABLES ARE ALREADY RESERVED FOR THIS TIME AS GUEST COUNT");
         return false;
 
     }
