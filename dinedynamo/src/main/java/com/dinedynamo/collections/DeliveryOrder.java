@@ -22,6 +22,7 @@ public class DeliveryOrder {
     private String  customerName;
     private String  customerPhone;
     private String  customerAddress;
+    private String  dateTime;
     private JSONArray OrderList;
 
 

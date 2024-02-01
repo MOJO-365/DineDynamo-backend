@@ -3,17 +3,18 @@ package com.dinedynamo.controllers;
 import com.dinedynamo.collections.Invoice;
 import com.dinedynamo.collections.Order;
 import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.Table;
 import com.dinedynamo.repositories.InvoiceRepository;
 import com.dinedynamo.repositories.OrderRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.repositories.TableRepository;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -42,35 +43,39 @@ public class InvoiceController {
     @Autowired
     InvoiceRepository invoiceRepository;
 
+    @Autowired
+    TableRepository tableRepository;
 
 
-    @PostMapping("/dinedynamo/invoice/save")
-    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
-        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
 
-        if (existingOrder.isPresent()) {
-            Order retrievedOrder = existingOrder.get();
 
-            try {
-                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
-
-                Invoice invoice = new Invoice();
-                invoice.setTotalPrice(order.getTotalPrice());
-                invoice.setPdfData(pdfBytes);
-                invoiceRepository.save(invoice);
-
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("inline", "invoice.pdf");
-                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-            } catch (IOException | DocumentException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PostMapping("/dinedynamo/invoice/save")
+//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
+//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
+//
+//        if (existingOrder.isPresent()) {
+//            Order retrievedOrder = existingOrder.get();
+//
+//            try {
+//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
+//
+//                Invoice invoice = new Invoice();
+//                invoice.setTotalPrice(order.getTotalPrice());
+//                invoice.setPdfData(pdfBytes);
+//                invoiceRepository.save(invoice);
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_PDF);
+//                headers.setContentDispositionFormData("inline", "invoice.pdf");
+//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+//            } catch (IOException | DocumentException e) {
+//                e.printStackTrace();
+//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
 
     //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
@@ -189,20 +194,75 @@ public class InvoiceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    private byte[] generatePDFBytes(Order order) throws IOException, DocumentException
-    {
+    private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            Document document = new Document(PageSize.A6, 10, 10, 10, 10);
-            PdfWriter.getInstance(document, outputStream);
+            // Calculate the required height based on the content
+            float contentHeight = calculateContentHeight(order);
+
+            // Create the document with dynamic width and calculated height
+            Document document = new Document(new Rectangle(PageSize.A6.getWidth(), contentHeight),10,10,10,10);
+
+            // Create a PdfWriter instance
+            PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+
+            // Open the document
             document.open();
 
+            // Add order details to PDF
             addOrderDetailsToPDF(document, order);
 
+            // Add QR Code and "Thank you for visiting" line
+            String websiteURL = "https://hello.com";
+            addQRCodeToPDF(document, websiteURL);
+
+            // Add "Thank you for visiting" line
+            Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            web.setAlignment(Element.ALIGN_CENTER);
+            document.add(web);
+
+            // Close the document after adding content
             document.close();
+
+            // Return the raw PDF bytes without trimming
             return outputStream.toByteArray();
         }
     }
+
+    private float calculateContentHeight(Order order) {
+        float baseContentHeight = 200; // Adjust this value based on your design
+        float orderDetailsHeight = calculateOrderDetailsHeight(order);
+        float thankYouHeight = calculateThankYouHeight();
+
+        // Check if orderDetailsHeight exceeds a threshold
+        if (orderDetailsHeight > 500) {
+            // Add additional height (adjust this value based on your needs)
+            orderDetailsHeight += 50;
+            float totalContentHeight = baseContentHeight + orderDetailsHeight + thankYouHeight;
+        } else {
+            // Keep orderDetailsHeight unchanged
+        }
+
+        float totalContentHeight = baseContentHeight + orderDetailsHeight + thankYouHeight;
+
+        return totalContentHeight;
+    }
+
+    private float calculateOrderDetailsHeight(Order order) {
+        // Add your logic to calculate the height of the order details content
+        // For example, iterate through order items and calculate the total height
+        // Replace the following line with your actual logic
+        return 300; // Replace with the calculated order details height
+    }
+
+    private float calculateThankYouHeight() {
+        // Assuming a fixed height for the "Thank you for visiting" line
+        float thankYouHeight = 20; // Adjust this value based on your design
+
+        return thankYouHeight;
+    }
+
+
+
 
 
     private void addHorizontalLine(Document document) throws DocumentException
@@ -215,11 +275,10 @@ public class InvoiceController {
 
     private void addOrderDetailsToPDF(Document document, Order order) throws DocumentException
     {
-        // Font titleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 16);
         Font subtitleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 14);
         Font normalFont = FontFactory.getFont(FontFactory.COURIER, 13);
 
-        String fontUrl = "src/main/resources/Castellar.ttf";
+        String fontUrl = "dinedynamo/src/main/resources/Castellar.ttf";
         FontFactory.register(fontUrl);
 
         Font castellar = FontFactory.getFont("Castellar", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16, Font.BOLD, BaseColor.BLACK);
@@ -240,18 +299,27 @@ public class InvoiceController {
             restaurantName.setAlignment(Element.ALIGN_CENTER);
             title.add(restaurantName);
 
+            Paragraph abnParagraph = new Paragraph("ABN:7852135457865", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            abnParagraph.setAlignment(Element.ALIGN_CENTER);
+            title.add(abnParagraph);
 
-            title.add(Chunk.NEWLINE);
 
-            Paragraph locationParagraph = new Paragraph(restaurant.getRestaurantLocation(), new Font(Font.FontFamily.COURIER, 10, Font.NORMAL, BaseColor.BLACK));
-            locationParagraph.setAlignment(Element.ALIGN_LEFT);
+            Paragraph locationParagraph = new Paragraph(restaurant.getRestaurantLocation(), new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            locationParagraph.setAlignment(Element.ALIGN_CENTER);
             title.add(locationParagraph);
         }
 
+        Optional<Table> optionalTable = tableRepository.findById(order.getTableId());
 
-//        Paragraph abnParagraph = new Paragraph("ABN:7852135457865", new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK));
-//        abnParagraph.setAlignment(Element.ALIGN_LEFT);
-//        title.add(abnParagraph);
+        if (optionalTable.isPresent()) {
+            Table table = optionalTable.get();
+
+            Paragraph tableNameParagraph = new Paragraph("Table: " + table.getTableName(), new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            tableNameParagraph.setAlignment(Element.ALIGN_LEFT);
+            title.add(tableNameParagraph);
+        }
+
+
 
         title.add(Chunk.NEWLINE);
 
@@ -318,11 +386,6 @@ public class InvoiceController {
 
 
 
-        String websiteURL = "https://your-website-url.com"; // Replace with your actual website URL
-        addQRCodeToPDF(document, websiteURL);
-        Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
-        web.setAlignment(Element.ALIGN_CENTER);
-        document.add(web);
 
 
     }
@@ -330,31 +393,23 @@ public class InvoiceController {
         Paragraph qrCodeParagraph = new Paragraph();
 
         try {
-            // Generate QR Code
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 80, 80);
 
-            // Convert BitMatrix to image
             BufferedImage qrCodeImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
 
-            // Convert BufferedImage to iText Image
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(qrCodeImage, "png", baos);
             Image qrCode = Image.getInstance(baos.toByteArray());
 
-            // Add QR Code image to the PDF
             qrCode.setAlignment(Element.ALIGN_CENTER);
             qrCodeParagraph.add(qrCode);
 
             document.add(qrCodeParagraph);
         } catch (WriterException e) {
-            // Handle WriterException (log it, print a message, etc.)
             e.printStackTrace();
-            // You may choose to throw a DocumentException or another appropriate exception here
         } catch (IOException e) {
-            // Handle IOException (log it, print a message, etc.)
             e.printStackTrace();
-            // You may choose to throw a DocumentException or another appropriate exception here
         }
     }
 
