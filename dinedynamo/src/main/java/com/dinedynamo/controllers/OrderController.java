@@ -40,17 +40,7 @@ public class OrderController {
 
         Order existingOrder = orderRepository.findByTableId(order.getTableId()).orElse(null);
 
-
-
-        if(existingOrder == null){
             orderRepository.save(order);
-        }
-
-        else{
-            order.setOrderId(existingOrder.getOrderId());
-            orderRepository.delete(existingOrder);
-            orderRepository.save(order);
-        }
 
 
 

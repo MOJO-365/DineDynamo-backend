@@ -24,7 +24,6 @@ public class Order {
     private String restaurantId;
     private String tableId;
     private Double totalPrice;
-
     //private String orderStatus;
     private JSONArray OrderList;
 
