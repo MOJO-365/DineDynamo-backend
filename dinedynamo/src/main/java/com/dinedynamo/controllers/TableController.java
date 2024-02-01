@@ -1,6 +1,7 @@
 package com.dinedynamo.controllers;
 
 
+import com.cloudinary.Api;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.dto.EditAllTablesRequestBody;
 import com.dinedynamo.collections.Restaurant;
@@ -114,6 +115,8 @@ public class TableController
                         updatedTable.setTableName(table.getTableName());
                         updatedTable.setIsPositionAbsolute(table.getIsPositionAbsolute());
                         updatedTable.setRestaurantId(existingTable.getRestaurantId());
+                        updatedTable.setTableQRURL(existingTable.getTableQRURL());
+                        updatedTable.setPublicIdOfQRImage(existingTable.getPublicIdOfQRImage());
 
                         tableService.delete(existingTable);
                         tableService.save(updatedTable);
@@ -198,6 +201,32 @@ public class TableController
 
 
 
+    @PostMapping("/dinedynamo/restaurant/table/unoccupy-table")
+    public ResponseEntity<ApiResponse> unoccupyTable(@RequestBody Table table) throws IOException {
+
+        String tableId = table.getTableId();
+
+        if(tableId == null || tableId.equals(" ") || tableId.equals("")){
+            System.out.println("TABLE-ID NOT PRESENT IN REQUEST BODY");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+        }
+
+
+        table = tableRepository.findById(tableId).orElse(null);
+
+        if(table == null){
+            System.out.println("TABLE WITH THIS ID IS NOT PRESENT IN DB");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+
+        }
+
+        table.setStatus("unoccupied");
+        tableService.save(table);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",table),HttpStatus.OK);
+
+
+    }
 
 
 
