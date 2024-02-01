@@ -40,8 +40,11 @@ public class OrderController {
 
         Order existingOrder = orderRepository.findByTableId(order.getTableId()).orElse(null);
 
-            orderRepository.save(order);
 
+
+        if(existingOrder == null){
+            orderRepository.save(order);
+        }
 
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
