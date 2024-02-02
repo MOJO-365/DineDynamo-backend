@@ -55,7 +55,7 @@ public class TakeAwayController {
 
 
 
-    @PostMapping("/dinedynamo/restaurant/delivery/updateorder")
+    @PostMapping("/dinedynamo/restaurant/takeaway/updateorder")
     public ResponseEntity<ApiResponse> updateOrder( @RequestBody TakeAway takeAway) {
         try {
             TakeAway existingOrder = takeAwayRepository.findById(takeAway.getTakeAwayId()).orElse(null);
