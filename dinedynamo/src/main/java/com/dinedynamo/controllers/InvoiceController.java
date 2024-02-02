@@ -13,7 +13,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +49,52 @@ public class InvoiceController {
 
 
 
+//    @PostMapping("/dinedynamo/invoice/save")
+//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
+//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
+//
+//        if (existingOrder.isPresent()) {
+//            Order retrievedOrder = existingOrder.get();
+//
+//            try {
+//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
+//
+//                Invoice invoice = new Invoice();
+//                invoice.setTotalPrice(order.getTotalPrice());
+//                invoice.setPdfData(pdfBytes);
+//                invoiceRepository.save(invoice);
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_PDF);
+//                headers.setContentDispositionFormData("inline", "invoice.pdf");
+//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+//            } catch (IOException | DocumentException e) {
+//                e.printStackTrace();
+//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+
+    //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
+//        public ResponseEntity<byte[]> getInvoicePdf(@PathVariable String id) {
+//        Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
+//
+//        if (existingInvoice.isPresent()) {
+//            Invoice invoice = existingInvoice.get();
+//            byte[] pdfData = invoice.getPdfData();
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_PDF);
+//            headers.setContentDispositionFormData("inline", "invoice.pdf");
+//
+//            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @PostMapping("/dinedynamo/invoice/getorder")
     public ResponseEntity<Order> getOrderList(@RequestBody Order order)
@@ -147,6 +194,7 @@ public class InvoiceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             float contentHeight = calculateContentHeight(order);
@@ -219,8 +267,6 @@ public class InvoiceController {
     }
 
 
-
-
     private void addHorizontalLine(Document document) throws DocumentException
     {
         int lineLength = 38;
@@ -234,7 +280,7 @@ public class InvoiceController {
         Font subtitleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 14);
         Font normalFont = FontFactory.getFont(FontFactory.COURIER, 13);
 
-        String fontUrl = "dinedynamo/src/main/resources/Castellar.ttf";
+        String fontUrl = "src/main/resources/Castellar.ttf";
         FontFactory.register(fontUrl);
 
         Font castellar = FontFactory.getFont("Castellar", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16, Font.BOLD, BaseColor.BLACK);
@@ -343,6 +389,13 @@ public class InvoiceController {
 
 
 
+        String websiteURL = "https://hello.com";
+        addQRCodeToPDF(document, websiteURL);
+        Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+        web.setAlignment(Element.ALIGN_CENTER);
+        document.add(web);
+
+
 
     }
     private void addQRCodeToPDF(Document document, String content) throws DocumentException {
@@ -370,59 +423,4 @@ public class InvoiceController {
     }
 
 
-
-
-
-
-
-
-
-
-//    @PostMapping("/dinedynamo/invoice/save")
-//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
-//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
-//
-//        if (existingOrder.isPresent()) {
-//            Order retrievedOrder = existingOrder.get();
-//
-//            try {
-//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
-//
-//                Invoice invoice = new Invoice();
-//                invoice.setTotalPrice(order.getTotalPrice());
-//                invoice.setPdfData(pdfBytes);
-//                invoiceRepository.save(invoice);
-//
-//                HttpHeaders headers = new HttpHeaders();
-//                headers.setContentType(MediaType.APPLICATION_PDF);
-//                headers.setContentDispositionFormData("inline", "invoice.pdf");
-//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-//            } catch (IOException | DocumentException e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
-
-
-    //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
-//        public ResponseEntity<byte[]> getInvoicePdf(@PathVariable String id) {
-//        Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
-//
-//        if (existingInvoice.isPresent()) {
-//            Invoice invoice = existingInvoice.get();
-//            byte[] pdfData = invoice.getPdfData();
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_PDF);
-//            headers.setContentDispositionFormData("inline", "invoice.pdf");
-//
-//            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
 }

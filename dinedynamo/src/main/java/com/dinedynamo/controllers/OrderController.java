@@ -35,11 +35,13 @@ public class OrderController {
 
 
     //for placing order
+
     @PostMapping("/dinedynamo/restaurant/orders/placeorder")
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody Order order) {
         orderRepository.save(order);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
     }
+
 
     //Order prepared status true or false
     @GetMapping("/dinedynamo/order/prepare")
