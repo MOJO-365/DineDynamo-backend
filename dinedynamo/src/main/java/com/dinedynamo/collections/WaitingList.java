@@ -1,37 +1,33 @@
 package com.dinedynamo.collections;
 
-
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
+
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@Document("reservations")
-public class Reservation {
-
+@Document("waitinglist")
+public class WaitingList
+{
     @Id
-    String reservationId;
+    String waitingId;
 
     String restaurantId;
+
+    int guestCount;
 
     String customerPhone;
 
     String customerName;
 
-    LocalDateTime dineInDateAndTime;
+    LocalDateTime reservationDateAndTime;   //This would be the time when customer requested reservation - saving in DB for setting priority (FCFS)
 
-    Date reservationTimeAndDate;
 
-    int guestCount;
-
-    String tableId;
 
 }
