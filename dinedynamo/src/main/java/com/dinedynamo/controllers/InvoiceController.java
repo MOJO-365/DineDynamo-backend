@@ -55,7 +55,7 @@ public class InvoiceController {
 
             if (!orderListForTable.isEmpty()) {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Retrieved successfully", List.of(consolidatedOrder)), HttpStatus.OK);
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "orders retrieved successfully", List.of(consolidatedOrder)), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
             }
@@ -127,10 +127,13 @@ public class InvoiceController {
             int totalQuantity = entry.getValue();
             double totalPrice = itemNamePrices.get(itemName);
 
+            // Get the price of a single item from the last occurrence in the order list
+            double singleItemPrice = totalPrice / totalQuantity;
+
             Map<String, Object> consolidatedItem = new HashMap<>();
             consolidatedItem.put("name", itemName);
             consolidatedItem.put("qty", totalQuantity);
-            consolidatedItem.put("price", totalPrice);
+            consolidatedItem.put("price", singleItemPrice);
 
             consolidatedOrderList.add(consolidatedItem);
         }
@@ -329,7 +332,7 @@ public class InvoiceController {
             document.add(new Paragraph(
                     String.format("%-23s", itemName) +
                             "\t  " + String.format("%-2s", totalQuantity) +
-                            "\t  " + String.format("%-6s", "$" + price),
+                            "\t  " + String.format("%-6s", "$" + price*totalQuantity),
                     normalFont));
         }
 
