@@ -28,6 +28,8 @@ public class Order {
     private String restaurantId;
     private String tableId;
     private String dateTime;
+    private double grandTotal;
+
     //private String orderStatus;
     private JSONArray OrderList;
 

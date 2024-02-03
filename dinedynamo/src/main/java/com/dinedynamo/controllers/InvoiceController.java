@@ -1,5 +1,6 @@
 package com.dinedynamo.controllers;
 
+import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Order;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.Table;
@@ -13,9 +14,9 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,167 +41,157 @@ public class InvoiceController {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+
     @Autowired
     InvoiceRepository invoiceRepository;
 
     @Autowired
     TableRepository tableRepository;
 
-
-
-
-//    @PostMapping("/dinedynamo/invoice/save")
-//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
-//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
-//
-//        if (existingOrder.isPresent()) {
-//            Order retrievedOrder = existingOrder.get();
-//
-//            try {
-//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
-//
-//                Invoice invoice = new Invoice();
-//                invoice.setTotalPrice(order.getTotalPrice());
-//                invoice.setPdfData(pdfBytes);
-//                invoiceRepository.save(invoice);
-//
-//                HttpHeaders headers = new HttpHeaders();
-//                headers.setContentType(MediaType.APPLICATION_PDF);
-//                headers.setContentDispositionFormData("inline", "invoice.pdf");
-//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-//            } catch (IOException | DocumentException e) {
-//                e.printStackTrace();
-//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
-
-    //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
-//        public ResponseEntity<byte[]> getInvoicePdf(@PathVariable String id) {
-//        Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
-//
-//        if (existingInvoice.isPresent()) {
-//            Invoice invoice = existingInvoice.get();
-//            byte[] pdfData = invoice.getPdfData();
-//
-//            HttpHeaders headers = new HttpHeaders();
-//            headers.setContentType(MediaType.APPLICATION_PDF);
-//            headers.setContentDispositionFormData("inline", "invoice.pdf");
-//
-//            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-
     @PostMapping("/dinedynamo/invoice/getorder")
-    public ResponseEntity<Order> getOrderList(@RequestBody Order order)
-    {
-        Optional<Order> existingOrder=orderRepository.findById(order.getOrderId());
+    public ResponseEntity<ApiResponse> getFinalOrderForTable(@RequestBody Order order) {
+        try {
+            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
 
-        if (existingOrder.isPresent())
-        {
-            Order retrievedOrder=existingOrder.get();
-
-            try
-            {
-                JSONArray modifiedOrderList = modifyOrderList(retrievedOrder.getOrderList());
-
-                Order modifiedOrder = new Order();
-                modifiedOrder.setOrderId(retrievedOrder.getOrderId());
-                modifiedOrder.setRestaurantId(retrievedOrder.getRestaurantId());
-                modifiedOrder.setTableId(retrievedOrder.getTableId());
-                modifiedOrder.setOrderList(modifiedOrderList);
-
-                return new ResponseEntity<>(modifiedOrder, HttpStatus.OK);
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if (!orderListForTable.isEmpty()) {
+                Order consolidatedOrder = consolidateOrders(orderListForTable);
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Retrieved successfully", List.of(consolidatedOrder)), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
             }
-        } else
-        {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private JSONArray modifyOrderList(JSONArray orderList)
-    {
-        Map<String, Integer> itemQuantities = new HashMap<>();
+    @PostMapping("/dinedynamo/invoice/getinvoice")
+    public ResponseEntity<byte[]> generateInvoice(@RequestBody Order order) {
+        try {
+            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
 
-        for (Object orderItem : orderList)
-        {
-            Map<String, Object> orderObject = (Map<String, Object>) orderItem;
-            List<Map<String, Object>> items = (List<Map<String, Object>>) orderObject.get("items");
+            if (!orderListForTable.isEmpty()) {
+                Order consolidatedOrder = consolidateOrders(orderListForTable);
+                byte[] pdfBytes = generatePDFBytes(consolidatedOrder);
 
-            for (Map<String, Object> item : items)
-            {
-                String itemName = (String) item.get("name");
-                int quantity = ((Number) item.get("qty")).intValue();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("inline", "invoice.pdf");
 
-                itemQuantities.put(itemName, itemQuantities.getOrDefault(itemName, 0) + quantity);
+                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+        } catch (IOException | DocumentException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private Order consolidateOrders(List<Order> orderList) {
+        if (orderList.isEmpty()) {
+            return null;
         }
 
-        JSONArray modifiedOrderList = new JSONArray();
+        Order consolidatedOrder = new Order();
 
-        for (Object orderItem : orderList) {
-            Map<String, Object> orderObject = (Map<String, Object>) orderItem;
-            List<Map<String, Object>> items = (List<Map<String, Object>>) orderObject.get("items");
+        // Assuming that the first order in the list contains the necessary information
+        Order firstOrder = orderList.get(0);
+        consolidatedOrder.setOrderId(firstOrder.getOrderId());
+        consolidatedOrder.setDateTime(firstOrder.getDateTime());
+        consolidatedOrder.setTableId(firstOrder.getTableId());
+        consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId()); // Use getRestaurantId if available
+        consolidatedOrder.setOrderList(consolidateOrderLists(orderList));
+        consolidatedOrder.setGrandTotal(calculateGrandTotal(consolidatedOrder.getOrderList()));
 
-            for (Map<String, Object> item : items) {
-                String itemName = (String) item.get("name");
-                double price = ((Number) item.get("price")).doubleValue();
+        return consolidatedOrder;
+    }
 
-                if (itemQuantities.containsKey(itemName)) {
-                    int totalQuantity = itemQuantities.get(itemName);
+    private JSONArray consolidateOrderLists(List<Order> orderList) {
+        JSONArray consolidatedOrderList = new JSONArray();
 
-                    Map<String, Object> modifiedItem = new HashMap<>();
-                    modifiedItem.put("name", itemName);
-                    modifiedItem.put("qty", totalQuantity);
-                    modifiedItem.put("price", price);
+        Map<String, Integer> itemNameQuantities = new HashMap<>();
+        Map<String, Double> itemNamePrices = new HashMap<>();
 
-                    modifiedOrderList.add(modifiedItem);
-                    itemQuantities.remove(itemName);
+        for (Order order : orderList) {
+            JSONArray individualOrderList = order.getOrderList();
+            if (individualOrderList != null) {
+                for (Object orderItem : individualOrderList) {
+                    updateItemQuantitiesAndPrices(itemNameQuantities, itemNamePrices, orderItem);
                 }
             }
         }
 
-        return modifiedOrderList;
+        for (Map.Entry<String, Integer> entry : itemNameQuantities.entrySet()) {
+            String itemName = entry.getKey();
+            int totalQuantity = entry.getValue();
+            double totalPrice = itemNamePrices.get(itemName);
+
+            Map<String, Object> consolidatedItem = new HashMap<>();
+            consolidatedItem.put("name", itemName);
+            consolidatedItem.put("qty", totalQuantity);
+            consolidatedItem.put("price", totalPrice);
+
+            consolidatedOrderList.add(consolidatedItem);
+        }
+
+        return consolidatedOrderList;
     }
 
-    @PostMapping("/dinedynamo/invoice/getinvoice")
-    public ResponseEntity<byte[]> generateInvoice(@RequestBody Order order)
-    {
-        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
+    private void updateItemQuantitiesAndPrices(Map<String, Integer> itemNameQuantities, Map<String, Double> itemNamePrices, Object orderItem) {
+        String itemName;
+        int quantity;
+        double price;
 
-        if (existingOrder.isPresent()) {
-            Order retrievedOrder = existingOrder.get();
-
-            try {
-                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("inline", "invoice.pdf");
-                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
-            } catch (IOException | DocumentException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (orderItem instanceof JSONObject) {
+            itemName = (String) ((JSONObject) orderItem).get("name");
+            quantity = ((Number) ((JSONObject) orderItem).get("qty")).intValue();
+            price = ((Number) ((JSONObject) orderItem).get("price")).doubleValue();
+        } else if (orderItem instanceof LinkedHashMap) {
+            itemName = (String) ((LinkedHashMap<?, ?>) orderItem).get("name");
+            quantity = ((Number) ((LinkedHashMap<?, ?>) orderItem).get("qty")).intValue();
+            price = ((Number) ((LinkedHashMap<?, ?>) orderItem).get("price")).doubleValue();
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return;
         }
+
+        itemNameQuantities.put(itemName, itemNameQuantities.getOrDefault(itemName, 0) + quantity);
+        itemNamePrices.put(itemName, itemNamePrices.getOrDefault(itemName, 0.0) + (price * quantity));
+    }
+
+    private double calculateGrandTotal(JSONArray orderList) {
+        double total = 0.0;
+        for (Object orderItem : orderList) {
+            double price = getPriceFromOrderItem(orderItem);
+            int qty = getQuantityFromOrderItem(orderItem);
+            total += price * qty;
+        }
+        return total;
+    }
+
+    private double getPriceFromOrderItem(Object orderItem) {
+        if (orderItem instanceof JSONObject) {
+            return ((Number) ((JSONObject) orderItem).get("price")).doubleValue();
+        } else if (orderItem instanceof LinkedHashMap) {
+            return ((Number) ((LinkedHashMap<?, ?>) orderItem).get("price")).doubleValue();
+        }
+        return 0.0;
+    }
+
+    private int getQuantityFromOrderItem(Object orderItem) {
+        if (orderItem instanceof JSONObject) {
+            return ((Number) ((JSONObject) orderItem).get("qty")).intValue();
+        } else if (orderItem instanceof LinkedHashMap) {
+            return ((Number) ((LinkedHashMap<?, ?>) orderItem).get("qty")).intValue();
+        }
+        return 0;
     }
 
     private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             float contentHeight = calculateContentHeight(order);
 
-            Document document = new Document(new Rectangle(PageSize.A6.getWidth(), contentHeight),10,10,10,10);
-
+            Document document = new Document(new Rectangle(PageSize.A6.getWidth(), contentHeight), 10, 10, 10, 10);
 
             PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 
@@ -238,7 +229,6 @@ public class InvoiceController {
     }
 
     private float calculateTotalHeightWithIncreasedPageSize(float baseContentHeight, float orderDetailsHeight, float thankYouHeight) {
-
         int pageSize = 400;
 
         switch (pageSize) {
@@ -256,31 +246,19 @@ public class InvoiceController {
     }
 
     private float calculateOrderDetailsHeight(Order order) {
-
         return 300;
     }
 
     private float calculateThankYouHeight() {
         float thankYouHeight = 20;
-
         return thankYouHeight;
     }
 
-
-    private void addHorizontalLine(Document document) throws DocumentException
-    {
-        int lineLength = 38;
-        String line = new String(new char[lineLength]).replace('\0', '-');
-        document.add(new Paragraph(line, FontFactory.getFont(FontFactory.COURIER_BOLD, 12)));
-    }
-
-
-    private void addOrderDetailsToPDF(Document document, Order order) throws DocumentException
-    {
+    private void addOrderDetailsToPDF(Document document, Order order) throws DocumentException {
         Font subtitleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 14);
         Font normalFont = FontFactory.getFont(FontFactory.COURIER, 13);
 
-        String fontUrl = "src/main/resources/Castellar.ttf";
+        String fontUrl = "dinedynamo/src/main/resources/Castellar.ttf";
         FontFactory.register(fontUrl);
 
         Font castellar = FontFactory.getFont("Castellar", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, 16, Font.BOLD, BaseColor.BLACK);
@@ -305,7 +283,6 @@ public class InvoiceController {
             abnParagraph.setAlignment(Element.ALIGN_CENTER);
             title.add(abnParagraph);
 
-
             Paragraph locationParagraph = new Paragraph(restaurant.getRestaurantLocation(), new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
             locationParagraph.setAlignment(Element.ALIGN_CENTER);
             title.add(locationParagraph);
@@ -315,13 +292,10 @@ public class InvoiceController {
 
         if (optionalTable.isPresent()) {
             Table table = optionalTable.get();
-
             Paragraph tableNameParagraph = new Paragraph("Table: " + table.getTableName(), new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
             tableNameParagraph.setAlignment(Element.ALIGN_LEFT);
             title.add(tableNameParagraph);
         }
-
-
 
         title.add(Chunk.NEWLINE);
 
@@ -334,70 +308,46 @@ public class InvoiceController {
 
         double grandTotal = 0;
         List<Map<String, Object>> orderList = order.getOrderList();
-        Map<String, Integer> aggregatedQuantities = new HashMap<>();
+        Map<String, Integer> itemNameToTotalQuantity = new HashMap<>();
+        Map<String, Double> itemNameToPrice = new HashMap<>();
 
-        for (Map<String, Object> orderItem : orderList) {
-            List<Map<String, Object>> items = (List<Map<String, Object>>) orderItem.get("items");
+        for (Map<String, Object> item : orderList) {
+            String itemName = (String) item.get("name");
+            int quantity = ((Number) item.get("qty")).intValue();
+            double price = ((Number) item.get("price")).doubleValue();
 
-            for (Map<String, Object> item : items) {
-                String itemName = (String) item.get("name");
-                int quantity = ((Number) item.get("qty")).intValue();
+            itemNameToTotalQuantity.merge(itemName, quantity, Integer::sum);
+            itemNameToPrice.put(itemName, price);
 
-                aggregatedQuantities.put(itemName, aggregatedQuantities.getOrDefault(itemName, 0) + quantity);
-            }
+            grandTotal += price * quantity;
         }
 
-        Set<String> displayedItems = new HashSet<>();
+        for (String itemName : itemNameToTotalQuantity.keySet()) {
+            int totalQuantity = itemNameToTotalQuantity.get(itemName);
+            double price = itemNameToPrice.get(itemName);
 
-        for (Map<String, Object> orderItem : orderList) {
-            List<Map<String, Object>> items = (List<Map<String, Object>>) orderItem.get("items");
-
-            for (Map<String, Object> item : items) {
-                String itemName = (String) item.get("name");
-                double price = ((Number) item.get("price")).doubleValue();
-
-                if (!displayedItems.contains(itemName)) {
-                    int totalQuantity = aggregatedQuantities.get(itemName);
-
-                    document.add(new Paragraph(
-                            String.format("%-24s", itemName) +
-                                    "\t  " + String.format("%-2s", totalQuantity) +
-                                    "\t  " + String.format("%-5s", "$" + price*totalQuantity),
-                            normalFont));
-
-                    grandTotal += price;
-                    displayedItems.add(itemName);
-                }
-            }
+            document.add(new Paragraph(
+                    String.format("%-23s", itemName) +
+                            "\t  " + String.format("%-2s", totalQuantity) +
+                            "\t  " + String.format("%-6s", "$" + price),
+                    normalFont));
         }
 
-        Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f","GST:",grandTotal * 0.1),subtitleFont);
+        Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f", "GST:", grandTotal * 0.1), subtitleFont);
         gstPar.setAlignment(Element.ALIGN_LEFT);
-        gstPar.setIndentationLeft(178);
+        gstPar.setIndentationLeft(172);
         document.add(gstPar);
 
         grandTotal += grandTotal * 0.1;
 
-        Paragraph grandTotalPar = new Paragraph(String.format("%-4s $%.2f","Total(inc GST):",grandTotal),subtitleFont);
+        Paragraph grandTotalPar = new Paragraph(String.format("%-4s $%.2f", "Total(inc GST):", grandTotal), subtitleFont);
         grandTotalPar.setAlignment(Element.ALIGN_LEFT);
-        grandTotalPar.setIndentationLeft(85);
+        grandTotalPar.setIndentationLeft(80);
         document.add(grandTotalPar);
 
         addHorizontalLine(document);
-
-
-
-
-
-        String websiteURL = "https://hello.com";
-        addQRCodeToPDF(document, websiteURL);
-        Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
-        web.setAlignment(Element.ALIGN_CENTER);
-        document.add(web);
-
-
-
     }
+
     private void addQRCodeToPDF(Document document, String content) throws DocumentException {
         Paragraph qrCodeParagraph = new Paragraph();
 
@@ -422,5 +372,59 @@ public class InvoiceController {
         }
     }
 
+    private void addHorizontalLine(Document document) throws DocumentException {
+        int lineLength = 38;
+        String line = new String(new char[lineLength]).replace('\0', '-');
+        document.add(new Paragraph(line, FontFactory.getFont(FontFactory.COURIER_BOLD, 12)));
+    }
 
+
+
+//    @PostMapping("/dinedynamo/invoice/save")
+//    public ResponseEntity<byte[]> saveInvoice(@RequestBody Order order) {
+//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
+//
+//        if (existingOrder.isPresent()) {
+//            Order retrievedOrder = existingOrder.get();
+//
+//            try {
+//                byte[] pdfBytes = generatePDFBytes(retrievedOrder);
+//
+//                Invoice invoice = new Invoice();
+//                invoice.setTotalPrice(order.getTotalPrice());
+//                invoice.setPdfData(pdfBytes);
+//                invoiceRepository.save(invoice);
+//
+//                HttpHeaders headers = new HttpHeaders();
+//                headers.setContentType(MediaType.APPLICATION_PDF);
+//                headers.setContentDispositionFormData("inline", "invoice.pdf");
+//                return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
+//            } catch (IOException | DocumentException e) {
+//                e.printStackTrace();
+//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+
+
+    //    @PostMapping("/dinedynamo/invoice/getpdf/{id}")
+//        public ResponseEntity<byte[]> getInvoicePdf(@PathVariable String id) {
+//        Optional<Invoice> existingInvoice = invoiceRepository.findById(id);
+//
+//        if (existingInvoice.isPresent()) {
+//            Invoice invoice = existingInvoice.get();
+//            byte[] pdfData = invoice.getPdfData();
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.APPLICATION_PDF);
+//            headers.setContentDispositionFormData("inline", "invoice.pdf");
+//
+//            return new ResponseEntity<>(pdfData, headers, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 }

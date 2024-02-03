@@ -64,8 +64,7 @@ public class StripeCheckoutService
                 .addAllLineItem(lineItems)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
 
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.PAYNOW)
+
 
                 .build();
 
