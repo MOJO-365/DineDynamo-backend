@@ -26,7 +26,8 @@ public class WaitingListService {
         if(waitingList.getCustomerName() == null ||   waitingList.getCustomerName() == ""  ||
                 waitingList.getCustomerPhone() == null || waitingList.getCustomerPhone() == "" ||
                 waitingList.getGuestCount() == 0 ||
-                waitingList.getRestaurantId() == null  || waitingList.getRestaurantId() == ""
+                waitingList.getRestaurantId() == null  || waitingList.getRestaurantId() == ""   ||
+                waitingList.getReservationDateAndTime() == "" || waitingList.getReservationDateAndTime() == null
         ){
             return false;
         }
@@ -38,7 +39,7 @@ public class WaitingListService {
 
 
     public boolean save(WaitingList waitingList){
-        waitingList.setReservationDateAndTime(LocalDateTime.now());
+
 
         String restaurantId = waitingList.getRestaurantId();
 

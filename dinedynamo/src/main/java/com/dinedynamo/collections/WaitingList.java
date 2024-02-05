@@ -26,7 +26,7 @@ public class WaitingList
 
     String customerName;
 
-    LocalDateTime reservationDateAndTime;   //This would be the time when customer requested reservation - saving in DB for setting priority (FCFS)
+    String reservationDateAndTime;   //This would be the time when customer requested reservation - saving in DB for setting priority (FCFS)
 
 
 

@@ -4,6 +4,7 @@ package com.dinedynamo.controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.WaitingList;
+import com.dinedynamo.dto.ReservationOrWaitingResponseBody;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.WaitingListRepository;
 import com.dinedynamo.services.RestaurantService;
@@ -36,14 +37,14 @@ public class WaitingListController {
         boolean isWaitingListRequestValid = waitingListService.isWaitingListRequestValid(waitingList);
 
         if(!isWaitingListRequestValid){
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",new ReservationOrWaitingResponseBody(null,"INVALID_REQUEST")),HttpStatus.OK);
         }
 
 
         boolean isSavedInWaitingList = waitingListService.save(waitingList);
 
         if(!isSavedInWaitingList){
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND,"success",new ReservationOrWaitingResponseBody(waitingList,"WAITING")),HttpStatus.OK);
         }
 
 
@@ -69,7 +70,7 @@ public class WaitingListController {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
         }
 
-        List<WaitingList> waitings = waitingListRepository.findByRestaurantIdOrderByReservationDateAndTime(restaurantId).orElse(new ArrayList<>());
+        List<WaitingList> waitings = waitingListRepository.findByRestaurantId(restaurantId).orElse(new ArrayList<>());
 
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",waitings),HttpStatus.OK);
@@ -84,7 +85,7 @@ public class WaitingListController {
 
         if(waitingListId.equals(" ") || waitingListId.equals("") || waitingListId == null){
             System.out.println("WAITING-LIST-ID NOT FOUND IN REQUEST");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",new ReservationOrWaitingResponseBody(waitingList,"INVALID_REQUEST")),HttpStatus.OK);
 
         }
 
@@ -92,12 +93,12 @@ public class WaitingListController {
 
         if(waitingList == null){
             System.out.println("WAITING-LIST-ID NOT FOUND IN DB");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND,"success",new ReservationOrWaitingResponseBody(waitingList,"INVALID_REQUEST")),HttpStatus.OK);
         }
 
         waitingListRepository.delete(waitingList);
 
-        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",waitingList),HttpStatus.OK);
+        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",new ReservationOrWaitingResponseBody(waitingList,"WAITING_DELETED")),HttpStatus.OK);
 
     }
 

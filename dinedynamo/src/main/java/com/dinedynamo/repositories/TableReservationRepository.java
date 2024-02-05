@@ -20,5 +20,5 @@ public interface TableReservationRepository extends MongoRepository<Reservation,
     Optional<List<Reservation>> findByRestaurantIdAndGuestCount(String restaurantId, int guestCount);
 
     @Query("{tableId: '?0',dineInDateAndTime: ?1}")
-    Optional<Reservation> findByTableIdAndDineInDateAndTime(String tableId,LocalDateTime dineInDateAndTime);
+    Optional<Reservation> findByTableIdAndDineInDateAndTime(String tableId,String dineInDateAndTime);
 }

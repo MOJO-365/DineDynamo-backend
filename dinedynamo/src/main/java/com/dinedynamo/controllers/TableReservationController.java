@@ -4,8 +4,10 @@ package com.dinedynamo.controllers;
 import com.cloudinary.Api;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Reservation;
+import com.dinedynamo.dto.ReservationOrWaitingResponseBody;
 import com.dinedynamo.repositories.TableReservationRepository;
 import com.dinedynamo.services.TableReservationService;
+import com.dinedynamo.services.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,9 @@ public class TableReservationController
     @Autowired
     TableReservationService tableReservationService;
 
+    @Autowired
+    TableService tableService;
+
 
     /**
      *
@@ -34,10 +39,25 @@ public class TableReservationController
     @PostMapping("/dinedynamo/customer/reserve-table")
     ResponseEntity<ApiResponse> reserveTable(@RequestBody Reservation reservation){
 
+        boolean isReservationRequestValid = tableReservationService.validateReservationRequest(reservation);
+
+        if(!isReservationRequestValid){
+
+            throw new RuntimeException("REQUEST DOES NOT CONTAIN REQUIRED FIELDS FOR RESERVATION");
+        }
+
+
         boolean isReservationPossible = tableReservationService.save(reservation);
 
+        if(!isReservationPossible){
+            System.out.println("TABLE NOT RESERVED");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",new ReservationOrWaitingResponseBody("","UNRESERVED")),HttpStatus.OK);
+        }
+
+
         System.out.println("IS TABLE RESERVED: "+isReservationPossible);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",isReservationPossible),HttpStatus.OK);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",new ReservationOrWaitingResponseBody(reservation,"RESERVED")),HttpStatus.OK);
 
     }
 
@@ -51,9 +71,10 @@ public class TableReservationController
 
         }
 
+
         tableReservationRepository.delete(reservation);
         System.out.println("RESERVATION DELETED FROM DB");
-        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",reservation),HttpStatus.OK);
+        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",new ReservationOrWaitingResponseBody(reservation,"UNRESERVED")),HttpStatus.OK);
 
     }
 }

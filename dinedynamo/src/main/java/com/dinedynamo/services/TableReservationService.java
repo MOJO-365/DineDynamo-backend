@@ -25,12 +25,12 @@ public class TableReservationService
     @Autowired
     TableRepository tableRepository;
 
-    boolean validateReservationRequest(Reservation reservation){
+    public boolean validateReservationRequest(Reservation reservation){
         if(reservation.getCustomerName() == null ||
                 reservation.getCustomerPhone() == null ||
                 reservation.getGuestCount() == 0 ||
                 reservation.getRestaurantId() == null ||
-                reservation.getDineInDateAndTime() == null
+                reservation.getDineInDateAndTime() == null || reservation.getReservationTimeAndDate() == null
         ){
             return false;
         }
@@ -47,16 +47,7 @@ public class TableReservationService
      */
     public boolean save(Reservation reservation){
 
-        //boolean isRestaurantAvailable = isRestaurantAvailable(reservation.getRestaurantId(),reservation.getDineInDateAndTime());
-
-        //System.out.println("isRestaurantAvailable: "+isRestaurantAvailable);
         Table table = isTableAvailable(reservation.getRestaurantId(), reservation.getGuestCount(),reservation.getDineInDateAndTime());
-
-
-//        if(!isRestaurantAvailable){
-//            System.out.println("RESTAURANT NOT AVAILABLE");
-//            return false;
-//        }
 
         if(table == null){
 
@@ -65,20 +56,17 @@ public class TableReservationService
         }
 
 
-        reservation.setReservationTimeAndDate(new Date());
         reservation.setTableId(table.getTableId());
         tableReservationRepository.save(reservation);
         return true;
     }
 
 
-
-    public Table isTableAvailable(String restaurantId, int guestCount,LocalDateTime dineInDateAndTIme){
+    public Table isTableAvailable(String restaurantId, int guestCount,String dineInDateAndTIme){
 
 
         //fetch all the tables of this restaurantId and capacity equal to guestCount.
         List<Table> tables = tableRepository.findByRestaurantIdAndCapacity(restaurantId,guestCount);
-
 
 
         //If table of requested guestCount is not present in DB, apply merge logic
@@ -104,27 +92,9 @@ public class TableReservationService
         return null;
     }
 
-//
-//    public boolean isRestaurantAvailable(String restaurantId, LocalDateTime dineInDateAndTIme){
-//
-//        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-//
-//        LocalDate currentDate = LocalDate.now();
-//
-//
-//        LocalDateTime localStartDateTimeOfRestaurant = LocalDateTime.of(currentDate,restaurant.getStartTime());
-//        LocalDateTime localEndDateTimeOfRestaurant = LocalDateTime.of(dineInDateAndTIme.toLocalDate(),restaurant.getEndTime());
-//        if(localStartDateTimeOfRestaurant.isBefore(dineInDateAndTIme) && localEndDateTimeOfRestaurant.isAfter(dineInDateAndTIme)){
-//
-//            System.out.println("TIME IS APT, RESTAURANT AVAILABLE");
-//            return true;
-//        }
-//        System.out.println("TIME OF RESERVATION IS NOT APPROPRIATE AS PER RESTAURANT START-END TIME");
-//        return false;
-//    }
 
 
-    public boolean isPresentInReservations(String tableId,LocalDateTime dineInDateAndTime){
+    public boolean isPresentInReservations(String tableId,String dineInDateAndTime){
 
         Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndTime(tableId,dineInDateAndTime).orElse(null);
 
