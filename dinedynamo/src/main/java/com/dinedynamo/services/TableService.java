@@ -39,7 +39,7 @@ public class TableService
 
         tableRepository.save(table);
 
-        table = tableRepository.findById(table.getTableId()).orElse(null);
+        //table = tableRepository.findById(table.getTableId()).orElse(null);
         //This means the QR code for table has not been generated even for once
         if(table.getPublicIdOfQRImage() == null){
             byte[] qrByteArray = genetateQRCodeService.generateQrCodeImage(table.getTableId(), 450, 450);

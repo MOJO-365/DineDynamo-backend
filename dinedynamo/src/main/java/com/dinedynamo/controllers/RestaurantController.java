@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -36,6 +37,7 @@ public class RestaurantController
     public ResponseEntity<ApiResponse> findRestaurantsByCity(@RequestBody Restaurant restaurant){
 
         String restaurantCity = restaurant.getRestaurantCity();
+
         if(restaurantCity.equals("") || restaurantCity.equals(" ") || restaurantCity == null){
 
             List<Restaurant> listOfAllRestaurants = restaurantRepository.findAll();

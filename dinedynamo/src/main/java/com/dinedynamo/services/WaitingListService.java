@@ -23,10 +23,10 @@ public class WaitingListService {
 
     public boolean isWaitingListRequestValid(WaitingList waitingList){
 
-        if(waitingList.getCustomerName() == null ||
-                waitingList.getCustomerPhone() == null ||
+        if(waitingList.getCustomerName() == null ||   waitingList.getCustomerName() == ""  ||
+                waitingList.getCustomerPhone() == null || waitingList.getCustomerPhone() == "" ||
                 waitingList.getGuestCount() == 0 ||
-                waitingList.getRestaurantId() == null
+                waitingList.getRestaurantId() == null  || waitingList.getRestaurantId() == ""
         ){
             return false;
         }

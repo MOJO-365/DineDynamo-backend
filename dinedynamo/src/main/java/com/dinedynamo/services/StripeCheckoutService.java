@@ -65,7 +65,6 @@ public class StripeCheckoutService
                 .setMode(SessionCreateParams.Mode.PAYMENT)
 
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.PAYNOW)
 
                 .build();
 
@@ -76,8 +75,16 @@ public class StripeCheckoutService
         paymentResponse.setSuccessUrl(session.getSuccessUrl());
         paymentResponse.setUrl(session.getUrl());
         System.out.println("Session created");
+
+
         return paymentResponse;
+
+
+
+
     }
+
+
 
 
     private static List<Product> createStaticProductList() {
