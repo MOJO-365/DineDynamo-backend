@@ -2,6 +2,7 @@ package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.DeliveryOrder;
+import com.dinedynamo.collections.Order;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.TakeAway;
 import com.dinedynamo.repositories.RestaurantRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -57,7 +59,7 @@ public class TakeAwayController {
 
     @PostMapping("/dinedynamo/restaurant/takeaway/updateorder")
     public ResponseEntity<ApiResponse> updateOrder( @RequestBody TakeAway takeAway) {
-        try {
+
             TakeAway existingOrder = takeAwayRepository.findById(takeAway.getTakeAwayId()).orElse(null);
 
             if (existingOrder != null) {
@@ -68,12 +70,23 @@ public class TakeAwayController {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", null), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "failure", null), HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
+
+
+    @DeleteMapping("/dinedynamo/restaurant/takeaway/deleteorder")
+    public ResponseEntity<ApiResponse> deleteOrder(@RequestBody TakeAway takeAway) {
+        Optional<TakeAway> deleteOrder = takeAwayRepository.findById(takeAway.getTakeAwayId());
+
+        if (deleteOrder.isPresent()) {
+            takeAwayRepository.deleteById(takeAway.getTakeAwayId());
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", null), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 
 

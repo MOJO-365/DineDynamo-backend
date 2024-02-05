@@ -95,12 +95,11 @@ public class InvoiceController {
 
         Order consolidatedOrder = new Order();
 
-        // Assuming that the first order in the list contains the necessary information
         Order firstOrder = orderList.get(0);
         consolidatedOrder.setOrderId(firstOrder.getOrderId());
         consolidatedOrder.setDateTime(firstOrder.getDateTime());
         consolidatedOrder.setTableId(firstOrder.getTableId());
-        consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId()); // Use getRestaurantId if available
+        consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId());
         consolidatedOrder.setOrderList(consolidateOrderLists(orderList));
         consolidatedOrder.setGrandTotal(calculateGrandTotal(consolidatedOrder.getOrderList()));
 
@@ -127,7 +126,6 @@ public class InvoiceController {
             int totalQuantity = entry.getValue();
             double totalPrice = itemNamePrices.get(itemName);
 
-            // Get the price of a single item from the last occurrence in the order list
             double singleItemPrice = totalPrice / totalQuantity;
 
             Map<String, Object> consolidatedItem = new HashMap<>();
