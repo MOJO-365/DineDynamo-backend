@@ -52,4 +52,27 @@ public class DeliveryController {
         }
     }
 
+
+
+    @PostMapping("/dinedynamo/restaurant/delivery/updateorder")
+    public ResponseEntity<ApiResponse> updateOrder( @RequestBody DeliveryOrder deliveryOrder) {
+        try {
+            DeliveryOrder existingOrder = deliveryOrderRepository.findById(deliveryOrder.getDeliveryId()).orElse(null);
+
+            if (existingOrder != null) {
+
+                existingOrder.setOrderList(deliveryOrder.getOrderList());
+
+                deliveryOrderRepository.save(existingOrder);
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", null), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "failure", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }

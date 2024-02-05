@@ -1,5 +1,6 @@
 package com.dinedynamo.repositories;
 
+import com.dinedynamo.collections.Order;
 import com.dinedynamo.collections.Table;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

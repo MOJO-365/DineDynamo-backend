@@ -35,11 +35,13 @@ public class OrderController {
 
 
     //for placing order
+
     @PostMapping("/dinedynamo/restaurant/orders/placeorder")
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody Order order) {
         orderRepository.save(order);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
     }
+
 
     //Order prepared status true or false
     @GetMapping("/dinedynamo/order/prepare")
@@ -126,6 +128,25 @@ public class OrderController {
     }
 
 
+//    @PostMapping("/dinedynamo/restaurant/additem/placeorder")
+//    public ResponseEntity<ApiResponse> additem(@RequestBody Order order) {
+//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
+//
+//        if (existingOrder.isPresent()) {
+//            Order savedOrder = existingOrder.get();
+//
+//            //this is for Updating existing order with new item
+//            savedOrder.getOrderList().addAll(order.getOrderList());
+//
+//            orderRepository.save(savedOrder);
+//
+//            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", savedOrder), HttpStatus.OK);
+//        } else {
+//            // order doesn't exist, create a new.
+//            orderRepository.save(order);
+//            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
+//        }
+//    }
 
 
 }
