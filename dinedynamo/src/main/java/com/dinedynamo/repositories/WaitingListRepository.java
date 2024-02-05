@@ -15,4 +15,8 @@ public interface WaitingListRepository extends MongoRepository<WaitingList, Stri
 
     @Query("{ 'restaurantId' : ?0 }")
     Optional<List<WaitingList>> findByRestaurantId(String restaurantId);
+
+
+    @Query("{ 'restaurantId' : ?0, 'customerPhone' : ?1}")
+    Optional<WaitingList> findByRestaurantIdAndCustomerPhone(String restaurantId, String customerPhone);
 }

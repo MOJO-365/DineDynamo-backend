@@ -1,9 +1,9 @@
 package com.dinedynamo.controllers;
 
 
-import com.cloudinary.Api;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Reservation;
+import com.dinedynamo.dto.CheckExistingInReservationOrWaitingRequest;
 import com.dinedynamo.dto.ReservationOrWaitingResponseBody;
 import com.dinedynamo.repositories.TableReservationRepository;
 import com.dinedynamo.services.TableReservationService;
@@ -61,13 +61,13 @@ public class TableReservationController
 
     }
 
-    @PostMapping("dinedynamo/customer/unreserve-table")
+    @PostMapping("/dinedynamo/customer/unreserve-table")
     ResponseEntity<ApiResponse> unreserveTable(@RequestBody Reservation reservation){
         String reservationId = reservation.getReservationId();
 
         if(reservationId.equals(" ") || reservationId.equals("") || reservationId == null){
             System.out.println("RESERVATION-ID IS EMPTY OR NULL IN REQUEST");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",new ReservationOrWaitingResponseBody(null,"INVALID_REQUEST")),HttpStatus.OK);
 
         }
 
@@ -77,4 +77,33 @@ public class TableReservationController
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",new ReservationOrWaitingResponseBody(reservation,"UNRESERVED")),HttpStatus.OK);
 
     }
+
+
+    @PostMapping("/dinedynamo/customer/check-reservation")
+    public ResponseEntity<ApiResponse> isUserAlreadyReserved(@RequestBody CheckExistingInReservationOrWaitingRequest checkExistingInReservationOrWaitingRequest){
+
+
+        if(checkExistingInReservationOrWaitingRequest.getCustomerPhone() == null || checkExistingInReservationOrWaitingRequest.getCustomerPhone().isEmpty()
+            || checkExistingInReservationOrWaitingRequest.getRestaurantId() == null || checkExistingInReservationOrWaitingRequest.getRestaurantId().isEmpty()
+        ){
+            System.out.println("RESTAURANT-ID OR CUSTOMER-PHONE EMPTY IN REQUEST BODY");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
+
+        }
+
+
+        Reservation reservation = tableReservationService.existsInReservationCollection(checkExistingInReservationOrWaitingRequest.getRestaurantId(), checkExistingInReservationOrWaitingRequest.getCustomerPhone());
+
+        if(reservation == null){
+            System.out.println("NO EXISTING RESERVATIONS FOR THIS PHONE-NO.");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+
+        }
+
+        System.out.println("RESERVATION EXISTS ALREADY FOR THIS PHONE-NO.");
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",reservation),HttpStatus.OK);
+
+    }
+
+
 }

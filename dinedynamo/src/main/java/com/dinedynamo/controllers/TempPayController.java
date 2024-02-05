@@ -16,7 +16,6 @@ public class TempPayController {
     @PostMapping("dinedynamo/create-payment-intent")
     public ResponseEntity<ApiResponse> createPaymentIntent() {
 
-
         Stripe.apiKey = "sk_test_51OZ7YrSHVgEh3MIN43YcgXCCwF4tHGLFwAlfrHG7cuC97tVDCWoEeggEBHQWUs8ywW1a91m69XH34DoMCu4ofXbu00XnlHSUX6";
 
         try {

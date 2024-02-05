@@ -57,4 +57,21 @@ public class WaitingListService {
 
 
 
+    public WaitingList existsInWaitingList(String restaurantId, String customerPhone){
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+
+        if(restaurant == null){
+
+            System.out.println("RESTAURANT-ID DOES NOT EXIST IN DB");
+            return null;
+        }
+
+        WaitingList waitingList = waitingListRepository.findByRestaurantIdAndCustomerPhone(restaurantId,customerPhone).orElse(null);
+
+
+        return waitingList;
+
+    }
+
 }
