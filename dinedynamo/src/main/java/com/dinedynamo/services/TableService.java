@@ -42,7 +42,7 @@ public class TableService
         //table = tableRepository.findById(table.getTableId()).orElse(null);
         //This means the QR code for table has not been generated even for once
         if(table.getPublicIdOfQRImage() == null){
-            byte[] qrByteArray = genetateQRCodeService.generateQrCodeImage(table.getTableId(), 450, 450);
+            byte[] qrByteArray = genetateQRCodeService.generateQrCodeImage(table.getTableId(), 200, 200);
 
             Map mapOfImage = cloudinaryService.uploadImageOnCloudinary(qrByteArray);
 

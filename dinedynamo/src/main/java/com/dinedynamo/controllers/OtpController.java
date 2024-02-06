@@ -28,6 +28,7 @@ public class OtpController {
     public OtpResponse sendOtp(@RequestBody OtpRequest otpRequest) {
         return smsService.sendSMS(otpRequest);
     }
+<<<<<<< HEAD
     @PostMapping("dinedynamo/validate-otp")
     public ResponseEntity<ApiResponse> validateOtp(@RequestBody OtpValidationRequest otpValidationRequest) {
         String validateOtp = smsService.validateOtp(otpValidationRequest);
@@ -41,6 +42,13 @@ public class OtpController {
         }
 
         return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
+=======
+
+
+    @PostMapping("/validate-otp")
+    public String validateOtp(@RequestBody OtpValidationRequest otpValidationRequest) {
+        return smsService.validateOtp(otpValidationRequest);
+>>>>>>> 394733a78e4c66b97729e47153a4836779e53c12
     }
 
 

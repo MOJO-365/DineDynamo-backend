@@ -93,7 +93,6 @@ public class TableReservationService
     }
 
 
-
     public boolean isPresentInReservations(String tableId,String dineInDateAndTime){
 
         Reservation reservation = tableReservationRepository.findByTableIdAndDineInDateAndTime(tableId,dineInDateAndTime).orElse(null);
@@ -110,4 +109,21 @@ public class TableReservationService
     }
 
 
+
+    public Reservation existsInReservationCollection(String restaurantId, String customerPhone){
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+
+        if(restaurant == null){
+
+            System.out.println("RESTAURANT-ID NOT IN DB");
+
+            return null;
+        }
+
+        Reservation reservation = tableReservationRepository.findByRestaurantIdAndCustomerPhone(restaurantId,customerPhone).orElse(null);
+
+        return reservation;
+
+    }
 }

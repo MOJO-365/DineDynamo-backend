@@ -4,6 +4,7 @@ package com.dinedynamo.controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.WaitingList;
+import com.dinedynamo.dto.CheckExistingInReservationOrWaitingRequest;
 import com.dinedynamo.dto.ReservationOrWaitingResponseBody;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.WaitingListRepository;
@@ -102,6 +103,35 @@ public class WaitingListController {
 
     }
 
+
+
+    @PostMapping("/dinedynamo/restaurant/waitings/delete-waiting")
+    public ResponseEntity<ApiResponse> isUserAlreadyInWaiting(@RequestBody CheckExistingInReservationOrWaitingRequest checkExistingInReservationOrWaitingRequest){
+
+        if(checkExistingInReservationOrWaitingRequest.getCustomerPhone().isEmpty() || checkExistingInReservationOrWaitingRequest.getRestaurantId().isEmpty()
+        ||  checkExistingInReservationOrWaitingRequest.getRestaurantId() == null || checkExistingInReservationOrWaitingRequest.getCustomerPhone() == null
+
+        ){
+
+            System.out.println("REQUEST DOES NOT CONTAIN PHONE OR RESTAURANT-ID");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
+
+        }
+
+
+        WaitingList waitingList = waitingListService.existsInWaitingList(checkExistingInReservationOrWaitingRequest.getRestaurantId(), checkExistingInReservationOrWaitingRequest.getCustomerPhone());
+
+        if(waitingList == null){
+
+            System.out.println("DOES NOT EXIST IN WAITING LIST");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+
+        }
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",waitingList),HttpStatus.OK);
+
+
+    }
 
 
 }
