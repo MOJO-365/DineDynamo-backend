@@ -40,7 +40,7 @@ public class SmsService {
                     .creator(to, from,
                             otpMessage)
                     .create();
-            otpMap.put(otpRequest.getUsername(), otp);
+            otpMap.put(otpRequest.getPhoneNumber(), otp);
             otpResponseDto = new OtpResponse(OtpStatus.DELIVERED, otpMessage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,17 +50,17 @@ public class SmsService {
     }
 
     public String validateOtp(OtpValidationRequest otpValidationRequest) {
-        Set<String> keys = otpMap.keySet();
-        String username = null;
-        for(String key : keys)
-            username = key;
-        if (otpValidationRequest.getUsername().equals(username)) {
-            otpMap.remove(username,otpValidationRequest.getOtpNumber());
+        String phoneNumber = otpValidationRequest.getPhoneNumber();
+        String otpNumber = otpValidationRequest.getOtpNumber();
+
+        if (otpMap.containsKey(phoneNumber) && otpMap.get(phoneNumber).equals(otpNumber)) {
+            otpMap.remove(phoneNumber);
             return "OTP is valid!";
         } else {
             return "OTP is invalid!";
         }
     }
+
 
     private String generateOTP() {
         return new DecimalFormat("000000")
