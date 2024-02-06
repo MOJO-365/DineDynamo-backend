@@ -1,6 +1,7 @@
 package com.dinedynamo.helper;
 
 import com.stripe.exception.StripeException;
+import com.stripe.model.Address;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSearchResult;
 import com.stripe.param.CustomerCreateParams;
@@ -31,14 +32,25 @@ public class StripeCustomerUtil {
 //
         Customer customer;
 
+//        Address address = new Address();
+//        address.setLine1("123 Main St");
+//        address.setCity("City");
+//        address.setState("ABC");
+//        address.setPostalCode("12345");
+//        address.setCountry("AUSTRALIA");
+
         // If no existing customer was found, create a new record
        // if (result.getData().size() == 0) {
 
             CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
                     .setName(name)
                     .setEmail(email)
-                    .build();
+                    .setAddress(CustomerCreateParams.Address.builder().
+                            setCity("Sydney").setLine1("123 Main St").
+                            setCountry("AUSTRALIA").setPostalCode("12345").
+                            setState("XYZ").build())
 
+                    .build();
             customer = Customer.create(customerCreateParams);
         //} else {
 //            customer = result.getData().get(0);
