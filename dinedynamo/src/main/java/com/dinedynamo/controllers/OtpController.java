@@ -24,6 +24,8 @@ public class OtpController {
     public OtpResponse sendOtp(@RequestBody OtpRequest otpRequest) {
         return smsService.sendSMS(otpRequest);
     }
+
+
     @PostMapping("/validate-otp")
     public String validateOtp(@RequestBody OtpValidationRequest otpValidationRequest) {
         return smsService.validateOtp(otpValidationRequest);
