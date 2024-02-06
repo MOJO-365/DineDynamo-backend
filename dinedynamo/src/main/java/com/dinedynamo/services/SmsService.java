@@ -33,7 +33,7 @@ public class SmsService {
             PhoneNumber to = new PhoneNumber(phoneNumber);
             PhoneNumber from = new PhoneNumber(twilioConfig.getPhoneNumber());
             String otp = generateOTP();
-            String otpMessage = "Dear Customer, Your OTP is " + otp + " for sending SMS through Spring Boot application. Thank You.";
+            String otpMessage = "Dear Customer, Your OTP is " + otp +". Thanks for using our service.";
 
             Message message = Message
                     .creator(to, from, otpMessage)
@@ -59,7 +59,7 @@ public class SmsService {
             Map<String, Long> otpData = otpMap.get(phoneNumber);
             long currentTime = System.currentTimeMillis();
 
-            if (currentTime - otpData.values().iterator().next() <= 30000) { // Check if OTP is still valid
+            if (currentTime - otpData.values().iterator().next() <= 30000) {
                 String newOtp = generateOTP();
                 otpData.clear();
                 otpData.put(newOtp, System.currentTimeMillis());
