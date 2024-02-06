@@ -1,24 +1,26 @@
 package com.dinedynamo.dto;
 
+import com.stripe.model.Customer;
 import com.stripe.model.Product;
+import lombok.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class StripePayRequestDTO
 {
-
-    Product[] items;
+    //Product[] items;
     String customerName;
     String customerEmail;
+    String line1;
+    String city;
+    String country;
+    String postalCode;
+    String state;
+    String description;
+    Long amount;
 
-    public Product[] getItems() {
-        return items;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public String getCustomerEmail() {
-        return customerEmail;
-    }
 
 }

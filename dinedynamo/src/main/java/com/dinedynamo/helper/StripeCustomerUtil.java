@@ -1,5 +1,6 @@
 package com.dinedynamo.helper;
 
+import com.dinedynamo.dto.StripePayRequestDTO;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Address;
 import com.stripe.model.Customer;
@@ -21,7 +22,7 @@ public class StripeCustomerUtil {
         return result.getData().size() > 0 ? result.getData().get(0) : null;
     }
 
-    public static Customer findOrCreateCustomer(String email, String name) throws StripeException {
+    public static Customer findOrCreateCustomer(StripePayRequestDTO stripePayRequestDTO) throws StripeException {
 //        CustomerSearchParams params =
 //                CustomerSearchParams
 //                        .builder()
@@ -43,12 +44,12 @@ public class StripeCustomerUtil {
        // if (result.getData().size() == 0) {
 
             CustomerCreateParams customerCreateParams = CustomerCreateParams.builder()
-                    .setName(name)
-                    .setEmail(email)
+                    .setName(stripePayRequestDTO.getCustomerName())
+                    .setEmail(stripePayRequestDTO.getCustomerEmail())
                     .setAddress(CustomerCreateParams.Address.builder().
-                            setCity("Sydney").setLine1("123 Main St").
-                            setCountry("AUSTRALIA").setPostalCode("12345").
-                            setState("XYZ").build())
+                            setCity(stripePayRequestDTO.getCity()).setLine1(stripePayRequestDTO.getLine1()).
+                            setCountry(stripePayRequestDTO.getCountry()).setPostalCode(stripePayRequestDTO.getPostalCode()).
+                            setState(stripePayRequestDTO.getState()).build())
 
                     .build();
             customer = Customer.create(customerCreateParams);
