@@ -105,7 +105,7 @@ public class WaitingListController {
 
 
 
-    @PostMapping("/dinedynamo/restaurant/waitings/delete-waiting")
+    @PostMapping("/dinedynamo/restaurant/waitings/check-waiting")
     public ResponseEntity<ApiResponse> isUserAlreadyInWaiting(@RequestBody CheckExistingInReservationOrWaitingRequest checkExistingInReservationOrWaitingRequest){
 
         if(checkExistingInReservationOrWaitingRequest.getCustomerPhone().isEmpty() || checkExistingInReservationOrWaitingRequest.getRestaurantId().isEmpty()
