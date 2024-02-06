@@ -43,7 +43,6 @@ public class OtpController {
 
         return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
 
-
     }
 
 }
