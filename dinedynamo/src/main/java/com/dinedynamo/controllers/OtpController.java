@@ -29,6 +29,11 @@ public class OtpController {
         return smsService.sendSMS(otpRequest);
     }
 
+    @PostMapping("dinedynamo/resend-otp")
+    public OtpResponse resend(@RequestBody OtpRequest otpRequest) {
+        return smsService.resendOTP(otpRequest);
+    }
+
     @PostMapping("dinedynamo/validate-otp")
     public ResponseEntity<ApiResponse> validateOtp(@RequestBody OtpValidationRequest otpValidationRequest) {
         String validateOtp = smsService.validateOtp(otpValidationRequest);
@@ -36,9 +41,9 @@ public class OtpController {
         ApiResponse apiResponse;
 
         if ("OTP is valid!".equals(validateOtp)) {
-            apiResponse = new ApiResponse(HttpStatus.OK, "OTP is valid", null);
+            apiResponse = new ApiResponse(HttpStatus.OK, "success", validateOtp);
         } else {
-            apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "OTP is invalid", null);
+            apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "failure", validateOtp);
         }
 
         return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
