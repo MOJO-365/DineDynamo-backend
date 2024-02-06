@@ -21,16 +21,16 @@ public class TempPayController {
 
         Stripe.apiKey = "sk_test_51OZ7YrSHVgEh3MIN43YcgXCCwF4tHGLFwAlfrHG7cuC97tVDCWoEeggEBHQWUs8ywW1a91m69XH34DoMCu4ofXbu00XnlHSUX6";
 
-        Customer customer = StripeCustomerUtil.findOrCreateCustomer(stripePayRequestDTO.getCustomerEmail(), stripePayRequestDTO.getCustomerName());
+        Customer customer = StripeCustomerUtil.findOrCreateCustomer(stripePayRequestDTO);
 
 
         try {
             PaymentIntentCreateParams params =
                     PaymentIntentCreateParams.builder()
-                            .setAmount(1000L)
+                            .setAmount(stripePayRequestDTO.getAmount())
                             .setCurrency("AUD")
                             .setCustomer(customer.getId())
-                            .setDescription("This is my payment")
+                            .setDescription(stripePayRequestDTO.getDescription())
                             .setAutomaticPaymentMethods(
                                     PaymentIntentCreateParams.AutomaticPaymentMethods
                                             .builder()
