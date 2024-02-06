@@ -203,7 +203,7 @@ public class InvoiceController {
             String websiteURL = "https://hello.com";
             addQRCodeToPDF(document, websiteURL);
 
-            Paragraph web = new Paragraph("**Thank you for visiting**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            Paragraph web = new Paragraph("**THANK YOU FOR VISITING**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
             web.setAlignment(Element.ALIGN_CENTER);
             document.add(web);
 
@@ -279,14 +279,21 @@ public class InvoiceController {
             Paragraph restaurantName = new Paragraph(restaurant.getRestaurantName(), castellar);
             restaurantName.setAlignment(Element.ALIGN_CENTER);
             title.add(restaurantName);
+            title.setSpacingAfter(1f);
 
             Paragraph abnParagraph = new Paragraph("ABN:7852135457865", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
             abnParagraph.setAlignment(Element.ALIGN_CENTER);
             title.add(abnParagraph);
+            title.setSpacingAfter(1f);
 
             Paragraph locationParagraph = new Paragraph(restaurant.getRestaurantLocation(), new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
             locationParagraph.setAlignment(Element.ALIGN_CENTER);
             title.add(locationParagraph);
+            title.setSpacingAfter(1f);
+
+            Paragraph resPhone = new Paragraph("PHONE:(08)64606963", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            resPhone.setAlignment(Element.ALIGN_CENTER);
+            title.add(resPhone);
         }
 
         Optional<Table> optionalTable = tableRepository.findById(order.getTableId());
@@ -300,7 +307,7 @@ public class InvoiceController {
 
         title.add(Chunk.NEWLINE);
 
-        Paragraph taxInvoiceParagraph = new Paragraph("TAX INVOICE", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK));
+        Paragraph taxInvoiceParagraph = new Paragraph("T A X   I N V O I C E", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK));
         taxInvoiceParagraph.setAlignment(Element.ALIGN_CENTER);
         title.add(taxInvoiceParagraph);
 
@@ -333,6 +340,7 @@ public class InvoiceController {
                             "\t  " + String.format("%-6s", "$" + price*totalQuantity),
                     normalFont));
         }
+        addHorizontalLine(document);
 
         Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f", "GST:", grandTotal * 0.1), subtitleFont);
         gstPar.setAlignment(Element.ALIGN_LEFT);
@@ -378,6 +386,24 @@ public class InvoiceController {
         String line = new String(new char[lineLength]).replace('\0', '-');
         document.add(new Paragraph(line, FontFactory.getFont(FontFactory.COURIER_BOLD, 12)));
     }
+
+    private void addDoubleHorizontalLines(Document document) throws DocumentException {
+        int lineLength = 38;
+        String line = new String(new char[lineLength]).replace('\0', '-');
+
+        Paragraph firstLine = new Paragraph(line, FontFactory.getFont(FontFactory.COURIER_BOLD, 12));
+        firstLine.setSpacingBefore(0);
+        firstLine.setSpacingAfter(0);
+        firstLine.setLeading(0);
+        document.add(firstLine);
+
+        Paragraph secondLine = new Paragraph(line, FontFactory.getFont(FontFactory.COURIER_BOLD, 12));
+        secondLine.setSpacingBefore(0);
+        secondLine.setSpacingAfter(0);
+        firstLine.setLeading(0);
+        document.add(secondLine);
+    }
+
 
 
 
