@@ -30,6 +30,7 @@ public class TempPayController {
                             .setAmount(1000L)
                             .setCurrency("AUD")
                             .setCustomer(customer.getId())
+                            .setDescription("This is my payment")
                             .setAutomaticPaymentMethods(
                                     PaymentIntentCreateParams.AutomaticPaymentMethods
                                             .builder()
