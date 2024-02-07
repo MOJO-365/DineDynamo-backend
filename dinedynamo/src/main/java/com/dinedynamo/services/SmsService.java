@@ -90,7 +90,7 @@ public class SmsService {
             Map<String, Long> otpData = otpMap.get(phoneNumber);
             long currentTime = System.currentTimeMillis();
 
-            if (otpData.keySet().iterator().next().equals(otpNumber) && currentTime - otpData.values().iterator().next() <= 30000) {
+            if (otpData.keySet().iterator().next().equals(otpNumber) && currentTime - otpData.values().iterator().next() <= 40000) {
                 otpMap.remove(phoneNumber);
                 return "OTP is valid!";
             }
