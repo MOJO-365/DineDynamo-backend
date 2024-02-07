@@ -103,4 +103,18 @@ public class SmsService {
         return new DecimalFormat("000000")
                 .format(new Random().nextInt(999999));
     }
+
+
+    public void sendMessageForMergeCaseReservationRequest(String customerPhone, String messageContent){
+        PhoneNumber to = new PhoneNumber(customerPhone);
+        PhoneNumber from = new PhoneNumber(twilioConfig.getPhoneNumber());
+
+
+
+        Message message = Message
+                .creator(to, from, messageContent)
+                .create();
+
+        System.out.println("MESSAGE SENT TO CUSTOMER");
+    }
 }

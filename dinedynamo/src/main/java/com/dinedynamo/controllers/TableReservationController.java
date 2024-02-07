@@ -2,19 +2,23 @@ package com.dinedynamo.controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.MergeCaseReservationRequest;
 import com.dinedynamo.collections.Reservation;
+import com.dinedynamo.collections.WaitingList;
 import com.dinedynamo.dto.CheckExistingInReservationOrWaitingRequest;
 import com.dinedynamo.dto.ReservationOrWaitingResponseBody;
+import com.dinedynamo.repositories.MergeCaseReservationRequestRepository;
 import com.dinedynamo.repositories.TableReservationRepository;
+import com.dinedynamo.repositories.WaitingListRepository;
 import com.dinedynamo.services.TableReservationService;
 import com.dinedynamo.services.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -30,13 +34,19 @@ public class TableReservationController
     @Autowired
     TableService tableService;
 
+    @Autowired
+    WaitingListRepository waitingListRepository;
+
+    @Autowired
+    MergeCaseReservationRequestRepository mergeCaseReservationRequestRepository;
+
 
     /**
      *
      * @param reservation
      * @return ApiResponse.data will have true if table is reserved else false
      */
-    @PostMapping("/dinedynamo/customer/reserve-table")
+    @PostMapping("/dinedynamo/customer/reservations/reserve-table")
     ResponseEntity<ApiResponse> reserveTable(@RequestBody Reservation reservation){
 
         boolean isReservationRequestValid = tableReservationService.validateReservationRequest(reservation);
@@ -61,7 +71,7 @@ public class TableReservationController
 
     }
 
-    @PostMapping("/dinedynamo/customer/unreserve-table")
+    @PostMapping("/dinedynamo/customer/reservations/unreserve-table")
     ResponseEntity<ApiResponse> unreserveTable(@RequestBody Reservation reservation){
         String reservationId = reservation.getReservationId();
 
@@ -79,7 +89,7 @@ public class TableReservationController
     }
 
 
-    @PostMapping("/dinedynamo/customer/check-reservation")
+    @PostMapping("/dinedynamo/customer/reservations/check-reservation")
     public ResponseEntity<ApiResponse> isUserAlreadyReserved(@RequestBody CheckExistingInReservationOrWaitingRequest checkExistingInReservationOrWaitingRequest){
 
 
@@ -105,5 +115,39 @@ public class TableReservationController
 
     }
 
+
+    /**
+     *
+     * @param customerPhone
+     * @return list of Reservation, WaitingList MergeCaseReservationRequest objects
+     * Use: when customer wants to see all his/her pre existing requests of reservation
+     */
+    @PostMapping("/dinedynamo/customer/reservations/check-all-reservations")
+    ResponseEntity<ApiResponse> getAllPendingOrConfirmedReservations(@RequestParam String customerPhone){
+
+        if(customerPhone.equals("") || customerPhone.equals(" ") || customerPhone == null){
+            System.out.println("EMPTY OR NULL PHONE NUMBER IN REQUEST");
+            throw new RuntimeException("Invalid phone number");
+
+        }
+
+        List<Object> listOfAllPendingOrConfirmReservations = new ArrayList<>();
+
+        List<Reservation> reservations = tableReservationRepository.findByCustomerPhone(customerPhone).orElse(new ArrayList<>());
+
+        List<WaitingList> waitings = waitingListRepository.findByCustomerPhone(customerPhone).orElse(new ArrayList<>());
+
+        List<MergeCaseReservationRequest> mergeCaseReservationRequests = mergeCaseReservationRequestRepository.findByCustomerPhone(customerPhone).orElse(new ArrayList<>());
+
+
+        listOfAllPendingOrConfirmReservations.add(reservations);
+        listOfAllPendingOrConfirmReservations.add(waitings);
+        listOfAllPendingOrConfirmReservations.add(mergeCaseReservationRequests);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",listOfAllPendingOrConfirmReservations),HttpStatus.OK);
+
+
+
+    }
 
 }

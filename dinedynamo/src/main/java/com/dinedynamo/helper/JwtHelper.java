@@ -108,7 +108,7 @@ public class JwtHelper
             }
 
             claims.put("userEmail", signInRequestBody.getUserEmail());
-            claims.put("restaurantOrCustomerId",restaurant.getRestaurantId());
+            claims.put("restaurantId",restaurant.getRestaurantId());
             claims.put("userRole","RESTAURANT");
 
         }

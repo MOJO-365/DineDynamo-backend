@@ -1,7 +1,7 @@
 package com.dinedynamo.services;
 
 
-import com.dinedynamo.collections.SuccessfullPayment;
+import com.dinedynamo.collections.SuccessfulPayment;
 import com.dinedynamo.repositories.SavePaymentsInDBRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ public class SavePaymentsInDBService
     @Autowired
     SavePaymentsInDBRepository savePaymentsInDBRepository;
 
-    public SuccessfullPayment save(SuccessfullPayment successfullPayment){
+    public SuccessfulPayment save(SuccessfulPayment successfulPayment){
 
-        successfullPayment.setDateOfPayment(new Date());
+        successfulPayment.setDateOfPayment(new Date());
 
-        savePaymentsInDBRepository.save(successfullPayment);
+        savePaymentsInDBRepository.save(successfulPayment);
 
-        return successfullPayment;
+        return successfulPayment;
     }
 }

@@ -1,6 +1,6 @@
 package com.dinedynamo.dto;
 
-import com.dinedynamo.collections.SuccessfullPayment;
+import com.dinedynamo.collections.SuccessfulPayment;
 import lombok.*;
 
 @Data
@@ -12,5 +12,5 @@ public class EditPaymentInDBDTO
 {
     String paymentId;
 
-    SuccessfullPayment successfullPayment;
+    SuccessfulPayment successfulPayment;
 }

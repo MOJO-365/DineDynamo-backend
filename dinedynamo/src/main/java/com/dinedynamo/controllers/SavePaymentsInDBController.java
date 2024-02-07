@@ -2,17 +2,17 @@ package com.dinedynamo.controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.SuccessfullPayment;
+import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.SuccessfulPayment;
 import com.dinedynamo.dto.EditPaymentInDBDTO;
 import com.dinedynamo.repositories.SavePaymentsInDBRepository;
 import com.dinedynamo.services.SavePaymentsInDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -32,24 +32,24 @@ public class SavePaymentsInDBController
     @Autowired
     SavePaymentsInDBRepository savePaymentsInDBRepository;
 
-    @PostMapping("/dinedynamo/save-payment")
-    ResponseEntity<ApiResponse> savePaymentDataInDB(@RequestBody SuccessfullPayment successfullPayment){
-        successfullPayment = savePaymentsInDBService.save(successfullPayment);
+    @PostMapping("/dinedynamo/restaurant/payments/save-payment")
+    ResponseEntity<ApiResponse> savePaymentDataInDB(@RequestBody SuccessfulPayment successfulPayment){
+        successfulPayment = savePaymentsInDBService.save(successfulPayment);
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",successfullPayment), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success", successfulPayment), HttpStatus.OK);
     }
 
-    @DeleteMapping("/dinedynamo/delete-payment")
-    ResponseEntity<ApiResponse> deletePayment(@RequestBody SuccessfullPayment successfullPayment){
-        String paymentId = successfullPayment.getPaymentId();
+    @DeleteMapping("/dinedynamo/restaurant/payments/delete-payment")
+    ResponseEntity<ApiResponse> deletePayment(@RequestBody SuccessfulPayment successfulPayment){
+        String paymentId = successfulPayment.getPaymentId();
         //If paymentId is null (not passed from the frontend), exception will be thrown
-        savePaymentsInDBRepository.delete(successfullPayment);
+        savePaymentsInDBRepository.delete(successfulPayment);
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",successfullPayment), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success", successfulPayment), HttpStatus.OK);
 
     }
 
-    @PutMapping("/dinedynamo/edit-payment")
+    @PutMapping("/dinedynamo/restaurant/payments/edit-payment")
     ResponseEntity<ApiResponse> editPayment(@RequestBody EditPaymentInDBDTO editPaymentInDBDTO){
 
         String paymentId = editPaymentInDBDTO.getPaymentId();
@@ -58,29 +58,33 @@ public class SavePaymentsInDBController
             System.out.println("PAYMENT ID SHOULD BE PASSED IN REQUEST FOR EDIT PAYMENT");
             throw new RuntimeException("PaymentId not the request body");
         }
-        SuccessfullPayment successfullPayment = savePaymentsInDBRepository.findById(paymentId).orElse(null);
+        SuccessfulPayment successfulPayment = savePaymentsInDBRepository.findById(paymentId).orElse(null);
 
-        if(successfullPayment == null){
+        if(successfulPayment == null){
             System.out.println("RECORD WITH SUCH PAYMENT-ID DOES NOT EXIST IN DB");
             throw new NoSuchElementException("Record with paymentId not found in db");
         }
-        SuccessfullPayment updatedSuccessfullPayment = editPaymentInDBDTO.getSuccessfullPayment();
+        SuccessfulPayment updatedSuccessfulPayment = editPaymentInDBDTO.getSuccessfulPayment();
 
-        updatedSuccessfullPayment.setPaymentId(paymentId);
+        updatedSuccessfulPayment.setPaymentId(paymentId);
 
-        savePaymentsInDBRepository.save(updatedSuccessfullPayment);
+        savePaymentsInDBRepository.save(updatedSuccessfulPayment);
 
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedSuccessfullPayment),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success", updatedSuccessfulPayment),HttpStatus.OK);
 
     }
 
 
-    @PostMapping("/dinedynamo/get-all-payments")
-    ResponseEntity<ApiResponse> getAllPayments(){
-        List<SuccessfullPayment> payments = savePaymentsInDBRepository.findAll();
+    @PostMapping("/dinedynamo/restaurant/payments/get-all-payments")
+    ResponseEntity<ApiResponse> getAllPaymentsOfRestaurant(@RequestBody Restaurant restaurant){
+
+
+        List<SuccessfulPayment> payments = savePaymentsInDBRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(new ArrayList<>());
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",payments),HttpStatus.OK);
     }
+
+
 
 }
