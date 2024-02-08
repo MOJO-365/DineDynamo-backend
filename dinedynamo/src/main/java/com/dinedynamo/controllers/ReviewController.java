@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 
 @RestController
+@CrossOrigin("*")
 public class ReviewController {
     @Autowired
     private ReviewRepository reviewRepository;
