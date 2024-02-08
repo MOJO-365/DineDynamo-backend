@@ -13,7 +13,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
@@ -35,10 +34,21 @@ public class DinedynamoApplication
 		SpringApplication.run(DinedynamoApplication.class, args);
 		System.out.println("Hello, this application is up and running");
 
+//		System.out.println(LocalTime.now());
+//
+//		System.out.println(new Date());
 
 
+		LocalDateTime now = LocalDateTime.now();
+		String formattedTime = now.format(DateTimeFormatter.ISO_DATE_TIME);
+		System.out.println(formattedTime);
 
+		//return formattedTime;
+		Date d = new Date();
+		System.out.println(LocalDateTime.now().getHour());
+		System.out.println(LocalDateTime.now().getMinute());
 
+		System.out.println(LocalDateTime.now());
 
 	}
 
