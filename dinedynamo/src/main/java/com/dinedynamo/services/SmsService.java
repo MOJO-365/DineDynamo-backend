@@ -92,15 +92,12 @@ public class SmsService {
 
             if (otpData.keySet().iterator().next().equals(otpNumber) && currentTime - otpData.values().iterator().next() <= 40000) {
                 otpMap.remove(phoneNumber);
-                return "OTP is valid";
-            } else if (currentTime - otpData.values().iterator().next() > 40000) {
-                return "OTP has expired";
+                return "OTP is valid!";
             }
         }
 
-        return "Invalid OTP";
+        return "OTP is invalid or has expired!";
     }
-
 
     private String generateOTP() {
         return new DecimalFormat("000000")
