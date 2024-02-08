@@ -1,8 +1,6 @@
 package com.dinedynamo.services;
 
 import com.dinedynamo.collections.Reservation;
-import com.dinedynamo.collections.ReservationRequestStatus;
-import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +39,7 @@ public class RestaurantReservationService
             throw new RuntimeException("RESERVATION-ID IMPROPER");
         }
 
-        reservation.setReservationRequestStatus(ReservationRequestStatus.ACCEPTED);
+        reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.ACCEPTED);
         reservationRepository.save(reservation);
 
         System.out.println("Ready to send sms");
@@ -64,7 +62,7 @@ public class RestaurantReservationService
             System.out.println("PASS PROPER RESERVATION-ID");
             throw new RuntimeException("RESERVATION-ID IMPROPER");
         }
-        reservation.setReservationRequestStatus(ReservationRequestStatus.REJECTED);
+        reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.REJECTED);
         reservationRepository.save(reservation);
 
         smsService.sendMessageToCustomer(reservation.getCustomerPhone(), messageContent);

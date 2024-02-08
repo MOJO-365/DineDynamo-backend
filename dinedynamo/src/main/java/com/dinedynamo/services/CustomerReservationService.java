@@ -2,7 +2,6 @@ package com.dinedynamo.services;
 
 
 import com.dinedynamo.collections.Reservation;
-import com.dinedynamo.collections.ReservationRequestStatus;
 import com.dinedynamo.repositories.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class CustomerReservationService
     public Reservation save(Reservation reservation){
 
 
-        reservation.setReservationRequestStatus(ReservationRequestStatus.HOLD);
+        reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.HOLD);
         reservationRepository.save(reservation);
         return reservation;
     }
