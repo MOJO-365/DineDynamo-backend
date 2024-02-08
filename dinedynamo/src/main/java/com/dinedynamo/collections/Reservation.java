@@ -28,12 +28,9 @@ public class Reservation {
 
     String dineInDateAndTime;  //Time when cutomer will come to the restaurant
 
-    String reservationTimeAndDate;  //Time when customer requests for reservation
+    String reservationDateAndTime;  //Time when customer requests for reservation
 
     int guestCount;
 
-    String tableId;
-
-
-
+    ReservationRequestStatus reservationRequestStatus;
 }
