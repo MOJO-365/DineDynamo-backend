@@ -35,9 +35,7 @@ public class DinedynamoApplication
 		System.out.println("Hello, this application is up and running");
 
 //		System.out.println(LocalTime.now());
-//
 //		System.out.println(new Date());
-
 
 		LocalDateTime now = LocalDateTime.now();
 		String formattedTime = now.format(DateTimeFormatter.ISO_DATE_TIME);

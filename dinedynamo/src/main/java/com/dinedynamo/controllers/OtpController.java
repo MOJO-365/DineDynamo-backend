@@ -36,18 +36,20 @@ public class OtpController {
 
     @PostMapping("dinedynamo/validate-otp")
     public ResponseEntity<ApiResponse> validateOtp(@RequestBody OtpValidationRequest otpValidationRequest) {
-        String validateOtp = smsService.validateOtp(otpValidationRequest);
+        String validateOtpResponse = smsService.validateOtp(otpValidationRequest);
 
         ApiResponse apiResponse;
 
-        if ("OTP is valid!".equals(validateOtp)) {
-            apiResponse = new ApiResponse(HttpStatus.OK, "success", validateOtp);
+        if ("OTP is valid".equals(validateOtpResponse)) {
+            apiResponse = new ApiResponse(HttpStatus.OK, "success", "OTP is valid!");
+        } else if ("OTP has expired".equals(validateOtpResponse)) {
+            apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "failure", "OTP has expired");
         } else {
-            apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "failure", validateOtp);
+            apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "failure", "Invalid OTP");
         }
 
         return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
-
     }
+
 
 }
