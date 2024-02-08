@@ -8,14 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-
-public class ReservationOrWaitingResponseBody
+public class GetPreviousReservationDTO
 {
-
-    Object object;
-
-    String status;
-
-
-
+    String customerPhone;
+    String restaurantId;
 }

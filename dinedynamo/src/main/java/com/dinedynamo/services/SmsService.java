@@ -119,11 +119,12 @@ public class SmsService {
     }
 
 
-    public void sendMessageForMergeCaseReservationRequest(String customerPhone, String messageContent){
+    public void sendMessageToCustomer(String customerPhone, String messageContent){
         PhoneNumber to = new PhoneNumber(customerPhone);
+        System.out.println(to);
         PhoneNumber from = new PhoneNumber(twilioConfig.getPhoneNumber());
 
-
+        System.out.println(from);
 
         Message message = Message
                 .creator(to, from, messageContent)
