@@ -48,7 +48,7 @@ public class TempPayController {
 
         }
         catch (StripeException e) {
-            System.out.println("StripeException OCCURRED");
+            System.out.println("StripeException OCCURRED: "+e.getMessage());
             return null;
             //return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
         }

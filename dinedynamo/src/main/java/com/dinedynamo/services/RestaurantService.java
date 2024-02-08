@@ -14,8 +14,9 @@ import org.springframework.stereotype.Service;
 public class RestaurantService {
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    RestaurantRepository restaurantRepository;
 
+<<<<<<< HEAD
 
 
 
@@ -23,6 +24,12 @@ public class RestaurantService {
     public RestaurantService(RestaurantRepository restaurantRepository) {
         this.restaurantRepository = restaurantRepository;
     }
+=======
+//    @Autowired
+//    public RestaurantService(RestaurantRepository restaurantRepository) {
+//        this.restaurantRepository = restaurantRepository;
+//    }
+>>>>>>> 6567fd74d5dd09cc1769a6c70b3723cb570127f5
 
     public Page<Restaurant> getAllRestaurants(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

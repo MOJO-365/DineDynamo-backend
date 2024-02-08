@@ -6,8 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -15,14 +13,16 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Document("payments")
-public class SuccessfullPayment
+public class SuccessfulPayment
 {
     @Id
     String paymentId;
 
-    String customerId;
+    String customerEmail;
 
-    String customerEmailOrPhone;
+    String customerPhone;
+
+    String customerName;
 
     String restaurantId;
 
@@ -31,6 +31,11 @@ public class SuccessfullPayment
     String paymentType;
 
     double totalAmount;
+
+    //If customer splits and pays some amount in cash and some amount with online payment mode
+    double cashPayment;
+
+    double onlinePayment;
 
     JSONArray itemsArray;
 }

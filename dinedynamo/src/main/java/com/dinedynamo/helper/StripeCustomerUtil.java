@@ -49,7 +49,7 @@ public class StripeCustomerUtil {
                     .setAddress(CustomerCreateParams.Address.builder().
                             setCity(stripePayRequestDTO.getCity()).setLine1(stripePayRequestDTO.getLine1()).
                             setCountry(stripePayRequestDTO.getCountry()).setPostalCode(stripePayRequestDTO.getPostalCode()).
-                            setState(stripePayRequestDTO.getState()).build())
+                            setState(stripePayRequestDTO. getState()).build())
 
                     .build();
             customer = Customer.create(customerCreateParams);

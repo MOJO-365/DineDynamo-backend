@@ -47,6 +47,10 @@ public class Restaurant
 
     String termsAndConditionsForTableReservation;
 
+    String restaurantABN;
+
+    String restaurantPhone;
+
 
 
 }

@@ -2,6 +2,7 @@ package com.dinedynamo.repositories;
 
 
 import com.dinedynamo.collections.Reservation;
+import com.dinedynamo.collections.WaitingList;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,4 +25,8 @@ public interface TableReservationRepository extends MongoRepository<Reservation,
 
     @Query("{restaurantId: '?0',customerPhone: ?1}")
     Optional<Reservation> findByRestaurantIdAndCustomerPhone(String restaurantId, String customerPhone);
+
+
+    @Query("{'customerPhone' : ?0}")
+    Optional<List<Reservation>> findByCustomerPhone(String customerPhone);
 }
