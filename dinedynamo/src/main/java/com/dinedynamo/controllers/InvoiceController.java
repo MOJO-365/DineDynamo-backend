@@ -18,6 +18,7 @@ import com.itextpdf.text.pdf.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,6 +66,7 @@ public class InvoiceController {
         }
     }
 
+    
     @PostMapping("/dinedynamo/invoice/getinvoice")
     public ResponseEntity<byte[]> generateInvoice(@RequestBody Order order) {
         try {
@@ -254,7 +256,7 @@ public class InvoiceController {
     }
 
     private float calculateThankYouHeight() {
-        float thankYouHeight = 20;
+        float thankYouHeight = 80;
         return thankYouHeight;
     }
 
@@ -344,9 +346,9 @@ public class InvoiceController {
 
             // Add item details as a paragraph to the document
             Paragraph itemDetails = new Paragraph(
-                    String.format("%-23s", itemName) +
+                    String.format("%-18s", itemName) +
                             "\t  " + String.format("%-2s", totalQuantity) +
-                            "\t  " + String.format("%-6s", "$" + totalPrice),
+                            "\t  " + String.format("%-10s", "$" + totalPrice),
                     normalFont);
             document.add(itemDetails);
         }

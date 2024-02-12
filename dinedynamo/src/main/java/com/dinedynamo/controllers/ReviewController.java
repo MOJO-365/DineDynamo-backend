@@ -10,10 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -30,9 +28,9 @@ public class ReviewController {
 
         if (optionalRestaurant.isPresent()) {
             reviewRepository.save(review);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED, "Review added successfully"), HttpStatus.CREATED);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.CREATED, "success","Review added successfully"), HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Restaurant not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure","Restaurant not found"), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -46,11 +44,45 @@ public class ReviewController {
     @PostMapping("dinedynamo/restaurant/show/average-rating")
     public ResponseEntity<ApiResponse> getAverageRatingForRestaurant(@RequestBody Restaurant restaurant) {
         List<Review> reviews = reviewRepository.findByRestaurantId(restaurant.getRestaurantId());
-        OptionalDouble average = reviews.stream()
-                .mapToDouble(Review::getRating)
-                .average();
-        double averageRating = average.orElse(0.0);
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "Average rating retrieved successfully", averageRating);
+
+        Map<String, List<Review>> reviewsByRestaurant = reviews.stream().collect(Collectors.groupingBy(Review::getRestaurantId));
+
+        Map<String, Map<String, Object>> averageRatingsByRestaurant = new HashMap<>();
+        for (Map.Entry<String, List<Review>> entry : reviewsByRestaurant.entrySet()) {
+            String restaurantId = entry.getKey();
+            List<Review> restaurantReviews = entry.getValue();
+
+            OptionalDouble average = restaurantReviews.stream()
+                    .mapToDouble(Review::getStarRating)
+                    .average();
+            double averageRating = average.orElse(0.0);
+
+            long totalRatings = restaurantReviews.size();
+
+            Map<String, Object> restaurantData = Map.of("averageRating", averageRating, "totalRatings", totalRatings);
+
+            averageRatingsByRestaurant.put(restaurantId, restaurantData);
+        }
+
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "Average ratings and total ratings retrieved successfully", averageRatingsByRestaurant);
         return ResponseEntity.ok(response);
     }
+
+
+
+    @DeleteMapping("dinedynamo/restaurant/delete-rating")
+    public ResponseEntity<ApiResponse> deleteRating(@RequestBody Review review){
+
+        Optional<Review> optionalReview = reviewRepository.findById(review.getFeedbackId());
+
+        if(optionalReview.isPresent()){
+
+            reviewRepository.deleteById(review.getFeedbackId());
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"failure","review deleted"),HttpStatus.OK);
+        }
+    }
+
 }
