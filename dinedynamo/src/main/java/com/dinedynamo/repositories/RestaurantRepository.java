@@ -31,5 +31,7 @@ public interface RestaurantRepository extends MongoRepository<Restaurant, String
     Page<Restaurant> findAll(Pageable pageable);
 
 
+    @Query("{ 'restaurantName' : { $regex: ?0, $options: 'i' } }")
+    List<Restaurant> findByRestaurantNameRegexIgnoreCase(String regexPattern);
 
 }
