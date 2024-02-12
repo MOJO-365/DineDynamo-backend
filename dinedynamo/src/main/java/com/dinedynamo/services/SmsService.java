@@ -89,15 +89,29 @@ public class SmsService {
         if (otpMap.containsKey(phoneNumber)) {
             Map<String, Long> otpData = otpMap.get(phoneNumber);
             long currentTime = System.currentTimeMillis();
+            Long storedTime = otpData.values().iterator().next();
+            String storedOtp = otpData.keySet().iterator().next();
 
-            if (otpData.keySet().iterator().next().equals(otpNumber) && currentTime - otpData.values().iterator().next() <= 40000) {
-                otpMap.remove(phoneNumber);
-                return "OTP is valid!";
+            if (storedOtp.equals(otpNumber)) {
+                if (currentTime - storedTime <= 40000) {
+                    otpMap.remove(phoneNumber);
+                    return "OTP is valid!";
+                } else {
+                    return "OTP has expired!";
+                }
+            } else {
+                return "Entered OTP is invalid!";
             }
         }
 
-        return "OTP is invalid or has expired!";
+        return "OTP has expired!";
     }
+
+
+
+
+
+
 
     private String generateOTP() {
         return new DecimalFormat("000000")

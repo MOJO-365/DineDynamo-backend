@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -29,8 +29,6 @@ import java.security.NoSuchAlgorithmException;
 public class SignInController
 {
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
     @Autowired
     RestaurantRepository restaurantRepository;
 
@@ -72,24 +70,32 @@ public class SignInController
 //
 
     @PostMapping("/dinedynamo/signin")
-    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestBody signInRequestBody) {
-        String userEmail = signInRequestBody.getUserEmail();
-        String userPassword = signInRequestBody.getUserPassword();
-        String userRole = signInRequestBody.getUserType().toUpperCase();
+    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestBody signInRequestBody) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        if (userRole.toLowerCase().equals("restaurant")) {
-            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
-            if (restaurant != null && passwordEncoder.matches(userPassword, restaurant.getRestaurantPassword())) {
+        String userRole = signInRequestBody.getUserType().toUpperCase();
+        String userPassword = signInRequestBody.getUserPassword();
+
+        if(userRole.toLowerCase().equals("restaurant")){
+
+            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
+
+            if(restaurant!=null  && restaurant.getRestaurantPassword().equals(userPassword)){
+
+                restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
                 ApiResponse apiResponse = new ApiResponse();
                 apiResponse.setMessage("success");
                 apiResponse.setStatus(HttpStatus.OK);
                 apiResponse.setData(restaurant);
-                return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-            }
-            System.out.println("INVALID RESTAURANT CREDENTIALS: WRONG USERNAME/PASSWORD");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "success"), HttpStatus.OK);
-        }
 
+                return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
+
+            }
+
+            System.out.println("IN SIGNIN CONTROLLER: INVALID RESTAURANT CREDENTIALS: WRONG USERNAME/PASSWORD");
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
+
+
+        }
         else if (userRole.toLowerCase().equals("customer")) {
 
             Customer customer = customerRepository.findByCustomerEmail(signInRequestBody.getUserEmail()).orElse(null);

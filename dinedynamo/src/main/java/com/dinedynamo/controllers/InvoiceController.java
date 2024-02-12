@@ -108,38 +108,30 @@ public class InvoiceController {
 
     private JSONArray consolidateOrderLists(List<Order> orderList) {
         JSONArray consolidatedOrderList = new JSONArray();
-
-        Map<String, Integer> itemNameQuantities = new HashMap<>();
-        Map<String, Double> itemNamePrices = new HashMap<>();
+        Map<String, Map<String, Object>> itemNameQuantitiesPrices = new HashMap<>();
 
         for (Order order : orderList) {
             JSONArray individualOrderList = order.getOrderList();
             if (individualOrderList != null) {
                 for (Object orderItem : individualOrderList) {
-                    updateItemQuantitiesAndPrices(itemNameQuantities, itemNamePrices, orderItem);
+                    updateItemQuantitiesAndPrices(itemNameQuantitiesPrices, orderItem);
                 }
             }
         }
 
-        for (Map.Entry<String, Integer> entry : itemNameQuantities.entrySet()) {
-            String itemName = entry.getKey();
-            int totalQuantity = entry.getValue();
-            double totalPrice = itemNamePrices.get(itemName);
-
-            double singleItemPrice = totalPrice / totalQuantity;
-
+        for (Map.Entry<String, Map<String, Object>> entry : itemNameQuantitiesPrices.entrySet()) {
+            Map<String, Object> itemDetails = entry.getValue();
             Map<String, Object> consolidatedItem = new HashMap<>();
-            consolidatedItem.put("name", itemName);
-            consolidatedItem.put("qty", totalQuantity);
-            consolidatedItem.put("price", singleItemPrice);
-
+            consolidatedItem.put("name", itemDetails.get("name"));
+            consolidatedItem.put("qty", itemDetails.get("qty"));
+            consolidatedItem.put("price", itemDetails.get("price"));
             consolidatedOrderList.add(consolidatedItem);
         }
 
         return consolidatedOrderList;
     }
 
-    private void updateItemQuantitiesAndPrices(Map<String, Integer> itemNameQuantities, Map<String, Double> itemNamePrices, Object orderItem) {
+    private void updateItemQuantitiesAndPrices(Map<String, Map<String, Object>> itemNameQuantitiesPrices, Object orderItem) {
         String itemName;
         int quantity;
         double price;
@@ -156,8 +148,19 @@ public class InvoiceController {
             return;
         }
 
-        itemNameQuantities.put(itemName, itemNameQuantities.getOrDefault(itemName, 0) + quantity);
-        itemNamePrices.put(itemName, itemNamePrices.getOrDefault(itemName, 0.0) + (price * quantity));
+        String key = itemName + "_" + price;
+
+        if (!itemNameQuantitiesPrices.containsKey(key)) {
+            Map<String, Object> itemDetails = new HashMap<>();
+            itemDetails.put("name", itemName);
+            itemDetails.put("qty", quantity);
+            itemDetails.put("price", price);
+            itemNameQuantitiesPrices.put(key, itemDetails);
+        } else {
+            Map<String, Object> existingItem = itemNameQuantitiesPrices.get(key);
+            int existingQuantity = (int) existingItem.get("qty");
+            existingItem.put("qty", existingQuantity + quantity);
+        }
     }
 
     private double calculateGrandTotal(JSONArray orderList) {
@@ -313,33 +316,41 @@ public class InvoiceController {
 
         document.add(title);
         addHorizontalLine(document);
+        List<Map<String, Object>> orderList = order.getOrderList();
 
         double grandTotal = 0;
-        List<Map<String, Object>> orderList = order.getOrderList();
-        Map<String, Integer> itemNameToTotalQuantity = new HashMap<>();
-        Map<String, Double> itemNameToPrice = new HashMap<>();
+        Map<String, Integer> itemNameAndPriceToTotalQuantity = new HashMap<>();
+        Map<String, Double> itemNameAndPriceToTotalPrice = new HashMap<>();
 
         for (Map<String, Object> item : orderList) {
             String itemName = (String) item.get("name");
             int quantity = ((Number) item.get("qty")).intValue();
             double price = ((Number) item.get("price")).doubleValue();
 
-            itemNameToTotalQuantity.merge(itemName, quantity, Integer::sum);
-            itemNameToPrice.put(itemName, price);
+            String key = itemName + "_" + price;
+
+            itemNameAndPriceToTotalQuantity.merge(key, quantity, Integer::sum);
+            itemNameAndPriceToTotalPrice.merge(key, price * quantity, Double::sum);
 
             grandTotal += price * quantity;
         }
 
-        for (String itemName : itemNameToTotalQuantity.keySet()) {
-            int totalQuantity = itemNameToTotalQuantity.get(itemName);
-            double price = itemNameToPrice.get(itemName);
+        for (String key : itemNameAndPriceToTotalQuantity.keySet()) {
+            String[] parts = key.split("_");
+            String itemName = parts[0];
+            double price = Double.parseDouble(parts[1]);
+            int totalQuantity = itemNameAndPriceToTotalQuantity.get(key);
+            double totalPrice = itemNameAndPriceToTotalPrice.get(key);
 
-            document.add(new Paragraph(
+            // Add item details as a paragraph to the document
+            Paragraph itemDetails = new Paragraph(
                     String.format("%-23s", itemName) +
                             "\t  " + String.format("%-2s", totalQuantity) +
-                            "\t  " + String.format("%-6s", "$" + price*totalQuantity),
-                    normalFont));
+                            "\t  " + String.format("%-6s", "$" + totalPrice),
+                    normalFont);
+            document.add(itemDetails);
         }
+
         addHorizontalLine(document);
 
         Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f", "GST:", grandTotal * 0.1), subtitleFont);
@@ -356,8 +367,7 @@ public class InvoiceController {
 
         addHorizontalLine(document);
     }
-
-    private void addQRCodeToPDF(Document document, String content) throws DocumentException {
+        private void addQRCodeToPDF(Document document, String content) throws DocumentException {
         Paragraph qrCodeParagraph = new Paragraph();
 
         try {
