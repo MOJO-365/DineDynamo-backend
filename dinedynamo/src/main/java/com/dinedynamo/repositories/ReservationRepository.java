@@ -39,4 +39,9 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
 
 
 
+    @Query("{ 'restaurantId' : '?0', 'customerPhone' : '?1' }")
+    Optional<List<Reservation>> findByRestaurantIdAndCustomerPhone(String restaurantId, String customerPhone);
+
+
+
 }

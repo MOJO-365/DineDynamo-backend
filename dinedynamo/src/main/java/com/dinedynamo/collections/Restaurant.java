@@ -45,7 +45,6 @@ public class Restaurant
 
     String endTime;
 
-    String termsAndConditionsForTableReservation;
 
     String restaurantABN;
 

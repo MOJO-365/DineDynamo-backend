@@ -41,6 +41,11 @@ public class CustomerReservationController
 
         reservation = customerReservationService.save(reservation);
 
+        if(reservation.getReservationRequestStatus() == Reservation.ReservationRequestStatus.INVALID){
+
+            System.out.println("DATA NOT SAVED IN DB, AS CUSTOMER ALREADY HAS A BOOKING IN SAME SLOT");
+        }
+
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",reservation),HttpStatus.OK);
     }
 
