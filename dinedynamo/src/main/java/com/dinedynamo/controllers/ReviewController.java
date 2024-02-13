@@ -69,7 +69,6 @@ public class ReviewController {
     }
 
 
-
     @DeleteMapping("dinedynamo/restaurant/delete-rating")
     public ResponseEntity<ApiResponse> deleteRating(@RequestBody Review review){
 
