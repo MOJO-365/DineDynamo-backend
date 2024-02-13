@@ -52,7 +52,7 @@ public class InvoiceController {
     @PostMapping("/dinedynamo/invoice/getorder")
     public ResponseEntity<ApiResponse> getFinalOrderForTable(@RequestBody Order order) {
         try {
-            List<Order> orderListForTable = orderRepository.findOrderList(order.getOrderList());
+            List<Order> orderListForTable = orderRepository.findOrderByOrderList(order.getOrderList());
 
             if (!orderListForTable.isEmpty()) {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);

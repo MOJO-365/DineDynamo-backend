@@ -15,10 +15,11 @@ public interface OrderRepository extends MongoRepository<Order, String> {
 
     List<Order> findByTableId(String tableId);
 
-    List<Order> findOrderList(JSONArray order);
-
-
+    @Query("{ 'orderList': ?0 }")
+    List<Order> findOrderByOrderList(JSONArray orderList);
 }
+
+
 
 
 
