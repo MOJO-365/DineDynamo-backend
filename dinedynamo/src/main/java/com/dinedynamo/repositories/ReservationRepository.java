@@ -12,6 +12,10 @@ import java.util.Optional;
 @Repository
 public interface ReservationRepository extends MongoRepository<Reservation, String> {
 
+    @Query("{ 'restaurantId' : '?0'}")
+    Optional<List<Reservation>> findByRestaurantId(String restaurantId);
+
+
 
     //For restaurant side
     @Query("{ 'restaurantId' : '?0', 'reservationRequestStatus' : 'HOLD' }")

@@ -2,14 +2,22 @@ package com.dinedynamo.services;
 
 import com.dinedynamo.collections.Table;
 import com.dinedynamo.repositories.TableRepository;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import java.util.Arrays;
+
+
 
 @Service
 public class TableService
@@ -22,6 +30,9 @@ public class TableService
 
     @Autowired
     CloudinaryService cloudinaryService;
+
+    @Autowired
+    MongoClient mongoClient;
 
 
     public Table findById(String tableId){
@@ -118,6 +129,28 @@ public class TableService
         List<Table> reversedList = new ArrayList<>(bestMergedTables);
         java.util.Collections.reverse(reversedList);
         return reversedList;
+
+    }
+
+
+
+    public List<Document> getGroupByTables(String restaurantId){
+
+        MongoDatabase database = mongoClient.getDatabase("cluster0");
+        MongoCollection<org.bson.Document> collection = database.getCollection("tables");
+
+        AggregateIterable<Document> result = collection.aggregate(Arrays.asList(
+                new BasicDBObject("$match", new BasicDBObject("restaurantId", restaurantId)),
+                new BasicDBObject("$group", new BasicDBObject("_id", "$tableCategory")
+                        .append("tables", new BasicDBObject("$push", "$$ROOT")))));
+
+
+
+
+        List<Document> resultList = new ArrayList<>();
+        result.into(resultList);
+
+        return resultList;
 
     }
 

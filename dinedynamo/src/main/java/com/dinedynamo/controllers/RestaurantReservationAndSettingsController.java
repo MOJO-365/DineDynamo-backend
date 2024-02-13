@@ -1,13 +1,11 @@
 package com.dinedynamo.controllers;
 
 
-import com.cloudinary.Api;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Reservation;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.RestaurantReservationSettings;
 import com.dinedynamo.dto.ReservationRequestDTO;
-import com.dinedynamo.dto.RestaurantReservationSettingsDTO;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.RestaurantReservationSettingsRepository;
@@ -18,14 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 @RestController
 @CrossOrigin("*")
@@ -98,51 +90,55 @@ public class RestaurantReservationAndSettingsController
     }
 
 
-
-    @PostMapping("/dinedynamo/restaurant/reservations/test")
-    String test(){
-
-        Restaurant restaurant = restaurantRepository.findById("65b88c1ff6d0de4c234f4877").orElse(null);
-
-        String dateString = "12/15/2024, 5:10:00 PM";
-
-        // Define the DateTimeFormatter with the appropriate pattern and US locale
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy, h:mm:ss a", Locale.US);
-
-        // Parse the string to LocalDateTime
-        LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
+    @PostMapping("/dinedynamo/restaurant/reservations/add-or-edit-reservation-settings")
+    ResponseEntity<ApiResponse> editReservationSettings(@RequestBody RestaurantReservationSettings restaurantReservationSettings){
 
 
-        System.out.println("Converted LocalDateTime: " + localDateTime.toLocalTime());
+        String restaurantId = restaurantReservationSettings.getRestaurantId();
 
+        RestaurantReservationSettings existingRestaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(restaurantId).orElse(null);
 
-        return "done";
+        if(existingRestaurantReservationSettings != null){
 
-    }
+            restaurantReservationSettings.setReservationSettingsId(existingRestaurantReservationSettings.getReservationSettingsId());
 
+            restaurantReservationSettingsRepository.delete(existingRestaurantReservationSettings);
+            restaurantReservationSettingsRepository.save(restaurantReservationSettings);
+        }
 
-    @PostMapping("/dinedynamo/restaurant/reservations/add-reservation-settings")
-    ResponseEntity<ApiResponse> addReservationSettings(@RequestBody RestaurantReservationSettings restaurantReservationSettings){
+        else{
+            restaurantReservationSettingsRepository.save(restaurantReservationSettings);
+        }
 
-
-
-        restaurantReservationSettingsRepository.save(restaurantReservationSettings);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantReservationSettings),HttpStatus.OK);
-
-    }
-
-    @PutMapping("/dinedynamo/restaurant/reservations/edit-reservation-settings")
-    ResponseEntity<ApiResponse> editReservationSettings(@RequestBody RestaurantReservationSettingsDTO restaurantReservationSettingsDTO){
-
-
-        RestaurantReservationSettings restaurantReservationSettings = restaurantReservationSettingsDTO.getRestaurantReservationSettings();
-
-        restaurantReservationSettings.setRestaurantId(restaurantReservationSettingsDTO.getRestaurantReservationSettingsId());
-        restaurantReservationSettingsRepository.save(restaurantReservationSettings);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantReservationSettings),HttpStatus.OK);
 
     }
 
 
+    @PostMapping("/dinedynamo/restaurant/reservations/get-reservation-settings")
+    ResponseEntity<ApiResponse> getRestaurantReservationSettings(@RequestBody Restaurant restaurant){
 
+        RestaurantReservationSettings restaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantReservationSettings),HttpStatus.OK);
+    }
+
+
+
+//    @PostMapping("/dinedynamo/restaurant/reservations/clear-old-reservations")
+//    ResponseEntity<ApiResponse> clearOldREservations(@RequestBody Restaurant restaurant){
+//
+//        restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
+//
+//        if(restaurant == null){
+//            throw new RuntimeException("Restaurant not present in database");
+//        }
+//
+//        List<Reservation> listOfReservations = reservationRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+//
+//        for(Reservation reservation: listOfReservations){
+//
+//        }
+//
+//    }
 }

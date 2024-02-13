@@ -3,6 +3,7 @@ package com.dinedynamo.collections;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -17,6 +18,7 @@ public class RestaurantReservationSettings
     @Id
     String reservationSettingsId;
 
+    @Indexed(unique = true)
     String restaurantId;
 
     String termsAndConditionsForTableReservation;
