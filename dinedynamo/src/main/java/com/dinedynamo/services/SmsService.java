@@ -103,7 +103,6 @@ public class SmsService {
                 return "Entered OTP is invalid!";
             }
         }
-
         return "OTP has expired!";
     }
 
