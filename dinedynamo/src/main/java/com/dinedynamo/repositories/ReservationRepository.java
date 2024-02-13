@@ -12,6 +12,10 @@ import java.util.Optional;
 @Repository
 public interface ReservationRepository extends MongoRepository<Reservation, String> {
 
+    @Query("{ 'restaurantId' : '?0'}")
+    Optional<List<Reservation>> findByRestaurantId(String restaurantId);
+
+
 
     //For restaurant side
     @Query("{ 'restaurantId' : '?0', 'reservationRequestStatus' : 'HOLD' }")
@@ -36,6 +40,11 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
     //For customer side
     @Query("{ 'restaurantId' : '?0', 'reservationRequestStatus' : 'REJECTED', 'customerPhone' : '?1' }")
     Optional<List<Reservation>> findRejectedReservationsByRestaurantIdAndCustomerPhone(String restaurantId, String customerPhone);
+
+
+
+    @Query("{ 'restaurantId' : '?0', 'customerPhone' : '?1' }")
+    Optional<List<Reservation>> findByRestaurantIdAndCustomerPhone(String restaurantId, String customerPhone);
 
 
 

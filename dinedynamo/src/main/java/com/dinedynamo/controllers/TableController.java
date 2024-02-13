@@ -2,6 +2,8 @@ package com.dinedynamo.controllers;
 
 
 import com.cloudinary.Api;
+import com.dinedynamo.services.RestaurantService;
+import org.bson.Document;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.dto.EditAllTablesRequestBody;
 import com.dinedynamo.collections.Restaurant;
@@ -27,6 +29,9 @@ public class TableController
 {
     @Autowired
     RestaurantRepository restaurantRepository;
+
+    @Autowired
+    RestaurantService restaurantService;
 
     @Autowired
     TableRepository tableRepository;
@@ -105,7 +110,7 @@ public class TableController
             if(tableId != null){
                 Table existingTable = tableService.findById(table.getTableId());
 
-                    if(existingTable!=null){
+                    if(existingTable != null){
                         Table updatedTable = new Table();
                         updatedTable.setTableId(existingTable.getTableId());
                         updatedTable.setCapacity(table.getCapacity());
@@ -114,10 +119,12 @@ public class TableController
                         updatedTable.setStatus(table.getStatus());
                         updatedTable.setTableName(table.getTableName());
                         updatedTable.setIsPositionAbsolute(table.getIsPositionAbsolute());
+                        updatedTable.setTableCategory(table.getTableCategory());
                         updatedTable.setRestaurantId(existingTable.getRestaurantId());
                         updatedTable.setTableQRURL(existingTable.getTableQRURL());
                         updatedTable.setPublicIdOfQRImage(existingTable.getPublicIdOfQRImage());
 
+                        //updatedTable.setTableCategory(existingTable.getTableCategory());
                         tableService.delete(existingTable);
                         tableService.save(updatedTable);
 
@@ -154,19 +161,6 @@ public class TableController
 
 
     }
-
-
-
-
-    //If this method returns null, this means that the image does not exist in cloudinary
-    @GetMapping("/dinedynamo/restaurant/table/{publicId}")
-    public ResponseEntity<ApiResponse> getImageURLFromPublicID(@PathVariable String publicId) throws Exception {
-        String imageURL = cloudinaryService.getImageURLFromPublicId(publicId);
-
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",imageURL),HttpStatus.OK);
-    }
-
-
 
     @PostMapping("/dinedynamo/restaurant/table/findbytableid")
     public ResponseEntity<ApiResponse> findTableDetailsByTableId(@RequestBody Table table){
@@ -228,6 +222,27 @@ public class TableController
 
     }
 
+
+    /**
+     * Usage: When tables of particular restaurant are to be fetched in group by table category format
+     * @return List<Document>
+     */
+    @PostMapping("/dinedynamo/restaurant/table/get-groupby-tables")
+    public ResponseEntity<ApiResponse> getTableUsingGroupByCategory(@RequestBody Restaurant restaurant){
+
+        String restaurantId = restaurant.getRestaurantId();
+        boolean isRestaurantPresent = restaurantService.isRestaurantPresentinDb(restaurantId);
+
+        if(!isRestaurantPresent){
+            System.out.println("RESTAURANT-ID NOT FOUND IN DB");
+            throw new RuntimeException("restaurantId not present in database");
+
+        }
+        List<Document> listOfTables = tableService.getGroupByTables(restaurantId);
+
+        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",listOfTables),HttpStatus.OK);
+
+    }
 
 
 

@@ -4,24 +4,24 @@ package com.dinedynamo.controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Reservation;
 import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.RestaurantReservationSettings;
 import com.dinedynamo.dto.ReservationRequestDTO;
 import com.dinedynamo.repositories.ReservationRepository;
+import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.repositories.RestaurantReservationSettingsRepository;
 import com.dinedynamo.services.RestaurantReservationService;
 import com.dinedynamo.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-public class RestaurantReservationController
+public class RestaurantReservationAndSettingsController
 {
     @Autowired
     RestaurantReservationService restaurantReservationService;
@@ -32,6 +32,11 @@ public class RestaurantReservationController
     @Autowired
     RestaurantService restaurantService;
 
+    @Autowired
+    RestaurantRepository restaurantRepository;
+
+    @Autowired
+    RestaurantReservationSettingsRepository restaurantReservationSettingsRepository;
 
     @PostMapping("/dinedynamo/restaurant/reservations/get-hold-reservations")
     ResponseEntity<ApiResponse> getAllHoldReservations(@RequestBody Restaurant restaurant){
@@ -85,6 +90,55 @@ public class RestaurantReservationController
     }
 
 
+    @PostMapping("/dinedynamo/restaurant/reservations/add-or-edit-reservation-settings")
+    ResponseEntity<ApiResponse> editReservationSettings(@RequestBody RestaurantReservationSettings restaurantReservationSettings){
 
 
+        String restaurantId = restaurantReservationSettings.getRestaurantId();
+
+        RestaurantReservationSettings existingRestaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(restaurantId).orElse(null);
+
+        if(existingRestaurantReservationSettings != null){
+
+            restaurantReservationSettings.setReservationSettingsId(existingRestaurantReservationSettings.getReservationSettingsId());
+
+            restaurantReservationSettingsRepository.delete(existingRestaurantReservationSettings);
+            restaurantReservationSettingsRepository.save(restaurantReservationSettings);
+        }
+
+        else{
+            restaurantReservationSettingsRepository.save(restaurantReservationSettings);
+        }
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantReservationSettings),HttpStatus.OK);
+
+    }
+
+
+    @PostMapping("/dinedynamo/restaurant/reservations/get-reservation-settings")
+    ResponseEntity<ApiResponse> getRestaurantReservationSettings(@RequestBody Restaurant restaurant){
+
+        RestaurantReservationSettings restaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantReservationSettings),HttpStatus.OK);
+    }
+
+
+
+//    @PostMapping("/dinedynamo/restaurant/reservations/clear-old-reservations")
+//    ResponseEntity<ApiResponse> clearOldREservations(@RequestBody Restaurant restaurant){
+//
+//        restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
+//
+//        if(restaurant == null){
+//            throw new RuntimeException("Restaurant not present in database");
+//        }
+//
+//        List<Reservation> listOfReservations = reservationRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+//
+//        for(Reservation reservation: listOfReservations){
+//
+//        }
+//
+//    }
 }
