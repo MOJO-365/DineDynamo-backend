@@ -51,8 +51,7 @@ public class InvoiceController {
 
     @PostMapping("/dinedynamo/invoice/getorder")
     public ResponseEntity<ApiResponse> getFinalOrderForTable(@RequestBody Order order) {
-        try {
-            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
+            List<Order> orderListForTable = orderRepository.findOrderByOrderList(order.getOrderList());
 
             if (!orderListForTable.isEmpty()) {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);
@@ -60,6 +59,14 @@ public class InvoiceController {
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
             }
+    }
+
+
+    @PostMapping("dinedynamo/accept-order")
+    public ResponseEntity<ApiResponse> acceptOrder(@RequestBody Order order) {
+        try {
+            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orderListForTable), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
