@@ -48,46 +48,44 @@ public class SearchController
     }
 
 
+    /**
+     *
+     * @param expression
+     * @return List of Restaurant objects that match the cuisine or item name (or expression)
+     * This api searched the expression in the Menu object and returns the corresponding restaurants
+     */
     @PostMapping("/dinedynamo/customer/filters/filter-by-cuisine-or-item")
     ResponseEntity<ApiResponse> filterByMenuCuisineOrItem(@RequestParam String expression){
 
         List<Restaurant> listOfRestaurants = searchService.searchInMenuOfRestaurantsAndReturnRestaurantList(expression);
-
-
-
-
-
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",listOfRestaurants),HttpStatus.OK);
 
     }
 
 
+    /**
+     *
+     * @param expression
+     * @return Restaurant List
+     * Use: In customer dashboard, there is a search field. That field can have - search by restaurant name or search by menu item
+     * This api searched the database by the expression (irrespective of restaurant
+     * name or menu item or cuisine) and returns the list of restaurants that match the expression
+     */
     @PostMapping("/dinedynamo/customer/filters/filter-by-expression")
     ResponseEntity<ApiResponse> filterByExpression(@RequestParam String expression){
 
-        List<Restaurant>  listOfRestaurantsFilteredByRestaurantName   = restaurantRepository.findByRestaurantNameRegexIgnoreCase(expression);
-
-
+        List<Restaurant>  listOfRestaurantsFilteredByRestaurantName = restaurantRepository.findByRestaurantNameRegexIgnoreCase(expression);
 
         List<Restaurant> listOfRestaurantsFilteredByMenu = searchService.searchInMenuOfRestaurantsAndReturnRestaurantList(expression);
 
-
         Set<Restaurant> set = new HashSet<>();
 
-        // Add elements from list1
         set.addAll(listOfRestaurantsFilteredByRestaurantName);
 
-        // Add elements from list2
         set.addAll(listOfRestaurantsFilteredByMenu);
 
-
-
-
-
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",new ArrayList<>(set)),HttpStatus.OK);
-
-
 
     }
 

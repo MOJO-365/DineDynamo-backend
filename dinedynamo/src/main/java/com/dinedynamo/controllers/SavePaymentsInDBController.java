@@ -32,6 +32,13 @@ public class SavePaymentsInDBController
     @Autowired
     SavePaymentsInDBRepository savePaymentsInDBRepository;
 
+
+    /**
+     *
+     * @param successfulPayment
+     * @return successfulPayment
+     * Use: When the payment is done by the customer, this api needs to be called for saving details in DB
+     */
     @PostMapping("/dinedynamo/restaurant/payments/save-payment")
     ResponseEntity<ApiResponse> savePaymentDataInDB(@RequestBody SuccessfulPayment successfulPayment){
         successfulPayment = savePaymentsInDBService.save(successfulPayment);
@@ -39,6 +46,12 @@ public class SavePaymentsInDBController
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success", successfulPayment), HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param successfulPayment
+     * @return successfulPayment
+     * Use: deleting the payment data from database
+     */
     @DeleteMapping("/dinedynamo/restaurant/payments/delete-payment")
     ResponseEntity<ApiResponse> deletePayment(@RequestBody SuccessfulPayment successfulPayment){
         String paymentId = successfulPayment.getPaymentId();
@@ -49,36 +62,29 @@ public class SavePaymentsInDBController
 
     }
 
+    /**
+     *
+     * @param editPaymentInDBDTO
+     * @return successfulPayment
+     * Use: For updating the payment data
+     */
     @PutMapping("/dinedynamo/restaurant/payments/edit-payment")
     ResponseEntity<ApiResponse> editPayment(@RequestBody EditPaymentInDBDTO editPaymentInDBDTO){
 
-        String paymentId = editPaymentInDBDTO.getPaymentId();
-
-        if(paymentId == null || paymentId.equals("") || paymentId.equals(" ")){
-            System.out.println("PAYMENT ID SHOULD BE PASSED IN REQUEST FOR EDIT PAYMENT");
-            throw new RuntimeException("PaymentId not the request body");
-        }
-        SuccessfulPayment successfulPayment = savePaymentsInDBRepository.findById(paymentId).orElse(null);
-
-        if(successfulPayment == null){
-            System.out.println("RECORD WITH SUCH PAYMENT-ID DOES NOT EXIST IN DB");
-            throw new NoSuchElementException("Record with paymentId not found in db");
-        }
-        SuccessfulPayment updatedSuccessfulPayment = editPaymentInDBDTO.getSuccessfulPayment();
-
-        updatedSuccessfulPayment.setPaymentId(paymentId);
-
-        savePaymentsInDBRepository.save(updatedSuccessfulPayment);
-
-
+        SuccessfulPayment updatedSuccessfulPayment = savePaymentsInDBService.editPayment(editPaymentInDBDTO);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success", updatedSuccessfulPayment),HttpStatus.OK);
 
     }
 
 
+    /**
+     *
+     * @param restaurant
+     * @return List of SuccessfulPayment objects
+     * Use: fetch all the SuccessfulPayment done to a particular restaurant
+     */
     @PostMapping("/dinedynamo/restaurant/payments/get-all-payments")
     ResponseEntity<ApiResponse> getAllPaymentsOfRestaurant(@RequestBody Restaurant restaurant){
-
 
         List<SuccessfulPayment> payments = savePaymentsInDBRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(new ArrayList<>());
 
