@@ -200,22 +200,31 @@ public class CustomerReservationService
 
         RestaurantReservationSettings restaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(reservation.getRestaurantId()).orElse(null);
 
-        LocalDateTime firstSlotStartLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(restaurantReservationSettings.getFirstSlotStartTime());
-
-        LocalDateTime firstSlotEndLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(restaurantReservationSettings.getFirstSlotEndTime());
-
         LocalDateTime requestedLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime());
 
-        LocalDateTime secondSlotStartLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(restaurantReservationSettings.getSecondSlotStartTime());
+        String firstSlotStartLocalDateTimeString = restaurantReservationSettings.getFirstSlotStartTime();
+        LocalDateTime firstSlotStartLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(firstSlotStartLocalDateTimeString);
 
-        LocalDateTime secondSlotEndLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(restaurantReservationSettings.getSecondSlotEndTime());
+        String firstSlotEndLocalDateTimeString = restaurantReservationSettings.getFirstSlotEndTime();
+        LocalDateTime firstSlotEndLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(firstSlotEndLocalDateTimeString);
 
-        if(requestedLocalDateTime.toLocalTime().isBefore(firstSlotEndLocalDateTime.toLocalTime()) && requestedLocalDateTime.toLocalTime().isAfter(firstSlotStartLocalDateTime.toLocalTime())){
-            return 1;
+        if(firstSlotEndLocalDateTimeString!=null && firstSlotStartLocalDateTimeString!=null){
+            if(requestedLocalDateTime.toLocalTime().isBefore(firstSlotEndLocalDateTime.toLocalTime()) && requestedLocalDateTime.toLocalTime().isAfter(firstSlotStartLocalDateTime.toLocalTime())){
+                return 1;
+            }
         }
-        if(requestedLocalDateTime.toLocalTime().isBefore(secondSlotEndLocalDateTime.toLocalTime()) && requestedLocalDateTime.toLocalTime().isAfter(secondSlotStartLocalDateTime.toLocalTime())){
-            return 2;
 
+        String secondSlotStartLocalDateTimeString = restaurantReservationSettings.getSecondSlotStartTime();
+        LocalDateTime secondSlotStartLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(secondSlotStartLocalDateTimeString);
+
+        String secondSlotEndLocalDateTimeString = restaurantReservationSettings.getSecondSlotEndTime();
+        LocalDateTime secondSlotEndLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(secondSlotEndLocalDateTimeString);
+
+        if(secondSlotEndLocalDateTimeString!=null && secondSlotStartLocalDateTimeString!=null){
+            if(requestedLocalDateTime.toLocalTime().isBefore(secondSlotEndLocalDateTime.toLocalTime()) && requestedLocalDateTime.toLocalTime().isAfter(secondSlotStartLocalDateTime.toLocalTime())){
+                return 2;
+
+            }
         }
         return -1;
 
