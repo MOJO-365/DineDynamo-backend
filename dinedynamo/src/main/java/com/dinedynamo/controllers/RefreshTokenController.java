@@ -33,6 +33,19 @@ public class RefreshTokenController
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
 
+    /**
+     *
+     * @param refreshJWTRequest
+     * @return
+     * @throws InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException
+     * @throws BadPaddingException
+     * @throws InvalidKeyException
+     *
+     * Use: get a refresh token. This api needs to be hit before the old token expires else user will have to login again using password and username
+     */
     @PostMapping("/dinedynamo/refreshtoken")
     public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshJWTRequest refreshJWTRequest) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         String oldToken = refreshJWTRequest.getToken();

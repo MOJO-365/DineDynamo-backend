@@ -49,7 +49,7 @@ public class TableService
         }
 
         tableRepository.save(table);
-
+        System.out.println("Priting: "+table.getPublicIdOfQRImage());
         //table = tableRepository.findById(table.getTableId()).orElse(null);
         //This means the QR code for table has not been generated even for once
         if(table.getPublicIdOfQRImage() == null){

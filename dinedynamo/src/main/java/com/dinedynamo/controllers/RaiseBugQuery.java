@@ -20,7 +20,13 @@ public class RaiseBugQuery
     @Autowired
     RaiseBugQueryService raiseBugQueryService;
 
-        @PostMapping("/dinedynamo/restaurant/query/raise-query")
+    /**
+     *
+     * @param bugQuery
+     * @return bugQuery
+     * When the restaurant owner discovers any bug in DineDynamo application, He/She can raise this query and the mail will be sent to the DineDynamo team
+     */
+    @PostMapping("/dinedynamo/restaurant/query/raise-query")
     ResponseEntity<ApiResponse> raiseBugQuery(@RequestBody BugQuery bugQuery){
 
         boolean isQueryRaised = raiseBugQueryService.createAndSendQuery(bugQuery);

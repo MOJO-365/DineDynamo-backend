@@ -68,7 +68,7 @@ public class CustomerReservationController
      *
      * @param reservation
      * @return reservation
-     * Use: when customer wants to cancel the reservation. The reservation will be deleted from the database
+     * Use: when customer wants to cancel the reservation. The reservation request record will be deleted from the database collection: 'reservations'
      */
     @PostMapping("/dinedynamo/customer/reservations/cancel-reservation")
     ResponseEntity<ApiResponse> cancelReservation(@RequestBody Reservation reservation){
@@ -91,6 +91,13 @@ public class CustomerReservationController
 
     }
 
+
+    /**
+     *
+     * @param getPreviousReservationDTO
+     * @return List of all reservations with particular customerPhone and restaurantId
+     * This api returns the list of the reservation requests made by the customer for a particular restaurant
+     */
     @PostMapping("/dinedynamo/customer/reservations/get-previous-reservations")
     ResponseEntity<ApiResponse> getPreviousReservations(@RequestBody GetPreviousReservationDTO getPreviousReservationDTO){
 
@@ -123,6 +130,12 @@ public class CustomerReservationController
     }
 
 
+    /**
+     *
+     * @param restaurant
+     * @return RestaurantReservationSettings object
+     * For fetching the RestaurantReservationSettings made by the restaurant owner and show on the customer side
+     */
     @PostMapping("/dinedynamo/customer/reservation/fetch-reservation-settings")
     ResponseEntity<ApiResponse> getRestaurantReservationSettings(@RequestBody Restaurant restaurant){
 

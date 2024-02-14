@@ -28,6 +28,13 @@ public class MenuController
 
 
     //Pass restaurantId in RequestBody to get the menu
+
+    /**
+     *
+     * @param restaurant
+     * @return Menu
+     * Takes restaurantId from Restaurant.restaurantId (in request body) and fetches its menu from DB
+     */
     @PostMapping("/dinedynamo/restaurant/menu/getmenu")
     public ResponseEntity<ApiResponse> getMenu(@RequestBody Restaurant restaurant){
 
@@ -39,6 +46,11 @@ public class MenuController
 
     }
 
+    /**
+     *
+     * @param restaurant
+     * @return menu
+     */
     @DeleteMapping("/dinedynamo/restaurant/menu/deletewholemenu")
     public ResponseEntity<ApiResponse> deleteWholeMenu(@RequestBody Restaurant restaurant){
 

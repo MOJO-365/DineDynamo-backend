@@ -43,11 +43,6 @@ public class TableController
     CloudinaryService cloudinaryService;
 
 
-    @GetMapping("/dinedynamo/restaurant/test-table")
-    public String test(){
-        return "hello world";
-    }
-
     @PostMapping("/dinedynamo/restaurant/table/getalltables")
     public ResponseEntity<ApiResponse> getAllTables(@RequestBody Restaurant restaurant){
 
@@ -57,8 +52,6 @@ public class TableController
         System.out.println(listOfAllTables.get(0));
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",listOfAllTables.toArray()),HttpStatus.OK);
     }
-
-
 
 
 
@@ -125,7 +118,7 @@ public class TableController
                         updatedTable.setPublicIdOfQRImage(existingTable.getPublicIdOfQRImage());
 
                         //updatedTable.setTableCategory(existingTable.getTableCategory());
-                        tableService.delete(existingTable);
+
                         tableService.save(updatedTable);
 
                         listOfUpdatedTables.add(updatedTable);

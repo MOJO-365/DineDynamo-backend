@@ -47,6 +47,12 @@ public class RestaurantReservationAndSettingsController
     @Autowired
     RestaurantReservationService restaurantReservationSettingsService;
 
+
+    /**
+     *
+     * @param restaurant
+     * @return List of Reservation requests that are on HOLD i.e not accepted by the restaurant owner for his/her restaurant
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/get-hold-reservations")
     ResponseEntity<ApiResponse> getAllHoldReservations(@RequestBody Restaurant restaurant){
 
@@ -63,6 +69,11 @@ public class RestaurantReservationAndSettingsController
     }
 
 
+    /**
+     *
+     * @param restaurant
+     * @return List of Reservation requests that have been ACCEPTED by the restaurant owner for his/her restaurant
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/get-accepted-reservations")
     ResponseEntity<ApiResponse> getAllAcceptedReservations(@RequestBody Restaurant restaurant){
 
@@ -78,7 +89,12 @@ public class RestaurantReservationAndSettingsController
     }
 
 
-
+    /**
+     *
+     * @param reservationRequestDTO
+     * @return Reservation Object
+     * When the restaurant accepts the reservation request made by the customer, this API will change the status of reservation request from HOLD to ACCEPTED
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/accept-reservation")
     ResponseEntity<ApiResponse> acceptReservation(@RequestBody ReservationRequestDTO reservationRequestDTO){
 
@@ -89,6 +105,13 @@ public class RestaurantReservationAndSettingsController
     }
 
 
+
+    /**
+     *
+     * @param reservationRequestDTO
+     * @return Reservation Object
+     * When the restaurant rejects the reservation request made by the customer, this API will change the status of reservation request from HOLD to REJECTED
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/reject-reservation")
     ResponseEntity<ApiResponse> rejectReservation(@RequestBody ReservationRequestDTO reservationRequestDTO){
 
@@ -99,6 +122,12 @@ public class RestaurantReservationAndSettingsController
     }
 
 
+    /**
+     *
+     * @param restaurantReservationSettings
+     * @return restaurantReservationSettings
+     * Use: for adding or updating the Settings related to the reservations
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/add-or-edit-reservation-settings")
     ResponseEntity<ApiResponse> editReservationSettings(@RequestBody RestaurantReservationSettings restaurantReservationSettings){
 
@@ -124,6 +153,12 @@ public class RestaurantReservationAndSettingsController
     }
 
 
+    /**
+     *
+     * @param restaurant
+     * @return RestaurantReservationSettings
+     * Use: to fetch the reservation settings of a particular restaurant
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/get-reservation-settings")
     ResponseEntity<ApiResponse> getRestaurantReservationSettings(@RequestBody Restaurant restaurant){
 
@@ -133,7 +168,13 @@ public class RestaurantReservationAndSettingsController
     }
 
 
-
+    /**
+     *
+     * @param restaurant
+     * @return boolean
+     * This api needs to be hit periodically
+     * This api will delete all the records from 'reservations' collection which have their dineInDateAndTime before the current date and time
+     */
     @PostMapping("/dinedynamo/restaurant/reservations/clear-old-reservations")
     ResponseEntity<ApiResponse> clearOldREservations(@RequestBody Restaurant restaurant){
 
