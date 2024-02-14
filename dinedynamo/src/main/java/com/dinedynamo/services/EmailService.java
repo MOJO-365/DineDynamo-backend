@@ -27,5 +27,25 @@ public class EmailService {
         message.setText(emailContent);
         mailSender.send(message);
     }
+
+
+    public boolean sendBugQueryMail(String subject ,String restaurantName, String queryDescription){
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo("dinedynamo2024@gmail.com");
+        message.setSubject(subject);
+
+        String emailContent =
+                "You have received a bug query from " + restaurantName + " account.\n" +
+                "" + queryDescription + "\n\n" +
+                "Best regards,\n" +
+                ""+restaurantName;
+
+        message.setText(emailContent);
+        mailSender.send(message);
+
+        return true;
+
+    }
 }
 

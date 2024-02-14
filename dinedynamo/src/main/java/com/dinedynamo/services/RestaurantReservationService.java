@@ -1,11 +1,15 @@
 package com.dinedynamo.services;
 
 import com.dinedynamo.collections.Reservation;
+import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.helper.DateTimeUtility;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -22,6 +26,9 @@ public class RestaurantReservationService
 
     @Autowired
     RestaurantRepository restaurantRepository;
+
+    @Autowired
+    DateTimeUtility dateTimeUtility;
 
 
     public Reservation acceptReservationOfCustomer(Reservation reservation, String messageContent){
@@ -69,5 +76,33 @@ public class RestaurantReservationService
 
         return reservation;
     }
+
+
+    public boolean clearOldReservationsFromDb(String restaurantId){
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+
+        if(restaurant == null){
+            throw new RuntimeException("Restaurant not present in database");
+        }
+
+        List<Reservation> listOfReservations = reservationRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+
+        for(Reservation reservation: listOfReservations){
+
+            String dineInDateAndTimeString = reservation.getDineInDateAndTime();
+
+            LocalDateTime dineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dineInDateAndTimeString);
+
+            LocalDateTime today = LocalDateTime.now();
+
+            if(today.isAfter(dineInDateAndTime)){
+                reservationRepository.delete(reservation);
+            }
+
+        }
+
+        return true;
+    }
+
 
 }

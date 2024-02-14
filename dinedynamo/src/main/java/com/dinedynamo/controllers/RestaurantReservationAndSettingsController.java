@@ -6,6 +6,7 @@ import com.dinedynamo.collections.Reservation;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.RestaurantReservationSettings;
 import com.dinedynamo.dto.ReservationRequestDTO;
+import com.dinedynamo.helper.DateTimeUtility;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.RestaurantReservationSettingsRepository;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.dinedynamo.services.RestaurantReservationService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,13 @@ public class RestaurantReservationAndSettingsController
     RestaurantRepository restaurantRepository;
 
     @Autowired
+    DateTimeUtility dateTimeUtility;
+
+    @Autowired
     RestaurantReservationSettingsRepository restaurantReservationSettingsRepository;
+
+    @Autowired
+    RestaurantReservationService restaurantReservationSettingsService;
 
     @PostMapping("/dinedynamo/restaurant/reservations/get-hold-reservations")
     ResponseEntity<ApiResponse> getAllHoldReservations(@RequestBody Restaurant restaurant){
@@ -125,20 +134,12 @@ public class RestaurantReservationAndSettingsController
 
 
 
-//    @PostMapping("/dinedynamo/restaurant/reservations/clear-old-reservations")
-//    ResponseEntity<ApiResponse> clearOldREservations(@RequestBody Restaurant restaurant){
-//
-//        restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
-//
-//        if(restaurant == null){
-//            throw new RuntimeException("Restaurant not present in database");
-//        }
-//
-//        List<Reservation> listOfReservations = reservationRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
-//
-//        for(Reservation reservation: listOfReservations){
-//
-//        }
-//
-//    }
+    @PostMapping("/dinedynamo/restaurant/reservations/clear-old-reservations")
+    ResponseEntity<ApiResponse> clearOldREservations(@RequestBody Restaurant restaurant){
+
+        boolean isDeleted = restaurantReservationService.clearOldReservationsFromDb(restaurant.getRestaurantId());
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",isDeleted),HttpStatus.OK);
+
+    }
 }
