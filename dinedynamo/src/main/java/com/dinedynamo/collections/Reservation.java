@@ -34,6 +34,6 @@ public class Reservation {
 
     public enum ReservationRequestStatus
     {
-        HOLD,REJECTED,ACCEPTED,INVALID,CANCELED
+        HOLD,REJECTED,ACCEPTED,INVALID,CANCELLED
     }
 }

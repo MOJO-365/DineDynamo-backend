@@ -85,7 +85,7 @@ public class CustomerReservationController
             throw new RuntimeException("Reservation settings id not present in cancel reservation request");
         }
 
-        reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.CANCELED);
+        reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.CANCELLED);
         reservationRepository.save(reservation);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",reservation),HttpStatus.OK);
 

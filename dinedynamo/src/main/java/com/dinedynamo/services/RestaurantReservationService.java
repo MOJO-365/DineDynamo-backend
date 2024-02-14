@@ -1,11 +1,14 @@
 package com.dinedynamo.services;
 
+import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Reservation;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.helper.DateTimeUtility;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -104,5 +107,26 @@ public class RestaurantReservationService
         return true;
     }
 
+
+    public Reservation deleteCancelledReservation(Reservation reservation){
+
+        reservation = reservationRepository.findById(reservation.getReservationId()).orElse(null);
+
+        if(reservation == null){
+
+            System.out.println("RESERVATION-ID DOES NOT EXIST IN DATABASE, INCORRECT ID PASSED");
+            return null;
+        }
+
+        else if(reservation.getReservationRequestStatus() == Reservation.ReservationRequestStatus.CANCELLED){
+            reservationRepository.delete(reservation);
+            System.out.println("RESERVATION DELETED FROM DATABASE");
+            return reservation;
+        }
+        else{
+            System.out.println("CANNOT DELETE RESERVATION, AS THE STATUS IS NOT 'CANCELLED' IN THE DATABASE");
+            return null;
+        }
+    }
 
 }
