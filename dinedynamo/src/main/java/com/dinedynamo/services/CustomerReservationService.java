@@ -36,6 +36,12 @@ public class CustomerReservationService
     @Autowired
     RestaurantReservationSettingsRepository restaurantReservationSettingsRepository;
 
+    /**
+     *
+     * @param reservation
+     * @return boolean
+     * checks if the attributes are non-empty
+     */
     public  boolean validateReservationRequest(Reservation reservation){
 
         if(reservation.getGuestCount() == 0 || reservation.getCustomerPhone() == null ||
@@ -52,6 +58,12 @@ public class CustomerReservationService
     }
 
 
+    /**
+     *
+     * @param reservation
+     * @return reservation
+     * checks the constraints for saving the reservation request into database. If the constraints are satisfied, object will be saved are reservation is returned, else null is returned
+     */
     public Reservation save(Reservation reservation){
 
 
@@ -97,6 +109,10 @@ public class CustomerReservationService
     }
 
 
+    /**
+     *
+     * checks if the reservation requests' dineIn time is within first slot or not
+     */
     public boolean isPresentInFirstSlot(Reservation reservation){
 
         List<Reservation> existingReservations = reservationRepository.findByRestaurantIdAndCustomerPhone(reservation.getRestaurantId(), reservation.getCustomerPhone()).orElse(null);
@@ -137,6 +153,10 @@ public class CustomerReservationService
     }
 
 
+    /**
+     *
+     * checks if the reservation requests' dineIn time is within second slot or not
+     */
     public boolean isPresentInSecondSlot(Reservation reservation){
 
 
@@ -172,6 +192,10 @@ public class CustomerReservationService
 
     }
 
+
+    /**
+     * returns the slot of corresponding reservation request
+     */
     public int getSlot(Reservation reservation){
 
         RestaurantReservationSettings restaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(reservation.getRestaurantId()).orElse(null);

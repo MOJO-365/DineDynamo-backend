@@ -67,6 +67,13 @@ public class TableService
     }
 
 
+    /**
+     *
+     * @param table
+     * @return deleted table
+     * @throws IOException
+     * This method deletes the corresponding table qr from cloudinary and the table from database
+     */
     public Table delete(Table table) throws IOException {
 
         cloudinaryService.deleteImageFromCloudinary(table.getPublicIdOfQRImage());

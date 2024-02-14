@@ -16,6 +16,11 @@ public class RaiseBugQueryService
     @Autowired
     EmailService emailService;
 
+    /**
+     *
+     * @param bugQuery
+     * @return returns true is query is created and sent to the application owners' mail
+     */
     public boolean createAndSendQuery(BugQuery bugQuery){
 
         if(bugQuery.getBugDescription().equals("") || bugQuery.getBugDescription() == null ||

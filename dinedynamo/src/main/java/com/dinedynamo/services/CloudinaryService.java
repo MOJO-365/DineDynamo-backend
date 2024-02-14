@@ -14,6 +14,13 @@ public class CloudinaryService
     @Autowired
     Cloudinary cloudinary;
 
+    /**
+     *
+     * @param bytesOfImage
+     * @return Map object
+     * @throws IOException
+     * uploads image on cloudinary
+     */
     public Map uploadImageOnCloudinary(byte[] bytesOfImage) throws IOException {
 
         Map dataOfImage = cloudinary.uploader().upload(bytesOfImage,Map.of());
@@ -24,6 +31,12 @@ public class CloudinaryService
 
     }
 
+    /**
+     *
+     * @param publicId
+     * @return
+     * @throws Exception
+     */
     public String getImageURLFromPublicId(String publicId) throws Exception {
         Map result = cloudinary.api().resource(publicId,null);
 
@@ -36,6 +49,12 @@ public class CloudinaryService
 
     }
 
+    /**
+     *
+     * @param publicId
+     * @throws IOException
+     * deletes the image from cloudinary
+     */
     public void deleteImageFromCloudinary(String publicId) throws IOException {
         Map result = cloudinary.uploader().destroy(publicId, null);
         // The result map will contain information about the deletion
