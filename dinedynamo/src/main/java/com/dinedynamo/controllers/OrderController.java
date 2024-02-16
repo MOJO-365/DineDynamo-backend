@@ -5,12 +5,15 @@ import com.dinedynamo.collections.*;
 import com.dinedynamo.repositories.OrderRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.TableRepository;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.dinedynamo.repositories.CustomerRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -42,32 +45,7 @@ public class OrderController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
     }
 
-//
-//    Order prepared status true or false
-//    @GetMapping("/dinedynamo/order/prepare")
-//    public ResponseEntity<Object> getOrder(@RequestBody Order order) {
-//        Optional<Order> existingOrderOptional = orderRepository.findById(order.getOrderId());
-//
-//        if (existingOrderOptional.isPresent()) {
-//            Order existingOrder = existingOrderOptional.get();
-//            processOrder(existingOrder);
-//
-//            return new ResponseEntity<>(existingOrder, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-//
-//    private void processOrder(Order order) {
-//        List<Map<String, Object>> orderList = order.getOrderList();
-//
-//        for (Map<String, Object> orderItem : orderList) {
-//            List<Map<String, Object>> items = (List<Map<String, Object>>) orderItem.get("items");
-//
-//            // this is for Removing prepared items from the list
-//            items.removeIf(item -> Boolean.TRUE.equals(item.get("prepared")));
-//        }
-//    }
+
 
 
 
@@ -128,25 +106,105 @@ public class OrderController {
     }
 
 
-//    @PostMapping("/dinedynamo/restaurant/additem/placeorder")
-//    public ResponseEntity<ApiResponse> additem(@RequestBody Order order) {
-//        Optional<Order> existingOrder = orderRepository.findById(order.getOrderId());
-//
-//        if (existingOrder.isPresent()) {
-//            Order savedOrder = existingOrder.get();
-//
-//            //this is for Updating existing order with new item
-//            savedOrder.getOrderList().addAll(order.getOrderList());
-//
-//            orderRepository.save(savedOrder);
-//
-//            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", savedOrder), HttpStatus.OK);
-//        } else {
-//            // order doesn't exist, create a new.
-//            orderRepository.save(order);
-//            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
-//        }
-//    }
+
+
+
+    @PostMapping("/dinedynamo/invoice/get-order-items")
+    public ResponseEntity<ApiResponse> getFinalOrderForTable(@RequestBody Order order) {
+        try {
+            if (order.getTableId() == null) {
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "Table ID cannot be null", null), HttpStatus.BAD_REQUEST);
+            }
+
+            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
+
+            if (!orderListForTable.isEmpty()) {
+                Order consolidatedOrder = consolidateOrders(orderListForTable);
+                consolidatedOrder.setTableId(order.getTableId()); // Set the table ID in the consolidated order
+
+                // Extracting information from the first order
+                Order firstOrder = orderListForTable.get(0);
+                consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId());
+                consolidatedOrder.setOrderId(firstOrder.getOrderId());
+                consolidatedOrder.setDateTime(firstOrder.getDateTime());
+
+                // Setting up the response
+                ApiResponse response = new ApiResponse(HttpStatus.OK, "Orders retrieved successfully", List.of(consolidatedOrder));
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    private Order consolidateOrders(List<Order> orderList) {
+        if (orderList.isEmpty()) {
+            return null;
+        }
+
+        Order consolidatedOrder = new Order();
+        Map<String, Integer> itemNameToTotalQuantity = new HashMap<>();
+        Map<String, Double> itemNameToPrice = new HashMap<>();
+        Map<String, List<Map<String, Object>>> itemNameToAddons = new HashMap<>();
+
+        for (Order order : orderList) {
+            List<Map<String, Object>> orderListArray = order.getOrderList(); // Changed to List<Map<String, Object>>
+            for (Map<String, Object> item : orderListArray){
+
+                String itemName = (String) item.get("name");
+                double price = ((Number) item.get("price")).doubleValue();
+                int qty = ((Number) item.get("qty")).intValue();
+
+                // Update total quantity and price for each item
+                String key = itemName + "_" + price;
+                itemNameToTotalQuantity.put(key, itemNameToTotalQuantity.getOrDefault(key, 0) + qty);
+                itemNameToPrice.put(key, price);
+
+                // Handle addons
+                List<Map<String, Object>> addons = (List<Map<String, Object>>) item.get("addons");
+                if (addons != null && !addons.isEmpty()) {
+                    for (Map<String, Object> addon : addons) {
+                        String addonName = (String) addon.get("name");
+                        double addonPrice = ((Number) addon.get("price")).doubleValue();
+                        int addonQty = ((Number) addon.get("qty")).intValue();
+
+                        // Update addon quantity
+                        String addonKey = addonName + "_" + addonPrice;
+                        itemNameToTotalQuantity.put(addonKey, itemNameToTotalQuantity.getOrDefault(addonKey, 0) + addonQty);
+                        itemNameToPrice.put(addonKey, addonPrice);
+                    }
+                }
+            }
+        }
+
+        JSONArray combinedOrderList = new JSONArray();
+        for (String key : itemNameToTotalQuantity.keySet()) {
+            String[] parts = key.split("_");
+            String itemName = parts[0];
+            double price = Double.parseDouble(parts[1]);
+            int totalQuantity = itemNameToTotalQuantity.get(key);
+
+            JSONObject combinedItem = new JSONObject();
+            combinedItem.put("name", itemName);
+            combinedItem.put("price", price);
+            combinedItem.put("qty", totalQuantity);
+
+            combinedOrderList.add(combinedItem);
+        }
+
+        consolidatedOrder.setOrderList(combinedOrderList);
+        return consolidatedOrder;
+    }
+
+
+
+
+
+
 
 
 }
