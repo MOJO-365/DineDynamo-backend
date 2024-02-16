@@ -29,8 +29,11 @@ public class SearchService {
     @Autowired
     MongoConverter mongoConverter;
 
+    /**
+     * Searches the expression in the collection - Menu and creats list of matched menus
+     * Now from the matched menus list, corresponding restaurant ids are fetched and List of that restaurants is created
+     */
     public List<Restaurant> searchInMenuOfRestaurantsAndReturnRestaurantList(String expression){
-
 
         List<Menu> matchedMenus = new ArrayList<>();
         List<Restaurant> matchedRestaurants = new ArrayList<>();
@@ -44,10 +47,7 @@ public class SearchService {
                                                 new Document("wildcard", "*"))))));
 
 
-
-
         result.forEach(doc -> matchedMenus.add(mongoConverter.read(Menu.class,doc)));
-
 
         for(Menu menu: matchedMenus){
 

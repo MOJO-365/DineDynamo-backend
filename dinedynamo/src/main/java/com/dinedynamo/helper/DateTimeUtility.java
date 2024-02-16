@@ -10,7 +10,12 @@ import java.util.Locale;
 public class DateTimeUtility {
 
 
-
+    /**
+     *
+     * @param dateString
+     * @return LocalDateTime
+     * As we saved the date time from frontend in string format (in the database), this method converts JS Datetime string into Java LocalDateTime object
+     */
     public LocalDateTime convertJSLocalStringToLocalDateTime(String dateString){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy, h:mm:ss a", Locale.US);

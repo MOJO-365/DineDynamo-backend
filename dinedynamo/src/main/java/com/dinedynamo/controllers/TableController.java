@@ -2,6 +2,7 @@ package com.dinedynamo.controllers;
 
 
 import com.cloudinary.Api;
+import com.dinedynamo.dto.EditOneTableDTO;
 import com.dinedynamo.services.RestaurantService;
 import org.bson.Document;
 import com.dinedynamo.api.ApiResponse;
@@ -43,11 +44,6 @@ public class TableController
     CloudinaryService cloudinaryService;
 
 
-    @GetMapping("/dinedynamo/restaurant/test-table")
-    public String test(){
-        return "hello world";
-    }
-
     @PostMapping("/dinedynamo/restaurant/table/getalltables")
     public ResponseEntity<ApiResponse> getAllTables(@RequestBody Restaurant restaurant){
 
@@ -57,8 +53,6 @@ public class TableController
         System.out.println(listOfAllTables.get(0));
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",listOfAllTables.toArray()),HttpStatus.OK);
     }
-
-
 
 
 
@@ -99,6 +93,21 @@ public class TableController
 
 
 
+    @PutMapping("/dinedynamo/restaurant/table/edit-table")
+    public ResponseEntity<ApiResponse> editTable(@RequestBody EditOneTableDTO editOneTableDTO) throws IOException {
+
+        String tableId = editOneTableDTO.getTableId();
+
+        Table updatedTable = editOneTableDTO.getTable();
+
+        updatedTable.setTableId(tableId);
+
+        tableService.save(updatedTable);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedTable),HttpStatus.OK);
+    }
+
+
     //This method does not update the QR codes every time. It will only update the details other than table QR URL
     @PutMapping("/dinedynamo/restaurant/table/editalltables")
     public ResponseEntity<ApiResponse> editAllTables(@RequestBody EditAllTablesRequestBody editAllTablesRequestBody) throws IOException {
@@ -125,7 +134,7 @@ public class TableController
                         updatedTable.setPublicIdOfQRImage(existingTable.getPublicIdOfQRImage());
 
                         //updatedTable.setTableCategory(existingTable.getTableCategory());
-                        tableService.delete(existingTable);
+
                         tableService.save(updatedTable);
 
                         listOfUpdatedTables.add(updatedTable);
@@ -243,6 +252,8 @@ public class TableController
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",listOfTables),HttpStatus.OK);
 
     }
+
+
 
 
 

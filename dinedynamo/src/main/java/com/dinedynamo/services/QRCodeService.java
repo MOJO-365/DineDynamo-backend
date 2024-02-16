@@ -27,7 +27,18 @@ import org.springframework.web.multipart.MultipartFile;
 public class QRCodeService
 {
 
-    //content = product_id
+    //content = tableId
+
+    /**
+     *
+     * @param content
+     * @param width
+     * @param height
+     * @return byte[] or generated QR png image
+     * @throws IOException
+     * Uses zxing library and its classes to generate the qr
+     * Here content should be the corresponding tableId
+     */
     public byte[] generateQrCodeImage(String content, int width, int height) throws IOException {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         Map<EncodeHintType, Object> hintsMap = new HashMap<>();

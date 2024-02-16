@@ -21,6 +21,10 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
     @Query("{ 'restaurantId' : '?0', 'reservationRequestStatus' : 'HOLD' }")
     Optional<List<Reservation>> findHoldReservationsByRestaurantId(String restaurantId);
 
+    //For restaurant side
+    @Query("{ 'restaurantId' : '?0', 'reservationRequestStatus' : 'CANCELLED' }")
+    Optional<List<Reservation>> findCancelledReservationsByRestaurantId(String restaurantId);
+
 
     //For restaurant side
     @Query("{ 'restaurantId' : '?0', 'reservationRequestStatus' : 'ACCEPTED' }")

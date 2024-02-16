@@ -49,7 +49,7 @@ public class TableService
         }
 
         tableRepository.save(table);
-
+        System.out.println("Priting: "+table.getPublicIdOfQRImage());
         //table = tableRepository.findById(table.getTableId()).orElse(null);
         //This means the QR code for table has not been generated even for once
         if(table.getPublicIdOfQRImage() == null){
@@ -67,6 +67,13 @@ public class TableService
     }
 
 
+    /**
+     *
+     * @param table
+     * @return deleted table
+     * @throws IOException
+     * This method deletes the corresponding table qr from cloudinary and the table from database
+     */
     public Table delete(Table table) throws IOException {
 
         cloudinaryService.deleteImageFromCloudinary(table.getPublicIdOfQRImage());

@@ -52,7 +52,12 @@ public class RestaurantController
 
     }
 
-
+    /**
+     *
+     * @param restaurant
+     * @return Restaurant object
+     * Pass only restaurantId in request body to get the corresponding Restaurant object in response
+     */
     @PostMapping("/dinedynamo/restaurant/findrestaurantbyid")
     public ResponseEntity<ApiResponse> findRestaurantById(@RequestBody Restaurant restaurant){
 
@@ -69,6 +74,12 @@ public class RestaurantController
     }
 
 
+    /**
+     *
+     * @param editRestaurantDTO
+     * @return Restaurant
+     * Use: When the restaurant profiles needs to be updated
+     */
     @PutMapping("/dinedynamo/restaurant/editrestaurant")
     public ResponseEntity<ApiResponse> editRestaurant(@RequestBody EditRestaurantDTO editRestaurantDTO){
 
@@ -92,6 +103,12 @@ public class RestaurantController
     }
 
 
+    /**
+     *
+     * @param page : The page number that needs to be accessed
+     * @param size : At a time how may restaurants need to be fetched in one page
+     * @return: Returns the list of Restaurants in pagination format.
+     */
     @GetMapping("/dinedynamo/restaurant/getall")
     public ResponseEntity<Page<Restaurant>> getAllRestaurants(
             @RequestParam(defaultValue = "0") int page,
