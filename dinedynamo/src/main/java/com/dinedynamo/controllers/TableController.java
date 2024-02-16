@@ -2,6 +2,7 @@ package com.dinedynamo.controllers;
 
 
 import com.cloudinary.Api;
+import com.dinedynamo.dto.EditOneTableDTO;
 import com.dinedynamo.services.RestaurantService;
 import org.bson.Document;
 import com.dinedynamo.api.ApiResponse;
@@ -90,6 +91,21 @@ public class TableController
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",table),HttpStatus.OK);
     }
 
+
+
+    @PutMapping("/dinedynamo/restaurant/table/edit-table")
+    public ResponseEntity<ApiResponse> editTable(@RequestBody EditOneTableDTO editOneTableDTO) throws IOException {
+
+        String tableId = editOneTableDTO.getTableId();
+
+        Table updatedTable = editOneTableDTO.getTable();
+
+        updatedTable.setTableId(tableId);
+
+        tableService.save(updatedTable);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedTable),HttpStatus.OK);
+    }
 
 
     //This method does not update the QR codes every time. It will only update the details other than table QR URL
@@ -236,6 +252,8 @@ public class TableController
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",listOfTables),HttpStatus.OK);
 
     }
+
+
 
 
 

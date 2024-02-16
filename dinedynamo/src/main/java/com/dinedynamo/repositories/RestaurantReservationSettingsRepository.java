@@ -14,7 +14,6 @@ public interface RestaurantReservationSettingsRepository extends MongoRepository
 
 
 
-
     @Query("{ 'restaurantId' : '?0' }")
     Optional<RestaurantReservationSettings> findByRestaurantId(String restaurantId);
 
