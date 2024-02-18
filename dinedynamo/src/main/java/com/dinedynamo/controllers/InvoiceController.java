@@ -18,7 +18,6 @@ import com.itextpdf.text.pdf.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,34 +49,26 @@ public class InvoiceController {
     TableRepository tableRepository;
 
     @PostMapping("/dinedynamo/invoice/getorder")
-    public ResponseEntity<ApiResponse> getFinalOrderForTable(@RequestBody Order order) {
-            List<Order> orderListForTable = orderRepository.findOrderByOrderList(order.getOrderList());
+    public ResponseEntity<ApiResponse> getOrderForTable(@RequestBody Order requestOrder) {
+        try {
+            List<Order> orderListForTable = orderRepository.findByTableId(requestOrder.getTableId());
 
             if (!orderListForTable.isEmpty()) {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "orders retrieved successfully", List.of(consolidatedOrder)), HttpStatus.OK);
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Orders retrieved successfully", List.of(consolidatedOrder)), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
             }
-    }
-
-
-    @PostMapping("dinedynamo/accept-order")
-    public ResponseEntity<ApiResponse> acceptOrder(@RequestBody Order order) {
-        try {
-            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orderListForTable), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    
     @PostMapping("/dinedynamo/invoice/getinvoice")
-    public ResponseEntity<byte[]> generateInvoice(@RequestBody Order order) {
+    public ResponseEntity<byte[]> generateInvoicePDF(@RequestBody Order requestOrder) {
         try {
-            List<Order> orderListForTable = orderRepository.findByTableId(order.getTableId());
+            List<Order> orderListForTable = orderRepository.findByTableId(requestOrder.getTableId());
 
             if (!orderListForTable.isEmpty()) {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);
@@ -117,87 +108,35 @@ public class InvoiceController {
 
     private JSONArray consolidateOrderLists(List<Order> orderList) {
         JSONArray consolidatedOrderList = new JSONArray();
-        Map<String, Map<String, Object>> itemNameQuantitiesPrices = new HashMap<>();
 
         for (Order order : orderList) {
             JSONArray individualOrderList = order.getOrderList();
             if (individualOrderList != null) {
-                for (Object orderItem : individualOrderList) {
-                    updateItemQuantitiesAndPrices(itemNameQuantitiesPrices, orderItem);
-                }
+                consolidatedOrderList.addAll(individualOrderList);
             }
-        }
-
-        for (Map.Entry<String, Map<String, Object>> entry : itemNameQuantitiesPrices.entrySet()) {
-            Map<String, Object> itemDetails = entry.getValue();
-            Map<String, Object> consolidatedItem = new HashMap<>();
-            consolidatedItem.put("name", itemDetails.get("name"));
-            consolidatedItem.put("qty", itemDetails.get("qty"));
-            consolidatedItem.put("price", itemDetails.get("price"));
-            consolidatedOrderList.add(consolidatedItem);
         }
 
         return consolidatedOrderList;
     }
 
-    private void updateItemQuantitiesAndPrices(Map<String, Map<String, Object>> itemNameQuantitiesPrices, Object orderItem) {
-        String itemName;
-        int quantity;
-        double price;
-
-        if (orderItem instanceof JSONObject) {
-            itemName = (String) ((JSONObject) orderItem).get("name");
-            quantity = ((Number) ((JSONObject) orderItem).get("qty")).intValue();
-            price = ((Number) ((JSONObject) orderItem).get("price")).doubleValue();
-        } else if (orderItem instanceof LinkedHashMap) {
-            itemName = (String) ((LinkedHashMap<?, ?>) orderItem).get("name");
-            quantity = ((Number) ((LinkedHashMap<?, ?>) orderItem).get("qty")).intValue();
-            price = ((Number) ((LinkedHashMap<?, ?>) orderItem).get("price")).doubleValue();
-        } else {
-            return;
-        }
-
-        String key = itemName + "_" + price;
-
-        if (!itemNameQuantitiesPrices.containsKey(key)) {
-            Map<String, Object> itemDetails = new HashMap<>();
-            itemDetails.put("name", itemName);
-            itemDetails.put("qty", quantity);
-            itemDetails.put("price", price);
-            itemNameQuantitiesPrices.put(key, itemDetails);
-        } else {
-            Map<String, Object> existingItem = itemNameQuantitiesPrices.get(key);
-            int existingQuantity = (int) existingItem.get("qty");
-            existingItem.put("qty", existingQuantity + quantity);
-        }
-    }
-
     private double calculateGrandTotal(JSONArray orderList) {
         double total = 0.0;
         for (Object orderItem : orderList) {
-            double price = getPriceFromOrderItem(orderItem);
-            int qty = getQuantityFromOrderItem(orderItem);
-            total += price * qty;
+            if (orderItem instanceof JSONObject) {
+                double price = getPriceFromOrderItem((JSONObject) orderItem);
+                int quantity = getQuantityFromOrderItem((JSONObject) orderItem);
+                total += price * quantity;
+            }
         }
         return total;
     }
 
-    private double getPriceFromOrderItem(Object orderItem) {
-        if (orderItem instanceof JSONObject) {
-            return ((Number) ((JSONObject) orderItem).get("price")).doubleValue();
-        } else if (orderItem instanceof LinkedHashMap) {
-            return ((Number) ((LinkedHashMap<?, ?>) orderItem).get("price")).doubleValue();
-        }
-        return 0.0;
+    private double getPriceFromOrderItem(JSONObject orderItem) {
+        return ((Number) orderItem.get("price")).doubleValue();
     }
 
-    private int getQuantityFromOrderItem(Object orderItem) {
-        if (orderItem instanceof JSONObject) {
-            return ((Number) ((JSONObject) orderItem).get("qty")).intValue();
-        } else if (orderItem instanceof LinkedHashMap) {
-            return ((Number) ((LinkedHashMap<?, ?>) orderItem).get("qty")).intValue();
-        }
-        return 0;
+    private int getQuantityFromOrderItem(JSONObject orderItem) {
+        return ((Number) orderItem.get("qty")).intValue();
     }
 
     private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
@@ -242,7 +181,7 @@ public class InvoiceController {
     }
 
     private float calculateTotalHeightWithIncreasedPageSize(float baseContentHeight, float orderDetailsHeight, float thankYouHeight) {
-        int pageSize = 400;
+        int pageSize = 300;
 
         switch (pageSize) {
             case 400:
@@ -250,7 +189,7 @@ public class InvoiceController {
 
             case 600:
 
-                float additionalHeight = 200;
+                float additionalHeight = 100;
                 return baseContentHeight + orderDetailsHeight + thankYouHeight + additionalHeight;
 
             default:
@@ -259,7 +198,7 @@ public class InvoiceController {
     }
 
     private float calculateOrderDetailsHeight(Order order) {
-        return 300;
+        return 250;
     }
 
     private float calculateThankYouHeight() {
@@ -326,57 +265,111 @@ public class InvoiceController {
         document.add(title);
         addHorizontalLine(document);
         List<Map<String, Object>> orderList = order.getOrderList();
-
-        double grandTotal = 0;
-        Map<String, Integer> itemNameAndPriceToTotalQuantity = new HashMap<>();
-        Map<String, Double> itemNameAndPriceToTotalPrice = new HashMap<>();
+        Map<String, Map<Double, Integer>> itemNamePriceToTotalQuantity = new HashMap<>();
+        Map<String, Map<Double, Double>> itemNamePriceToTotalPrice = new HashMap<>();
 
         for (Map<String, Object> item : orderList) {
             String itemName = (String) item.get("name");
             int quantity = ((Number) item.get("qty")).intValue();
             double price = ((Number) item.get("price")).doubleValue();
 
-            String key = itemName + "_" + price;
+            // Update total quantity and total price for each item
+            if (!itemNamePriceToTotalQuantity.containsKey(itemName)) {
+                itemNamePriceToTotalQuantity.put(itemName, new HashMap<>());
+                itemNamePriceToTotalPrice.put(itemName, new HashMap<>());
+            }
 
-            itemNameAndPriceToTotalQuantity.merge(key, quantity, Integer::sum);
-            itemNameAndPriceToTotalPrice.merge(key, price * quantity, Double::sum);
+            Map<Double, Integer> priceToQuantityMap = itemNamePriceToTotalQuantity.get(itemName);
+            Map<Double, Double> priceToPriceMap = itemNamePriceToTotalPrice.get(itemName);
 
-            grandTotal += price * quantity;
+            if (!priceToQuantityMap.containsKey(price)) {
+                priceToQuantityMap.put(price, 0);
+                priceToPriceMap.put(price, 0.0);
+            }
+
+            priceToQuantityMap.put(price, priceToQuantityMap.get(price) + quantity);
+            priceToPriceMap.put(price, priceToPriceMap.get(price) + (price * quantity));
+
+            // Addons logic
+            List<Map<String, Object>> addons = (List<Map<String, Object>>) item.get("addons");
+            if (addons != null && !addons.isEmpty()) {
+                for (Map<String, Object> addon : addons) {
+                    String addonName = (String) addon.get("name");
+                    int addonQty = ((Number) addon.get("qty")).intValue();
+                    double addonPrice = ((Number) addon.get("price")).doubleValue();
+
+                    // Add addon quantity and price to the respective maps
+                    if (!itemNamePriceToTotalQuantity.containsKey(addonName)) {
+                        itemNamePriceToTotalQuantity.put(addonName, new HashMap<>());
+                        itemNamePriceToTotalPrice.put(addonName, new HashMap<>());
+                    }
+
+                    Map<Double, Integer> addonPriceToQuantityMap = itemNamePriceToTotalQuantity.get(addonName);
+                    Map<Double, Double> addonPriceToPriceMap = itemNamePriceToTotalPrice.get(addonName);
+
+                    if (!addonPriceToQuantityMap.containsKey(addonPrice)) {
+                        addonPriceToQuantityMap.put(addonPrice, 0);
+                        addonPriceToPriceMap.put(addonPrice, 0.0);
+                    }
+
+                    addonPriceToQuantityMap.put(addonPrice, addonPriceToQuantityMap.get(addonPrice) + addonQty);
+                    addonPriceToPriceMap.put(addonPrice, addonPriceToPriceMap.get(addonPrice) + (addonPrice * addonQty));
+                }
+            }
         }
 
-        for (String key : itemNameAndPriceToTotalQuantity.keySet()) {
-            String[] parts = key.split("_");
-            String itemName = parts[0];
-            double price = Double.parseDouble(parts[1]);
-            int totalQuantity = itemNameAndPriceToTotalQuantity.get(key);
-            double totalPrice = itemNameAndPriceToTotalPrice.get(key);
+// Print item details
+        for (String itemName : itemNamePriceToTotalQuantity.keySet()) {
+            for (Double price : itemNamePriceToTotalQuantity.get(itemName).keySet()) {
+                int totalQuantity = itemNamePriceToTotalQuantity.get(itemName).get(price);
+                double totalPrice = itemNamePriceToTotalPrice.get(itemName).get(price);
 
-            // Add item details as a paragraph to the document
-            Paragraph itemDetails = new Paragraph(
-                    String.format("%-18s", itemName) +
-                            "\t  " + String.format("%-2s", totalQuantity) +
-                            "\t  " + String.format("%-10s", "$" + totalPrice),
-                    normalFont);
-            document.add(itemDetails);
+                String itemDetailsString = String.format("%-22s\t  %-2s\t  $%-7.2f", itemName, totalQuantity, totalPrice);
+                Paragraph itemDetails = new Paragraph(itemDetailsString, normalFont);
+                document.add(itemDetails);
+            }
         }
 
-        addHorizontalLine(document);
+//// Print addons details
+//        for (String addonName : itemNamePriceToTotalQuantity.keySet()) {
+//            for (Double price : itemNamePriceToTotalQuantity.get(addonName).keySet()) {
+//                int totalQuantity = itemNamePriceToTotalQuantity.get(addonName).get(price);
+//                double totalPrice = itemNamePriceToTotalPrice.get(addonName).get(price);
+//
+//                String addonDetailsString = String.format("\t\tAddon: %-18s\t  %-2s\t  $%-10.2f", addonName, totalQuantity, totalPrice);
+//                Paragraph addonDetails = new Paragraph(addonDetailsString, normalFont);
+//                document.add(addonDetails);
+//            }
+//        }
 
-        Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f", "GST:", grandTotal * 0.1), subtitleFont);
+        double grandTotal = 0;
+        double gstAmount = 0;
+
+        for (String itemName : itemNamePriceToTotalPrice.keySet()) {
+            for (Double price : itemNamePriceToTotalPrice.get(itemName).keySet()) {
+                double totalPrice = itemNamePriceToTotalPrice.get(itemName).get(price);
+                grandTotal += totalPrice;
+            }
+        }
+
+        gstAmount = grandTotal * 0.1; // Calculate GST amount
+        grandTotal += gstAmount; // Add GST amount to grand total
+
+        Paragraph gstPar = new Paragraph(String.format("%-4s $%.2f", "GST:", gstAmount), subtitleFont);
         gstPar.setAlignment(Element.ALIGN_LEFT);
         gstPar.setIndentationLeft(172);
         document.add(gstPar);
-
-        grandTotal += grandTotal * 0.1;
 
         Paragraph grandTotalPar = new Paragraph(String.format("%-4s $%.2f", "Total(inc GST):", grandTotal), subtitleFont);
         grandTotalPar.setAlignment(Element.ALIGN_LEFT);
         grandTotalPar.setIndentationLeft(80);
         document.add(grandTotalPar);
-
         addHorizontalLine(document);
+
+
     }
-        private void addQRCodeToPDF(Document document, String content) throws DocumentException {
+
+    private void addQRCodeToPDF(Document document, String content) throws DocumentException {
         Paragraph qrCodeParagraph = new Paragraph();
 
         try {
