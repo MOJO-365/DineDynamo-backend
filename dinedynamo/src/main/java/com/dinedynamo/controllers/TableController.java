@@ -195,12 +195,12 @@ public class TableController
 
     }
 
-    @PostMapping("/dinedynamo/restaurant/table/merge-table")
-    public List<Table> mergeTables(@RequestParam int capacity){
-
-        return tableService.bestMergeTables(capacity);
-
-    }
+//    @PostMapping("/dinedynamo/restaurant/table/merge-table")
+//    public List<Table> mergeTables(@RequestParam int capacity){
+//
+//        return tableService.bestMergeTables(capacity);
+//
+//    }
 
 
 
