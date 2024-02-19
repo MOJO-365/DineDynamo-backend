@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Random;
 
 import com.dinedynamo.config.TwilioConfig;
-import com.dinedynamo.dto.OtpRequest;
-import com.dinedynamo.dto.OtpResponse;
-import com.dinedynamo.dto.OtpStatus;
-import com.dinedynamo.dto.OtpValidationRequest;
+import com.dinedynamo.dto.otp_dtos.OtpRequest;
+import com.dinedynamo.dto.otp_dtos.OtpResponse;
+import com.dinedynamo.dto.otp_dtos.OtpStatus;
+import com.dinedynamo.dto.otp_dtos.OtpValidationRequest;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
 

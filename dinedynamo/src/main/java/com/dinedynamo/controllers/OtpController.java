@@ -1,9 +1,9 @@
 package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.dto.OtpRequest;
-import com.dinedynamo.dto.OtpResponse;
-import com.dinedynamo.dto.OtpValidationRequest;
+import com.dinedynamo.dto.otp_dtos.OtpRequest;
+import com.dinedynamo.dto.otp_dtos.OtpResponse;
+import com.dinedynamo.dto.otp_dtos.OtpValidationRequest;
 import com.dinedynamo.services.SmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
