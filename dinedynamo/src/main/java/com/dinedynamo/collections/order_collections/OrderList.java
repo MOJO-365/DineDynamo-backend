@@ -1,4 +1,4 @@
-package com.dinedynamo.collections;
+package com.dinedynamo.collections.order_collections;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class OrderItem {
+public class OrderList {
 
-    private String itemName;
-    private int quantity;
+    private String itemId;
+    private String name;
+    private int qty;
     private double price;
+    private String desc;
+    private String note;
     private List<Addon> addons;
-}
 
+}

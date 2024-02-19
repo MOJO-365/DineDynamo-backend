@@ -122,13 +122,11 @@ public class OrderController {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);
                 consolidatedOrder.setTableId(order.getTableId()); // Set the table ID in the consolidated order
 
-                // Extracting information from the first order
                 Order firstOrder = orderListForTable.get(0);
                 consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId());
                 consolidatedOrder.setOrderId(firstOrder.getOrderId());
                 consolidatedOrder.setDateTime(firstOrder.getDateTime());
 
-                // Setting up the response
                 ApiResponse response = new ApiResponse(HttpStatus.OK, "Orders retrieved successfully", List.of(consolidatedOrder));
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
@@ -208,6 +206,5 @@ public class OrderController {
 
 
 }
-
 
 

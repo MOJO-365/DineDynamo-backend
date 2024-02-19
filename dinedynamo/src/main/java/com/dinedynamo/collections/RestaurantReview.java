@@ -11,8 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-@Document(collection = "feedback")
-public class Review
+@Document(collection = "restaurant_reviews")
+public class RestaurantReview
 {
 
     @Id
@@ -21,7 +21,5 @@ public class Review
     private String customerName;
     private double starRating;
     private String comment;
-//    private double averageRating;
-//    private long totalRatings;
-//    seprate collection
+
 }
