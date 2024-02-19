@@ -1,4 +1,4 @@
-package com.dinedynamo.controllers.discount_offers_controllers;
+package com.dinedynamo.controllers.discounts_offers_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
@@ -6,7 +6,6 @@ import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.discounts_offers.BogoOffer;
 
 import com.dinedynamo.dto.discount_offers_dtos.EditBogoOfferDTO;
-import com.dinedynamo.dto.discount_offers_dtos.EditPercentageDiscountDTO;
 import com.dinedynamo.repositories.discounts_offers_repositories.BogoOfferRepository;
 import com.dinedynamo.services.RestaurantService;
 import com.dinedynamo.services.discounts_offers_services.BogoOfferService;

@@ -1,4 +1,4 @@
-package com.dinedynamo.controllers;
+package com.dinedynamo.controllers.reservation_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;

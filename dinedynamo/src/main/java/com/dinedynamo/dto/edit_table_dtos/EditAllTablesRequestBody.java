@@ -1,4 +1,4 @@
-package com.dinedynamo.dto;
+package com.dinedynamo.dto.edit_table_dtos;
 
 import com.dinedynamo.collections.Table;
 import lombok.AllArgsConstructor;

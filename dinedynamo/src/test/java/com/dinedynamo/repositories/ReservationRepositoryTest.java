@@ -18,7 +18,7 @@ class ReservationRepositoryTest {
 
     @Test
     void testFindByRestaurantId() {
-        String restaurantId = "123";
+        String restaurantId = "1234";
         Reservation reservation1 = createReservation(restaurantId);
         Reservation reservation2 = createReservation(restaurantId);
         reservationRepository.save(reservation1);
@@ -32,7 +32,7 @@ class ReservationRepositoryTest {
 
     @Test
     void testFindHoldReservationsByRestaurantId() {
-        String restaurantId = "123";
+        String restaurantId = "999";
         Reservation reservation1 = createReservationWithStatus(restaurantId, Reservation.ReservationRequestStatus.HOLD);
         Reservation reservation2 = createReservationWithStatus(restaurantId, Reservation.ReservationRequestStatus.HOLD);
         reservationRepository.save(reservation1);
@@ -46,7 +46,7 @@ class ReservationRepositoryTest {
 
     @Test
     void testFindAcceptedReservationsByRestaurantId() {
-        String restaurantId = "123";
+        String restaurantId = "999";
         Reservation reservation1 = createReservationWithStatus(restaurantId, Reservation.ReservationRequestStatus.ACCEPTED);
         Reservation reservation2 = createReservationWithStatus(restaurantId, Reservation.ReservationRequestStatus.ACCEPTED);
         reservationRepository.save(reservation1);

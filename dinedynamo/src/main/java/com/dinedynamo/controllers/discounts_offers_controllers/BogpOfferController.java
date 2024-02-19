@@ -1,4 +1,4 @@
-package com.dinedynamo.controllers.discount_offers_controllers;
+package com.dinedynamo.controllers.discounts_offers_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
