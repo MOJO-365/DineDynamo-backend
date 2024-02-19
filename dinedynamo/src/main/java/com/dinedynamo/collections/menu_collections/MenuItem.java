@@ -15,7 +15,7 @@ public class MenuItem {
     @Id
     private String itemId;
     private String restaurantId;
-    private String perentId;
+    private String parentId;
     private String itemName;
     private String itemDescription;
     private double itemPrice;

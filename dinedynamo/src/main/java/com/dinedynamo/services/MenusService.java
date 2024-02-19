@@ -53,7 +53,7 @@ public class MenusService
                                 for(MenuItem menuItem: subSubCategory.getListOfMenuItems()){
 
                                     menuItem.setRestaurantId(menus.getRestaurantId());
-                                    menuItem.setPerentId(subSubCategory.getSubSubcategoryId());
+                                    menuItem.setParentId(subSubCategory.getSubSubcategoryId());
                                     menuItem.setParentType(ParentType.SUBSUBCATEGORY);
                                     menuItemRepository.save(menuItem);
                                 }
@@ -69,7 +69,7 @@ public class MenusService
                         for(MenuItem menuItem: subCategory.getListOfMenuItems()){
 
                             menuItem.setRestaurantId(menus.getRestaurantId());
-                            menuItem.setPerentId(subCategory.getSubcategoryId());
+                            menuItem.setParentId(subCategory.getSubcategoryId());
                             menuItem.setParentType(ParentType.SUBCATEGORY);
                             menuItemRepository.save(menuItem);
                         }
@@ -82,7 +82,7 @@ public class MenusService
                 for(MenuItem menuItem: category.getListOfMenuItems()){
 
                     menuItem.setRestaurantId(menus.getRestaurantId());
-                    menuItem.setPerentId(category.getCategoryId());
+                    menuItem.setParentId(category.getCategoryId());
                     menuItem.setParentType(ParentType.CATEGORY);
                     menuItemRepository.save(menuItem);
                 }

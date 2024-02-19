@@ -19,6 +19,7 @@ public class NewMenusController
     @Autowired
     private MenusRepository menusRepository;
 
+
     @Autowired
     MenusService menusService;
 
@@ -33,6 +34,16 @@ public class NewMenusController
     public ResponseEntity<ApiResponse> deletemenu(@RequestBody Restaurant restaurant){
         boolean isDeleted = menusService.deleteMenus(restaurant.getRestaurantId());
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",isDeleted),HttpStatus.OK);
+    }
+
+    @PostMapping("/dinedynamo/restaurant/menu/get-menu")
+    public ResponseEntity<ApiResponse> getMenuOfRestaurant(@RequestBody Restaurant restaurant){
+        Menus menus = menusRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+
+        if(menus == null){
+            System.out.println("MENU OF THIS RESTAURANT DOES NOT EXIST");
+        }
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
     }
 
 
