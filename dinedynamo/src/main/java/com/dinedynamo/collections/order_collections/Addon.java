@@ -1,4 +1,4 @@
-package com.dinedynamo.collections;
+package com.dinedynamo.collections.order_collections;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,11 @@ import lombok.Setter;
 @Setter
 public class Addon {
 
+    private String itemId;
     private String name;
-    private int quantity;
+    private int qty;
     private double price;
+    private String desc;
+    private String note;
 }
 
