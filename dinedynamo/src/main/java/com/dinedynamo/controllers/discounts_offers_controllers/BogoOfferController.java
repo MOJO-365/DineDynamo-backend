@@ -33,16 +33,10 @@ public class BogoOfferController {
 
     @PostMapping("/dinedynamo/restaurant/offers/create-bogo-offer")
     ResponseEntity<ApiResponse> createBogoOffer(@RequestBody BogoOffer bogoOffer){
-        boolean isRequestValid = bogoOfferService.isRequestValid(bogoOffer);
 
-        if(isRequestValid){
-            bogoOffer = bogoOfferService.save(bogoOffer);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",bogoOffer),HttpStatus.OK);
-        }
-        else{
-            System.out.println("INVALID REQUEST, NO SUFFICIENT ATTRIBUTES IN REQUEST BODY");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
-        }
+        bogoOffer = bogoOfferService.save(bogoOffer);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",bogoOffer),HttpStatus.OK);
+
     }
 
     @DeleteMapping("/dinedynamo/restaurant/offers/delete-bogo-offer")

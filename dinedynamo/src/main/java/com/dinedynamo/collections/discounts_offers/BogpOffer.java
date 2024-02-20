@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,15 +19,24 @@ public class BogpOffer {
 
     private OfferType offerType;
 
+
     private String offerName;
 
-    private String minQty;
+    @Builder.Default
+    private String minQty=" ";
 
-    private String percentage;
+    @Builder.Default
+    private String maxValue=" ";
 
-    private String[] items;
+    @Builder.Default
+    private String percentage=" ";
 
-    private String startingDate;
+    @Builder.Default
+    private String[] items = {};
 
-    private String endingDate;
+    @Builder.Default
+    private String startingDate=" ";
+
+    @Builder.Default
+    private String endingDate=" ";
 }

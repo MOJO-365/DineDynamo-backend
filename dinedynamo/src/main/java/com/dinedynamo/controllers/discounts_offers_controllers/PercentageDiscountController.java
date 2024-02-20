@@ -31,17 +31,8 @@ public class PercentageDiscountController
 
     @PostMapping("/dinedynamo/restaurant/offers/create-percentage-discount")
     ResponseEntity<ApiResponse> createPercentageOffer(@RequestBody PercentageDiscount percentageDiscount){
-
-        boolean isRequestValid = percentageDiscountService.isRequestValid(percentageDiscount);
-
-        if(isRequestValid){
-            percentageDiscount = percentageDiscountService.save(percentageDiscount);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",percentageDiscount),HttpStatus.OK);
-        }
-        else{
-            System.out.println("INVALID REQUEST, NO SUFFICIENT ATTRIBUTES IN REQUEST BODY");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
-        }
+        percentageDiscount = percentageDiscountService.save(percentageDiscount);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",percentageDiscount),HttpStatus.OK);
 
     }
 
