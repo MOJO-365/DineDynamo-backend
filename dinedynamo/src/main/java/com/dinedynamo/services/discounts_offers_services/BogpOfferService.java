@@ -19,8 +19,8 @@ public class BogpOfferService
 
     public boolean isRequestValid(BogpOffer bogpOffer){
 
-        if(bogpOffer.getOfferName()!=null || bogpOffer.getItems()!=null || bogpOffer.getEndingDate()!= null || bogpOffer.getRestaurantId() != null
-                || bogpOffer.getStartingDate() != null || bogpOffer.getPercentage() != null || bogpOffer.getMinQty()!=null
+        if(bogpOffer.getOfferName()!=null || bogpOffer.getItems()!=null || bogpOffer.getEndingDate()!= null || bogpOffer.getRestaurantId() != null || bogpOffer.getStartingDate() != null || bogpOffer.getPercentage() != null || bogpOffer.getMinQty()!=null
+        || bogpOffer.getMaxValue() != null
         ){
 
             if(restaurantService.isRestaurantPresentinDb(bogpOffer.getRestaurantId())){
@@ -37,6 +37,9 @@ public class BogpOfferService
 
 
     public BogpOffer save(BogpOffer bogpOffer){
+
+
+
 
         bogpOffer.setOfferType(OfferType.BOGP);
         bogpOfferRepository.save(bogpOffer);

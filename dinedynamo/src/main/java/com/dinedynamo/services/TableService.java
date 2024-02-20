@@ -13,8 +13,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.*;
 
@@ -60,18 +58,7 @@ public class TableService
             return null;
         }
 
-
-        if (!isTableCategoryAndNameUnique(table.getRestaurantId(), table.getTableCategory(), table.getTableName())) {
-            mongoTemplate.save(table);
-            //tableRepository.save(table);
-
-        } else {
-
-            throw new RuntimeException("Table name must be unique within the category for a specific restaurant.");
-        }
-
-
-
+        tableRepository.save(table);
 
         System.out.println("Priting: "+table.getPublicIdOfQRImage());
         //table = tableRepository.findById(table.getTableId()).orElse(null);
@@ -130,16 +117,6 @@ public class TableService
 
     }
 
-
-    public boolean isTableCategoryAndNameUnique(String restaurantId, String tableCategory, String tableName) {
-        // Query to check uniqueness in the database
-        return mongoTemplate.exists(
-                Query.query(Criteria.where("restaurantId").is(restaurantId)
-                        .and("tableCategory").is(tableCategory)
-                        .and("tableName").is(tableName)),
-                Table.class
-        );
-    }
 
 }
 

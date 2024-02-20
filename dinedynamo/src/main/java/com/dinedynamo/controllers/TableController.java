@@ -96,14 +96,25 @@ public class TableController
     public ResponseEntity<ApiResponse> editTable(@RequestBody EditOneTableDTO editOneTableDTO) throws IOException {
 
         String tableId = editOneTableDTO.getTableId();
+        Table existingTable = tableRepository.findById(tableId).orElse(null);
 
-        Table updatedTable = editOneTableDTO.getTable();
+        if(existingTable == null){
+            throw new RuntimeException("Table not found in Database");
+        }
 
-        updatedTable.setTableId(tableId);
+        existingTable.setTableCategory(editOneTableDTO.getTable().getTableCategory());
+        existingTable.setTableName(editOneTableDTO.getTable().getTableName());
+        existingTable.setCapacity(editOneTableDTO.getTable().getCapacity());
+        existingTable.setIsPositionAbsolute(editOneTableDTO.getTable().getIsPositionAbsolute());
+        existingTable.setStatus(editOneTableDTO.getTable().getStatus());
+        existingTable.setRestaurantId(editOneTableDTO.getTable().getRestaurantId());
+        existingTable.setCoordinateY(editOneTableDTO.getTable().getCoordinateY());
+        existingTable.setCoordinateX(editOneTableDTO.getTable().getCoordinateX());
+        existingTable.setTableQRURL(editOneTableDTO.getTable().getTableQRURL());
+        existingTable.setPublicIdOfQRImage(editOneTableDTO.getTable().getPublicIdOfQRImage());
+        tableService.save(existingTable);
 
-        tableService.save(updatedTable);
-
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedTable),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",existingTable),HttpStatus.OK);
     }
 
 
