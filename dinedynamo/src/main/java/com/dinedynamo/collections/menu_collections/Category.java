@@ -18,6 +18,7 @@ public class Category {
     private String categoryId;
     private String restaurantId;
     private String categoryName;
+
     private  List<SubCategory> listOfSubCategories;
     private List<MenuItem> listOfMenuItems;
 

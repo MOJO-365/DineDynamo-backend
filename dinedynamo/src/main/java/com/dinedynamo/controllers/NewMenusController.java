@@ -4,6 +4,7 @@ package com.dinedynamo.controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.menu_collections.Category;
+import com.dinedynamo.collections.menu_collections.MenuItem;
 import com.dinedynamo.collections.menu_collections.Menus;
 import com.dinedynamo.repositories.menu_repositories.MenusRepository;
 import com.dinedynamo.services.MenusService;
@@ -62,5 +63,31 @@ public class NewMenusController
 
     }
 
+
+    @PostMapping("/dinedynamo/restaurant/menu/add-item-to-category")
+    public ResponseEntity<ApiResponse> addItemToCategory(@RequestBody MenuItem menuItem){
+
+        Menus menus = menusService.addMenuItemInCategory(menuItem);
+
+        if(menus == null){
+
+            System.out.println("INVALID REQUEST BODY, PASS RESTAURANT-ID, PARENT-ID");
+        }
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
+
+    }
+
+    @PostMapping("/dinedynamo/restaurant/menu/add-item-to-sub-category")
+    public ResponseEntity<ApiResponse> addItemToSubCategory(@RequestBody MenuItem menuItem){
+
+        Menus menus = menusService.addMenuItemInSubCategory(menuItem);
+
+        if(menus == null){
+
+            System.out.println("INVALID REQUEST BODY, PASS RESTAURANT-ID, PARENT-ID");
+        }
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
+
+    }
 
 }

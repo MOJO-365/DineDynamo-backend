@@ -45,7 +45,7 @@ public class CustomerController {
     }
 
 
-    @DeleteMapping("/dinedynamo/customer/favourites/delete-from-favs")
+    @PostMapping("/dinedynamo/customer/favourites/delete-from-favs")
     ResponseEntity<ApiResponse> deleteFromFavourites(@RequestParam String customerPhone, @RequestParam String restaurantId){
 
         System.out.println("CUSTOMER PHONE: "+customerPhone);

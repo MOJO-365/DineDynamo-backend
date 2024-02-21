@@ -67,8 +67,11 @@ public class CustomerFavouriteRestaurantsService {
 
         listOfFavs.remove(restaurantId);
 
-        customerFavouriteRestaurantsRespository.findById(customerPhone).get().setListOfRestaurantIds(listOfFavs);
+        CustomerFavouriteRestaurants customerFavouriteRestaurants = customerFavouriteRestaurantsRespository.findById(customerPhone).get();
 
+        customerFavouriteRestaurants.setListOfRestaurantIds(listOfFavs);
+
+        customerFavouriteRestaurantsRespository.save(customerFavouriteRestaurants);
         return listOfFavs;
 
     }
