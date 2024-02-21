@@ -34,4 +34,12 @@ public interface RestaurantRepository extends MongoRepository<Restaurant, String
     @Query("{ 'restaurantName' : { $regex: ?0, $options: 'i' } }")
     List<Restaurant> findByRestaurantNameRegexIgnoreCase(String regexPattern);
 
+
+
+    @Query("{'isPureVeg': true, 'restaurantCity': ?0}")
+    List<Restaurant> findAllPureVegRestaurantsByCity(String restaurantCity);
+
+    @Query("{'isPureVeg': false, 'restaurantCity': ?0}")
+    List<Restaurant> findAllNonPureVegRestaurantsByCity(String restaurantCity);
+
 }

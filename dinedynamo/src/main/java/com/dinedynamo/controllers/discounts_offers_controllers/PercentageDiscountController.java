@@ -47,7 +47,7 @@ public class PercentageDiscountController
         }
         else{
             percentageDiscountRepository.delete(percentageDiscount);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",percentageDiscount),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",percentageDiscount),HttpStatus.OK);
         }
     }
 

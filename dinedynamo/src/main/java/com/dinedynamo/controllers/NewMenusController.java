@@ -3,6 +3,7 @@ package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.menu_collections.Category;
 import com.dinedynamo.collections.menu_collections.Menus;
 import com.dinedynamo.repositories.menu_repositories.MenusRepository;
 import com.dinedynamo.services.MenusService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -44,6 +47,19 @@ public class NewMenusController
             System.out.println("MENU OF THIS RESTAURANT DOES NOT EXIST");
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
+    }
+
+
+    @PostMapping("/dinedynamo/restaurant/menu/categories")
+    public List<Category> getCategories(){
+
+        Menus menus = menusRepository.findById("65d198e184210b4917ef7761").orElse(null);
+
+        assert menus != null;
+        List<Category> l = menus.getListOfCategories();
+
+        return l;
+
     }
 
 

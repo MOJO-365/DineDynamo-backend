@@ -21,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
-public class SearchController
+public class SearchAndFiltersController
 {
 
     @Autowired
@@ -86,6 +86,20 @@ public class SearchController
 
     }
 
+    @PostMapping("/dinedynamo/customer/filters/filter-by-city-pure-veg")
+    ResponseEntity<ApiResponse> filterByCityAndPureVeg(@RequestParam String restaurantCity){
+
+        List<Restaurant> restaurantList = restaurantRepository.findAllPureVegRestaurantsByCity(restaurantCity);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantList),HttpStatus.OK);
+    }
+
+
+    @PostMapping("/dinedynamo/customer/filters/filter-by-city-non-veg-and-veg")
+    ResponseEntity<ApiResponse> filterByCityAndVegAndNonVeg(@RequestParam String restaurantCity){
+
+        List<Restaurant> restaurantList = restaurantRepository.findAllNonPureVegRestaurantsByCity(restaurantCity);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantList),HttpStatus.OK);
+    }
 
 
 }

@@ -2,9 +2,13 @@ package com.dinedynamo.services;
 
 
 import com.dinedynamo.collections.menu_collections.*;
+import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.menu_repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MenusService
@@ -24,6 +28,9 @@ public class MenusService
 
     @Autowired
     SubSubCategoryRepository subSubCategoryRepository;
+
+    @Autowired
+    RestaurantRepository restaurantRepository;
 
     public Menus save(Menus menus){
 
@@ -103,4 +110,60 @@ public class MenusService
         menusRepository.deleteByRestaurantId(restaurantId);
         return true;
     }
+
+    //For update
+    public void updateWholeMenu(String  restaurantId){
+
+        Menus menus = menusRepository.findByRestaurantId(restaurantId).orElse(null);
+
+        if(menus == null){
+            System.out.println("NO MENU PRESENT IN DB");
+            return;
+        }
+
+
+        List<Category> updatedListOfCategories = categoryRepository.findByRestaurantId(restaurantId);
+        List<SubCategory> updatedListOfSubCategories = new ArrayList<>();
+        List<SubSubCategory>updatedListOfSubSubCategories = new ArrayList<>();
+        List<MenuItem> updatedListOfMenuItemsInSubCategories = new ArrayList<>();
+        List<MenuItem> updatedListOfMenuItemsInSubSubCategories = new ArrayList<>();
+        List<MenuItem> updatedListOfMenuItemsInCategories = new ArrayList<>();
+
+        for(Category category: updatedListOfCategories){
+
+            updatedListOfMenuItemsInCategories = menuItemRepository.findByRestaurantIdAndParentIdAndParentType(restaurantId, category.getCategoryId(), ParentType.CATEGORY);
+            if(updatedListOfMenuItemsInCategories != null)
+            {
+                category.setListOfMenuItems(updatedListOfMenuItemsInCategories);
+            }
+
+            updatedListOfSubCategories = subCategoryRepository.findByRestaurantIdAndCategoryId(restaurantId, category.getCategoryId());
+            for(SubCategory subCategory: updatedListOfSubCategories){
+
+                updatedListOfMenuItemsInSubCategories = menuItemRepository.findByRestaurantIdAndParentIdAndParentType(restaurantId, subCategory.getSubcategoryId(), ParentType.SUBCATEGORY);
+                if(updatedListOfMenuItemsInSubCategories != null)
+                {
+                    subCategory.setListOfMenuItems(updatedListOfMenuItemsInSubCategories);
+                }
+
+                updatedListOfSubSubCategories = subSubCategoryRepository.findByRestaurantIdAndSubCategoryId(restaurantId, subCategory.getSubcategoryId());
+                for(SubSubCategory subSubCategory: updatedListOfSubSubCategories){
+
+                    updatedListOfMenuItemsInSubSubCategories = menuItemRepository.findByRestaurantIdAndParentIdAndParentType(restaurantId, subSubCategory.getSubSubcategoryId(), ParentType.SUBSUBCATEGORY);
+                    if(updatedListOfMenuItemsInSubSubCategories != null)
+                    {
+                        subSubCategory.setListOfMenuItems(updatedListOfMenuItemsInSubSubCategories);
+                    }
+                }
+                subCategory.setListOfSubSubCategories(updatedListOfSubSubCategories);
+
+            }
+            category.setListOfSubCategories(updatedListOfSubCategories);
+        }
+
+        menus.setListOfCategories(updatedListOfCategories);
+        menusRepository.save(menus);
+        System.out.println("SAVED");
+    }
+
 }
