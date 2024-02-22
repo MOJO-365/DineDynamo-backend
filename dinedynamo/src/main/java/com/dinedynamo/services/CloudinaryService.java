@@ -16,7 +16,7 @@ public class CloudinaryService
 
     /**
      *
-     * @param bytesOfImage
+     * @param bytesOfImage - byte array
      * @return Map object
      * @throws IOException
      * uploads image on cloudinary

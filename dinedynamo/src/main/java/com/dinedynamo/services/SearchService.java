@@ -1,6 +1,7 @@
 package com.dinedynamo.services;
 
 
+import com.dinedynamo.collections.menu_collections.Menus;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -8,7 +9,6 @@ import com.mongodb.client.MongoDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.stereotype.Service;
-import com.dinedynamo.collections.Menu;
 import com.dinedynamo.collections.Restaurant;
 import org.bson.Document;
 
@@ -30,28 +30,28 @@ public class SearchService {
     MongoConverter mongoConverter;
 
     /**
-     * Searches the expression in the collection - Menu and creats list of matched menus
+     * Searches the expression in the collection - 'Menus' and creates list of matched menus
      * Now from the matched menus list, corresponding restaurant ids are fetched and List of that restaurants is created
      */
-    public List<Restaurant> searchInMenuOfRestaurantsAndReturnRestaurantList(String expression){
+    public List<Restaurant> searchInMenusOfRestaurantsAndReturnRestaurantList(String expression){
 
-        List<Menu> matchedMenus = new ArrayList<>();
+        List<Menus> matchedMenus = new ArrayList<>();
         List<Restaurant> matchedRestaurants = new ArrayList<>();
         MongoDatabase database = mongoClient.getDatabase("cluster0");
-        MongoCollection<Document> collection = database.getCollection("menu");
+        MongoCollection<Document> collection = database.getCollection("menus");
         AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$search",
-                new Document("index", "search-menu")
+                new Document("index", "search-menus")
                         .append("text",
                                 new Document("query", expression)
                                         .append("path",
                                                 new Document("wildcard", "*"))))));
 
 
-        result.forEach(doc -> matchedMenus.add(mongoConverter.read(Menu.class,doc)));
+        result.forEach(doc -> matchedMenus.add(mongoConverter.read(Menus.class,doc)));
 
-        for(Menu menu: matchedMenus){
+        for(Menus menus: matchedMenus){
 
-            String restaurantId = menu.getRestaurantId();
+            String restaurantId = menus.getRestaurantId();
 
             Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 

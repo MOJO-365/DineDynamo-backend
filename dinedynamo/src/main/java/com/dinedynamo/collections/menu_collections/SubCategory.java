@@ -16,10 +16,10 @@ import java.util.List;
 public class SubCategory
 {
     @Id
-    private String subcategoryId;
+    private String subCategoryId;
     private String restaurantId;
     private String categoryId;
-    private String subcategoryName;
+    private String subCategoryName;
     private List<SubSubCategory> listOfSubSubCategories;
     private List<MenuItem> listOfMenuItems;
 }

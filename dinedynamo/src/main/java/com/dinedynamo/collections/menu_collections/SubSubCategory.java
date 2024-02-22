@@ -17,10 +17,10 @@ public class SubSubCategory
 {
 
     @Id
-    private String subSubcategoryId;
+    private String subSubCategoryId;
     private String restaurantId;
-    private String subSubcategoryName;
-    private String subcategoryId;
+    private String subSubCategoryName;
+    private String subCategoryId;
     private List<MenuItem> listOfMenuItems;
 
 }

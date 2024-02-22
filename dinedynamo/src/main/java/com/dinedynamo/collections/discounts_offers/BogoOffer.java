@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,13 +24,18 @@ public class BogoOffer {
 
     private String offerName;
 
-    private String buyQty;
+    @Builder.Default
+    private String buyQty=" ";
 
-    private String getQty;
+    @Builder.Default
+    private String getQty=" ";
 
-    private String[] items;
+    @Builder.Default
+    private String[] items={};
 
-    private String startingDate;
+    @Builder.Default
+    private String startingDate=" ";
 
-    private String endingDate;
+    @Builder.Default
+    private String endingDate=" ";
 }

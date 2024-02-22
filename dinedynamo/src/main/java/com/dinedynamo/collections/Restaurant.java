@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,11 +42,14 @@ public class Restaurant
 
     double restaurantRating;
 
-    int restaurantppr;
-
     String startTime;
 
     String endTime;
+
+    @Builder.Default
+    double costForTwo=0.0;
+
+    boolean isPureVeg;
 
 
     String restaurantABN;

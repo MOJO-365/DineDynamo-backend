@@ -3,6 +3,7 @@ package com.dinedynamo.collections;
 
 import lombok.*;
 
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +14,8 @@ public class BugQuery
 
     //String senderEmail;
 
-    String bugQueryTitle;
+    @Builder.Default
+    String bugQueryTitle=" ";
 
     String bugDescription;
 

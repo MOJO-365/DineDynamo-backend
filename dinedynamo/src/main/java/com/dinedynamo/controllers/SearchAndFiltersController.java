@@ -6,8 +6,6 @@ import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.MenuRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.services.SearchService;
-import org.apache.coyote.Response;
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.dinedynamo.collections.Menu;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin("*")
-public class SearchController
+public class SearchAndFiltersController
 {
 
     @Autowired
@@ -57,7 +54,7 @@ public class SearchController
     @PostMapping("/dinedynamo/customer/filters/filter-by-cuisine-or-item")
     ResponseEntity<ApiResponse> filterByMenuCuisineOrItem(@RequestParam String expression){
 
-        List<Restaurant> listOfRestaurants = searchService.searchInMenuOfRestaurantsAndReturnRestaurantList(expression);
+        List<Restaurant> listOfRestaurants = searchService.searchInMenusOfRestaurantsAndReturnRestaurantList(expression);
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",listOfRestaurants),HttpStatus.OK);
 
@@ -77,7 +74,7 @@ public class SearchController
 
         List<Restaurant>  listOfRestaurantsFilteredByRestaurantName = restaurantRepository.findByRestaurantNameRegexIgnoreCase(expression);
 
-        List<Restaurant> listOfRestaurantsFilteredByMenu = searchService.searchInMenuOfRestaurantsAndReturnRestaurantList(expression);
+        List<Restaurant> listOfRestaurantsFilteredByMenu = searchService.searchInMenusOfRestaurantsAndReturnRestaurantList(expression);
 
         Set<Restaurant> set = new HashSet<>();
 
@@ -89,6 +86,20 @@ public class SearchController
 
     }
 
+    @PostMapping("/dinedynamo/customer/filters/filter-by-city-pure-veg")
+    ResponseEntity<ApiResponse> filterByCityAndPureVeg(@RequestParam String restaurantCity){
+
+        List<Restaurant> restaurantList = restaurantRepository.findAllPureVegRestaurantsByCity(restaurantCity);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantList),HttpStatus.OK);
+    }
+
+
+    @PostMapping("/dinedynamo/customer/filters/filter-by-city-non-veg-and-veg")
+    ResponseEntity<ApiResponse> filterByCityAndVegAndNonVeg(@RequestParam String restaurantCity){
+
+        List<Restaurant> restaurantList = restaurantRepository.findAllNonPureVegRestaurantsByCity(restaurantCity);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantList),HttpStatus.OK);
+    }
 
 
 }

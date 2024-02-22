@@ -112,7 +112,7 @@ public class SmsService {
 
 
 
-    private String generateOTP() {
+    public String generateOTP() {
         return new DecimalFormat("000000")
                 .format(new Random().nextInt(999999));
     }

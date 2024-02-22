@@ -1,4 +1,4 @@
-package com.dinedynamo.controllers.discount_offers_controllers;
+package com.dinedynamo.controllers.discounts_offers_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
@@ -33,16 +33,8 @@ public class BogpOfferController
     @PostMapping("/dinedynamo/restaurant/offers/create-bogp-offer")
     ResponseEntity<ApiResponse> createBogpOffer(@RequestBody BogpOffer bogpOffer){
 
-        boolean isRequestValid = bogpOfferService.isRequestValid(bogpOffer);
-
-        if(isRequestValid){
-            bogpOffer = bogpOfferService.save(bogpOffer);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",bogpOffer),HttpStatus.OK);
-        }
-        else{
-            System.out.println("INVALID REQUEST, NO SUFFICIENT ATTRIBUTES IN REQUEST BODY");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_ACCEPTABLE,"success",null),HttpStatus.OK);
-        }
+        bogpOffer = bogpOfferService.save(bogpOffer);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",bogpOffer),HttpStatus.OK);
 
     }
 
