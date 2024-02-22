@@ -33,14 +33,14 @@ public class NewOrderController {
     private FinalBillRepository finalBillRepository;
 
     // Place order
-    @PostMapping("/dinedynamo/restaurant/orders/place")
+    @PostMapping("dinedynamo/restaurant/orders/place")
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody Order order) {
         orderRepository.save(order);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
     }
 
     // Get all orders for a restaurant using restaurantId
-    @PostMapping("/dinedynamo/restaurant/orders/all")
+    @PostMapping("dinedynamo/restaurant/orders/all")
     public ResponseEntity<ApiResponse> getAllOrders(@RequestBody Restaurant restaurant) {
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
 
@@ -48,12 +48,24 @@ public class NewOrderController {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Restaurant not found", null), HttpStatus.NOT_FOUND);
         } else {
             List<Order> orders = orderRepository.findByRestaurantId(restaurant.getRestaurantId());
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", orders), HttpStatus.OK);
+            // Extracting data array from orders
+            List<Map<String, Object>> data = new ArrayList<>();
+            for (Order order : orders) {
+                for (OrderList orderList : order.getOrderList()) {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("itemId", orderList.getItemId());
+                    item.put("name", orderList.getName());
+                    item.put("qty", orderList.getQty());
+                    item.put("price", orderList.getPrice());
+                    data.add(item);
+                }
+            }
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", data), HttpStatus.OK);
         }
     }
 
     // Delete order using orderId
-    @DeleteMapping("/dinedynamo/restaurant/orders/delete")
+    @DeleteMapping("dinedynamo/restaurant/orders/delete")
     public ResponseEntity<ApiResponse> deleteOrder(@RequestBody Order order) {
         Optional<Order> deleteOrder = orderRepository.findById(order.getOrderId());
 
@@ -66,7 +78,7 @@ public class NewOrderController {
     }
 
     // Update order using orderId
-    @PostMapping("/dinedynamo/restaurant/orders/update")
+    @PostMapping("dinedynamo/restaurant/orders/update")
     public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order order) {
         try {
             Order existingOrder = orderRepository.findById(order.getOrderId()).orElse(null);
@@ -84,41 +96,44 @@ public class NewOrderController {
         }
     }
 
-    @PostMapping("/dinedynamo/restaurant/orders/process")
+    @PostMapping("dinedynamo/restaurant/dine-in-orders/final-bill")
     public ResponseEntity<ApiResponse> processOrderDetail(@RequestBody Order order) {
         List<Order> orders = orderRepository.findByTableId(order.getTableId());
 
-        List<Map<String, Object>> data = processData(orders);
-        Map<String, Object> responseData = new HashMap<>();
-        if (!orders.isEmpty()) {
-            responseData.put("restaurantId", orders.get(0).getRestaurantId());
-            responseData.put("tableId", orders.get(0).getTableId());
-            responseData.put("dateTime", orders.get(0).getDateTime());
+        // Check if any orders are found for the provided tableId
+        if (orders.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the provided tableId", null), HttpStatus.NOT_FOUND);
         }
-        responseData.put("data", data);
 
+        Order firstOrder = orders.get(0); // Get the first order from the list
+
+        List<Map<String, Object>> data = processData(orders);
+
+        // Create FinalBill object and set the relevant fields
         FinalBill finalBill = new FinalBill();
-        finalBill.setRestaurantId(order.getRestaurantId());
-        finalBill.setTableId(order.getTableId());
-        finalBill.setDateTime(order.getDateTime());
-        // Inside your controller method
+        finalBill.setRestaurantId(firstOrder.getRestaurantId());
+        finalBill.setTableId(firstOrder.getTableId());
+        finalBill.setDateTime(firstOrder.getDateTime());
+        finalBill.setOrderType("DineIn"); // You may set this value dynamically if needed
+
+        // Convert data to OrderList objects
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderList> orderList = new ArrayList<>();
-
-        // Iterate over the list of maps and map each map to an OrderList object
         for (Map<String, Object> item : data) {
             OrderList orderListItem = objectMapper.convertValue(item, OrderList.class);
             orderList.add(orderListItem);
-
         }
-
         finalBill.setOrderList(orderList);
+
+        // Save finalBill to the repository
         finalBillRepository.save(finalBill);
 
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", responseData);
+        // Create ApiResponse object
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", data);
+
+        // Return the response with HttpStatus.OK
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
     private List<Map<String, Object>> processData(List<Order> orders) {
         Map<String, Map<String, Object>> itemMap = new HashMap<>();
 
@@ -161,6 +176,7 @@ public class NewOrderController {
 
         return new ArrayList<>(itemMap.values());
     }
+
 
 
     @GetMapping("dinedynamo/report/percentage-sales/{restaurantId}/{itemId}")

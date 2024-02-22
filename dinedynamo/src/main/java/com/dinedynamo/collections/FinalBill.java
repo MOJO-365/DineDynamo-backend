@@ -22,6 +22,8 @@ public class FinalBill {
     private String restaurantId;
     private String tableId;
     private String dateTime;
+    private String orderType;
     private List<OrderList> orderList;
     private double totalAmount;
+
 }

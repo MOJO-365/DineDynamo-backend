@@ -1,11 +1,9 @@
 package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.DeliveryOrder;
-import com.dinedynamo.collections.Order;
-import com.dinedynamo.collections.Restaurant;
-import com.dinedynamo.collections.TakeAway;
+import com.dinedynamo.collections.*;
 import com.dinedynamo.repositories.DeliveryOrderRepository;
+import com.dinedynamo.repositories.FinalBillRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +22,41 @@ public class DeliveryController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private FinalBillRepository finalBillRepository;
+
 
     @PostMapping("/dinedynamo/restaurant/orders/delivery")
     public ResponseEntity<ApiResponse> createDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder) {
+        // Step 1: Process the delivery order
+        DeliveryOrder savedOrder = deliveryOrderRepository.save(deliveryOrder);
 
-            DeliveryOrder savedOrder = deliveryOrderRepository.save(deliveryOrder);
-            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", savedOrder);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+        // Step 2: Prepare data for the Final Bill
+        String restaurantId = deliveryOrder.getRestaurantId(); // Get restaurant ID from the delivery order
+        String deliveryId = savedOrder.getDeliveryId(); // Get delivery ID from the saved delivery order
+        // Additional data preparation as needed...
 
+        // Step 3: Create Final Bill object
+        FinalBill finalBill = new FinalBill();
+        finalBill.setRestaurantId(restaurantId);
+        finalBill.setOrderList(deliveryOrder.getOrderList());
+        // Set other relevant fields for the Final Bill
+
+        // Step 4: Save the Final Bill
+        finalBillRepository.save(finalBill);
+
+        // Prepare and return the response
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", finalBill);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @PostMapping("dinedynami/restaurant/order/get-final-bill")
+    public ResponseEntity<ApiResponse> getfinal(@RequestBody Restaurant restaurant){
+
+        restaurant= restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
     }
 
     @PostMapping("/dinedynamo/restaurant/orders/getDeliveryorder")

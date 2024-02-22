@@ -28,6 +28,19 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendPasswordResetEmail(String recipientEmail, String resetLink) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(recipientEmail);
+        message.setSubject("Password Reset Request");
+        String emailContent = "Hello,\n\n" +
+                "You have requested to reset your password. Please click on the link below to reset your password:\n" +
+                resetLink + "\n\n" +
+                "If you did not request a password reset, please ignore this email.\n\n" +
+                "Best regards,\n" +
+                "The DineDynamo Team";
+        message.setText(emailContent);
+        mailSender.send(message);
+    }
 
     public boolean sendBugQueryMail(String subject ,String restaurantName, String queryDescription){
 

@@ -31,6 +31,8 @@ public class Restaurant
 
     String restaurantPassword;
 
+    private String resetToken;
+
     String restaurantLocation;
 
     String restaurantCity;
