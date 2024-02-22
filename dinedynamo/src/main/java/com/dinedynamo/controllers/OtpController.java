@@ -24,7 +24,7 @@ public class OtpController {
         return "SMS sent";
     }
 
-    @PostMapping("")
+    @PostMapping("dinedynamo/send-otp")
     public OtpResponse sendOtp(@RequestBody OtpRequest otpRequest) {
         return smsService.sendSMS(otpRequest);
     }
