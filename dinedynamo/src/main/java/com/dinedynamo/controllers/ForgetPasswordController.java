@@ -4,17 +4,16 @@ import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.services.EmailService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.Random;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
@@ -32,18 +31,20 @@ public class ForgetPasswordController {
     @PostMapping("/dinedynamo/forget-password")
     public ResponseEntity<ApiResponse> forgetPassword(@RequestBody Restaurant restaurant) {
         String email = restaurant.getRestaurantEmail();
-
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findByRestaurantEmail(email);
         if (optionalRestaurant.isPresent()) {
             Restaurant existingRestaurant = optionalRestaurant.get();
-            String newPassword = generateRandomPassword();
 
-            existingRestaurant.setRestaurantPassword(passwordEncoder.encode(newPassword));
+            // Generate a unique token for password reset
+            String resetToken = UUID.randomUUID().toString();
+            existingRestaurant.setResetToken(resetToken);
             restaurantRepository.save(existingRestaurant);
 
-            emailService.sendNewPasswordEmail(existingRestaurant.getRestaurantEmail(), newPassword, existingRestaurant.getRestaurantName());
+            // Send email with reset link
+            String resetLink = "http://localhost:5173/?token=" + resetToken;
+            emailService.sendPasswordResetEmail(email, resetLink);
 
-            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "A new password has been sent to your email");
+            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset link has been sent to your email");
             return ResponseEntity.ok(response);
         } else {
             ApiResponse response = new ApiResponse(HttpStatus.NOT_FOUND, "failure", "No restaurant found with this email");
@@ -51,14 +52,53 @@ public class ForgetPasswordController {
         }
     }
 
-    private String generateRandomPassword() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder newPassword = new StringBuilder();
-        Random rnd = new Random();
-        while (newPassword.length() < 8) {
-            int index = (int) (rnd.nextFloat() * characters.length());
-            newPassword.append(characters.charAt(index));
+
+
+    @PostMapping("/dinedynamo/reset-password")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        Optional<Restaurant> optionalRestaurant = restaurantRepository.findByResetToken(token);
+        if (optionalRestaurant.isPresent()) {
+            Restaurant existingRestaurant = optionalRestaurant.get();
+            existingRestaurant.setRestaurantPassword(passwordEncoder.encode(newPassword));
+            existingRestaurant.setResetToken(null);
+            restaurantRepository.save(existingRestaurant);
+            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset successfully");
+            return ResponseEntity.ok(response);
+        } else {
+            ApiResponse response = new ApiResponse(HttpStatus.NOT_FOUND, "failure", "Invalid or expired reset token");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        return newPassword.toString();
     }
+
+
+
+    //    @PostMapping("/dinedynamo/forget-password")
+//    public ResponseEntity<ApiResponse> forgetPassword(@RequestBody Restaurant restaurant, HttpServletRequest request) {
+//        String email = restaurant.getRestaurantEmail();
+//        Optional<Restaurant> optionalRestaurant = restaurantRepository.findByRestaurantEmail(email);
+//        if (optionalRestaurant.isPresent()) {
+//            Restaurant existingRestaurant = optionalRestaurant.get();
+//
+//            // Generate a unique token for password reset
+//            String resetToken = UUID.randomUUID().toString();
+//
+//            // Store token and email in session
+//            HttpSession session = request.getSession();
+//            session.setAttribute("resetToken", resetToken);
+//            session.setAttribute("email", email);
+//
+//            // Send email with reset link
+//            String resetLink = "http://localhost:5173/reset-password";
+//            emailService.sendPasswordResetEmail(email, resetLink);
+//
+//            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset link has been sent to your email");
+//            return ResponseEntity.ok(response);
+//        } else {
+//            ApiResponse response = new ApiResponse(HttpStatus.NOT_FOUND, "failure", "No restaurant found with this email");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+//        }
+//    }
+
+
+
 }
