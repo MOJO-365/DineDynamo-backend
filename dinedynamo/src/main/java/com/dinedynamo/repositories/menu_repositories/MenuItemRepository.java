@@ -15,4 +15,6 @@ public interface MenuItemRepository extends MongoRepository<MenuItem, String> {
     @Query("{ 'restaurantId': ?0, 'parentId': ?1, 'parentType': ?2 }")
     List<MenuItem> findByRestaurantIdAndParentIdAndParentType(String restaurantId, String parentId, ParentType parentType);
 
+
+    List<MenuItem> deleteByParentId(String parentId);
 }

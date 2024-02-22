@@ -13,4 +13,6 @@ public interface SubSubCategoryRepository extends MongoRepository<SubSubCategory
     @Query("{ 'restaurantId': ?0, 'subCategoryId': ?1}")
     List<SubSubCategory> findByRestaurantIdAndSubCategoryId(String restaurantId, String subCategoryId);
 
+
+    List<SubSubCategory> deleteBySubCategoryId(String subCategoryId);
 }

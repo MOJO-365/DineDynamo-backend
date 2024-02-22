@@ -65,6 +65,7 @@ public class MenusService
                                     menuItemRepository.save(menuItem);
                                 }
                             }
+                            subSubCategoryRepository.save(subSubCategory);
 
                         }
 
@@ -80,7 +81,9 @@ public class MenusService
                             menuItem.setParentType(ParentType.SUBCATEGORY);
                             menuItemRepository.save(menuItem);
                         }
+
                     }
+                    subCategoryRepository.save(subCategory);
                 }
             }
 
@@ -94,6 +97,7 @@ public class MenusService
                     menuItemRepository.save(menuItem);
                 }
             }
+            categoryRepository.save(category);
         }
 
         menusRepository.save(menus);
@@ -153,12 +157,15 @@ public class MenusService
                     if(updatedListOfMenuItemsInSubSubCategories != null)
                     {
                         subSubCategory.setListOfMenuItems(updatedListOfMenuItemsInSubSubCategories);
+                        subSubCategoryRepository.save(subSubCategory);
                     }
                 }
                 subCategory.setListOfSubSubCategories(updatedListOfSubSubCategories);
+                subCategoryRepository.save(subCategory);
 
             }
             category.setListOfSubCategories(updatedListOfSubCategories);
+            categoryRepository.save(category);
         }
 
         menus.setListOfCategories(updatedListOfCategories);
@@ -169,20 +176,93 @@ public class MenusService
     }
 
 
+    //not tested
+    public Menus addSubSubCategory(SubSubCategory subSubCategory){
+
+        if(subSubCategory.getRestaurantId().equals("") || subSubCategory.getRestaurantId().equals(" ") || subSubCategory.getRestaurantId()==null
+        || subSubCategory.getSubCategoryId() == null || subSubCategory.getSubCategoryId().equals("") || subSubCategory.getSubSubCategoryId().equals(" ")
+        ){
+            System.out.println("PASS SUB-CATEGORY-ID AND RESTAURANT-ID IN REQUEST");
+            return null;
+        }
+
+        subSubCategoryRepository.save(subSubCategory);
+
+        if(subSubCategory.getListOfMenuItems() != null){
+            for(MenuItem menuItem: subSubCategory.getListOfMenuItems()){
+
+                menuItem.setRestaurantId(subSubCategory.getRestaurantId());
+                menuItem.setParentType(ParentType.SUBSUBCATEGORY);
+                menuItem.setParentId(subSubCategory.getSubSubCategoryId());
+                menuItemRepository.save(menuItem);
+            }
+        }
+
+        return updateWholeMenu(subSubCategory.getRestaurantId());
+    }
+
+    //DONE
+    public Menus addSubCategory(SubCategory subCategory){
+
+        if(subCategory.getCategoryId().equals(" ") || subCategory.getRestaurantId() == null || subCategory.getCategoryId() == null || subCategory.getCategoryId().equals("")
+        || subCategory.getRestaurantId().equals("") || subCategory.getRestaurantId().equals(" ")
+        ){
+            System.out.println("PASS CATEGORY-ID AND RESTAURANT-ID IN REQUEST");
+            return null;
+        }
+
+        subCategoryRepository.save(subCategory);
+
+        if(subCategory.getListOfMenuItems()!=null){
+            for(MenuItem menuItem: subCategory.getListOfMenuItems()){
+
+                menuItem.setRestaurantId(subCategory.getRestaurantId());
+                menuItem.setParentType(ParentType.SUBCATEGORY);
+                menuItem.setParentId(subCategory.getSubCategoryId());
+                menuItemRepository.save(menuItem);
+
+            }
+        }
+
+        if(subCategory.getListOfSubSubCategories() != null){
+            for(SubSubCategory subSubCategory: subCategory.getListOfSubSubCategories()){
+
+                subSubCategory.setSubCategoryId(subCategory.getSubCategoryId());
+                subSubCategory.setRestaurantId(subCategory.getRestaurantId());
+                subSubCategoryRepository.save(subSubCategory);
+
+                if(subSubCategory.getListOfMenuItems() != null){
+                    for(MenuItem menuItem: subSubCategory.getListOfMenuItems()){
+
+                        menuItem.setRestaurantId(subCategory.getRestaurantId());
+                        menuItem.setParentType(ParentType.SUBSUBCATEGORY);
+                        menuItem.setParentId(subSubCategory.getSubSubCategoryId());
+                        menuItemRepository.save(menuItem);
+                    }
+                }
+            }
+        }
+
+        return updateWholeMenu(subCategory.getRestaurantId());
+    }
 
 
-    public Menus addCategoryInMenu(String restaurantId, String menuId, Category category){
+    //DONE
+    public Menus addCategoryInMenu(Category category){
 
-        category.setRestaurantId(restaurantId);
+        if(category.getRestaurantId() == null || category.getRestaurantId().equals("") || category.getRestaurantId().equals(" ")){
+            System.out.println("RESTAURANT-ID NOT IN CATEGORY-REQUEST BODY");
+            return null;
+        }
+
         categoryRepository.save(category);
-
         List<SubCategory> subCategoryList = category.getListOfSubCategories();
         List<MenuItem> menuItemList = category.getListOfMenuItems();
 
         if(menuItemList!=null){
             for(MenuItem menuItem: menuItemList){
 
-                menuItem.setRestaurantId(restaurantId);
+                menuItem.setRestaurantId(category.getRestaurantId());
                 menuItem.setParentType(ParentType.CATEGORY);
                 menuItem.setParentId(category.getCategoryId());
                 menuItemRepository.save(menuItem);
@@ -193,13 +273,13 @@ public class MenusService
             for(SubCategory subCategory: subCategoryList){
 
                 subCategory.setCategoryId(category.getCategoryId());
-                subCategory.setRestaurantId(restaurantId);
+                subCategory.setRestaurantId(category.getRestaurantId());
                 subCategoryRepository.save(subCategory);
 
                 if(subCategory.getListOfMenuItems()!=null){
                     for(MenuItem menuItem: subCategory.getListOfMenuItems()){
 
-                        menuItem.setRestaurantId(restaurantId);
+                        menuItem.setRestaurantId(category.getRestaurantId());
                         menuItem.setParentType(ParentType.SUBCATEGORY);
                         menuItem.setParentId(subCategory.getSubCategoryId());
                         menuItemRepository.save(menuItem);
@@ -211,24 +291,25 @@ public class MenusService
                     for(SubSubCategory subSubCategory: subCategory.getListOfSubSubCategories()){
 
                         subSubCategory.setSubCategoryId(subCategory.getSubCategoryId());
-                        subSubCategory.setRestaurantId(restaurantId);
+                        subSubCategory.setRestaurantId(category.getRestaurantId());
                         subSubCategoryRepository.save(subSubCategory);
 
                         if(subSubCategory.getListOfMenuItems() != null){
                             for(MenuItem menuItem: subSubCategory.getListOfMenuItems()){
 
-                                menuItem.setRestaurantId(restaurantId);
+                                menuItem.setRestaurantId(category.getRestaurantId());
                                 menuItem.setParentType(ParentType.SUBSUBCATEGORY);
                                 menuItem.setParentId(subSubCategory.getSubSubCategoryId());
                                 menuItemRepository.save(menuItem);
                             }
                         }
+
                     }
                 }
             }
         }
 
-        return updateWholeMenu(restaurantId);
+        return updateWholeMenu(category.getRestaurantId());
 
     }
 
@@ -249,6 +330,8 @@ public class MenusService
 
     }
 
+
+    //DONE
     public Menus addMenuItemInSubCategory(MenuItem menuItem){
 
         if(menuItem.getRestaurantId() == null || menuItem.getRestaurantId().equals("") || menuItem.getRestaurantId().equals(" ") ||
@@ -262,12 +345,137 @@ public class MenusService
         return updateWholeMenu(menuItem.getRestaurantId());
     }
 
-    public Menus addMenuItemInSubSubCategory(String restaurantId, MenuItem menuItem, String subSubCategoryParentId){
 
-        menuItem.setParentId(subSubCategoryParentId);
-        menuItem.setRestaurantId(restaurantId);
+
+    //DONE
+    public Menus addMenuItemInSubSubCategory(MenuItem menuItem){
+
+        if(menuItem.getRestaurantId() == null || menuItem.getRestaurantId().equals("") || menuItem.getRestaurantId().equals(" ") ||
+                menuItem.getParentId() == null || menuItem.getParentId().equals("") || menuItem.getParentId().equals(" ")
+        ){
+
+            return null;
+        }
         menuItem.setParentType(ParentType.SUBSUBCATEGORY);
         menuItemRepository.save(menuItem);
-        return updateWholeMenu(restaurantId);
+        return updateWholeMenu(menuItem.getRestaurantId());
+    }
+
+
+    //DONE
+    public Menus deleteMenuItem(MenuItem menuItem){
+
+        menuItemRepository.delete(menuItem);
+        return updateWholeMenu(menuItem.getRestaurantId());
+    }
+
+
+
+    //DONE
+    public Menus deleteSubSubCategory(SubSubCategory subSubCategory){
+
+        String parentSubSubCategoryId = subSubCategory.getSubSubCategoryId();
+
+        menuItemRepository.deleteByParentId(parentSubSubCategoryId);
+
+        subSubCategoryRepository.delete(subSubCategory);
+
+        return updateWholeMenu(subSubCategory.getRestaurantId());
+
+    }
+
+
+    //DONE
+    public Menus deleteSubCategory(SubCategory subCategory){
+
+        String subCategoryId = subCategory.getSubCategoryId();
+
+        menuItemRepository.deleteByParentId(subCategoryId);
+
+        List<SubSubCategory> subSubCategoryList = subCategory.getListOfSubSubCategories();
+
+        if(subSubCategoryList!=null){
+            for(SubSubCategory subSubCategory: subSubCategoryList){
+
+                String subSubCategoryId = subSubCategory.getSubSubCategoryId();
+                menuItemRepository.deleteByParentId(subSubCategoryId);
+
+            }
+        }
+
+
+        subSubCategoryRepository.deleteBySubCategoryId(subCategoryId);
+
+        subCategoryRepository.delete(subCategory);
+
+        return updateWholeMenu(subCategory.getRestaurantId());
+    }
+
+
+    //DONE
+    public Menus deleteCategory(Category category){
+
+        category = categoryRepository.findById(category.getCategoryId()).orElse(null);
+
+        if(category==null){
+            System.out.println("CATEGORY ID DOES NOT EXIST IN DB");
+            return null;
+        }
+
+        if(category.getListOfMenuItems()!=null && !category.getListOfMenuItems().isEmpty()){
+            menuItemRepository.deleteByParentId(category.getCategoryId());
+        }
+
+        if(category.getListOfSubCategories()!=null && !category.getListOfSubCategories().isEmpty()){
+
+            for(SubCategory subCategory: category.getListOfSubCategories()){
+
+                if(subCategory.getListOfMenuItems()!=null){
+                    menuItemRepository.deleteByParentId(subCategory.getSubCategoryId());
+                }
+
+                if(subCategory.getListOfSubSubCategories()!=null && !subCategory.getListOfSubSubCategories().isEmpty()){
+
+                    for(SubSubCategory subSubCategory: subCategory.getListOfSubSubCategories()){
+
+                        System.out.println("SSC NAME: "+subSubCategory.getSubSubCategoryName());
+                        if(subSubCategory.getListOfMenuItems()!=null && !subSubCategory.getListOfMenuItems().isEmpty()){
+
+
+                            menuItemRepository.deleteByParentId(subSubCategory.getSubSubCategoryId());
+                        }
+                        System.out.println("SSC ID: "+subSubCategory.getSubSubCategoryId());
+                        System.out.println("SSC-sc NAME: "+subSubCategory.getSubCategoryId());
+                        subSubCategoryRepository.delete(subSubCategory);
+                    }
+                }
+                subCategoryRepository.delete(subCategory);
+            }
+        }
+
+        categoryRepository.delete(category);
+        return updateWholeMenu(category.getRestaurantId());
+    }
+
+
+    //DONE
+    //parentType of menuItem should be sent from frontend itself
+    public Menus editMenuItem(String menudItemId, MenuItem menuItem){
+
+        menuItem.setItemId(menudItemId);
+        menuItemRepository.save(menuItem);
+        return updateWholeMenu(menuItem.getRestaurantId());
+    }
+
+    public void editCategory(Category category){
+
+    }
+
+    public void editSubCategory(SubSubCategory subSubCategory){
+
+    }
+
+    public void editSubSubCategory(SubSubCategory subSubCategory){
+
     }
 }
