@@ -141,7 +141,7 @@ public class CustomerReservationService
 
             if(localDateTimeDineInDateAndTime.toLocalDate().equals(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).toLocalDate())
             && localDateTimeDineInDateAndTime.toLocalTime().isAfter(firstSlotStartLocalDateTime.toLocalTime()) && localDateTimeDineInDateAndTime.toLocalTime().isBefore(firstSlotEndLocalDateTime.toLocalTime())
-            ){
+            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED){
                 System.out.println("CANNOT HAVE 2 BOOKINGS IN ONE SLOT");
                 return true;
             }
@@ -183,6 +183,7 @@ public class CustomerReservationService
 
             if(localDateTimeDineInDateAndTime.toLocalDate().equals(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).toLocalDate())
             && localDateTimeDineInDateAndTime.toLocalTime().isAfter(secondSlotStartLocalDateTime.toLocalTime()) && localDateTimeDineInDateAndTime.toLocalTime().isBefore(secondSlotEndLocalDateTime.toLocalTime())
+            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED
             ){
                 return true;
             }
