@@ -18,7 +18,7 @@ class ReservationRepositoryTest {
 
     @Test
     void testFindByRestaurantId() {
-        String restaurantId = "1234";
+        String restaurantId = "879";
         Reservation reservation1 = createReservation(restaurantId);
         Reservation reservation2 = createReservation(restaurantId);
         reservationRepository.save(reservation1);

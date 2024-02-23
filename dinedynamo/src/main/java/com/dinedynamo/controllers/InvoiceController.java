@@ -202,7 +202,7 @@ public class InvoiceController {
     }
 
     private float calculateThankYouHeight() {
-        float thankYouHeight = 80;
+        float thankYouHeight = 130;
         return thankYouHeight;
     }
 
