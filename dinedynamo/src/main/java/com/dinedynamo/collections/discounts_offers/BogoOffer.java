@@ -31,6 +31,9 @@ public class BogoOffer {
     private String getQty=" ";
 
     @Builder.Default
+    private String minQty=" ";
+
+    @Builder.Default
     private String[] items={};
 
     @Builder.Default
