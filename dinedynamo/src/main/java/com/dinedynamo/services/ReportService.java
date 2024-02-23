@@ -20,7 +20,6 @@ public class ReportService {
         Map<String, Integer> totalQuantities = new HashMap<>();
         Map<String, Double> totalSales = new HashMap<>();
 
-        // Calculate total quantities and total sales for each item
         for (FinalBill finalBill : finalBills) {
             List<OrderList> orderList = finalBill.getOrderList();
             if (orderList != null) {
@@ -34,14 +33,12 @@ public class ReportService {
             }
         }
 
-        // Generate ItemSale objects based on total quantities and total sales
         List<ItemSale> itemSales = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : totalQuantities.entrySet()) {
             String itemId = entry.getKey();
             int totalQuantity = entry.getValue();
             double totalItemSales = totalSales.get(itemId);
-            String itemName = ""; // Placeholder for item name
-            // Retrieve item name from the OrderList
+            String itemName = "";
             Optional<String> optionalName = finalBills.stream()
                     .flatMap(finalBill -> finalBill.getOrderList().stream())
                     .filter(orderList -> orderList.getItemId().equals(itemId))
@@ -50,8 +47,7 @@ public class ReportService {
             if (optionalName.isPresent()) {
                 itemName = optionalName.get();
             }
-            double itemPrice = 0.0; // Placeholder for item price
-            // Retrieve item price from the OrderList
+            double itemPrice = 0.0;
             Optional<Double> optionalPrice = finalBills.stream()
                     .flatMap(finalBill -> finalBill.getOrderList().stream())
                     .filter(orderList -> orderList.getItemId().equals(itemId))

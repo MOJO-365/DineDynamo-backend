@@ -1,5 +1,4 @@
 package com.dinedynamo.controllers;
-
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.RestaurantReview;
@@ -83,26 +82,20 @@ public class RestaurantReviewController {
 
         Map<String, List<RestaurantReview>> reviewsByRestaurant = reviews.stream().collect(Collectors.groupingBy(RestaurantReview::getRestaurantId));
 
-        Map<String, Map<String, Object>> averageRatingsByRestaurant = new HashMap<>();
-        for (Map.Entry<String, List<RestaurantReview>> entry : reviewsByRestaurant.entrySet()) {
-            String restaurantId = entry.getKey();
-            List<RestaurantReview> restaurantRestaurantReviews = entry.getValue();
+        double averageRating = reviewsByRestaurant.values().stream()
+                .flatMap(List::stream)
+                .mapToDouble(RestaurantReview::getStarRating)
+                .average()
+                .orElse(0.0);
 
-            OptionalDouble average= restaurantRestaurantReviews.stream()
-                    .mapToDouble(RestaurantReview::getStarRating)
-                    .average();
-            double averageRating=average.orElse(0.0);
+        long totalRatings = reviews.size();
 
-            long totalRatings= restaurantRestaurantReviews.size();
+        Map<String, Object> averageRatings = Map.of("averageRating", averageRating, "totalRatings", totalRatings);
 
-            Map<String, Object> restaurantData = Map.of("averageRating", averageRating, "totalRatings", totalRatings);
-
-            averageRatingsByRestaurant.put(restaurantId, restaurantData);
-        }
-
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "Average ratings and total ratings retrieved successfully", averageRatingsByRestaurant);
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "Average ratings and total ratings retrieved successfully", averageRatings);
         return ResponseEntity.ok(response);
     }
+
 
     /**
      * Endpoint to delete a review.
@@ -123,11 +116,6 @@ public class RestaurantReviewController {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"failure","review deleted"),HttpStatus.OK);
         }
     }
-
-
-
-
-
 
 
 }

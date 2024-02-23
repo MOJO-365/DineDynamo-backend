@@ -41,7 +41,7 @@ public class ForgetPasswordController {
             restaurantRepository.save(existingRestaurant);
 
             // Send email with reset link
-            String resetLink = "http://localhost:5173/?token=" + resetToken;
+            String resetLink = "http://localhost:5173/set-password?token=" + resetToken;
             emailService.sendPasswordResetEmail(email, resetLink);
 
             ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset link has been sent to your email");
