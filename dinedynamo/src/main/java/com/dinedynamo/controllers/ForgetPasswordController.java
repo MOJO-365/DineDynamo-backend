@@ -1,6 +1,7 @@
 package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.ResetPasswordRequest;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.services.EmailService;
@@ -55,11 +56,14 @@ public class ForgetPasswordController {
 
 
     @PostMapping("/dinedynamo/reset-password")
-    public ResponseEntity<ApiResponse> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
-        Optional<Restaurant> optionalRestaurant = restaurantRepository.findByResetToken(token);
-        if (optionalRestaurant.isPresent()) {
-            Restaurant existingRestaurant = optionalRestaurant.get();
+    public ResponseEntity<ApiResponse> resetPassword(@RequestBody ResetPasswordRequest requestBody) {
+        String resetToken = requestBody.getResetToken();
+        String newPassword = requestBody.getNewPassword();
+
+        Restaurant existingRestaurant = restaurantRepository.findByResetToken(resetToken);
+        if (existingRestaurant != null) {
             existingRestaurant.setRestaurantPassword(passwordEncoder.encode(newPassword));
+
             existingRestaurant.setResetToken(null);
             restaurantRepository.save(existingRestaurant);
             ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset successfully");
