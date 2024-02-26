@@ -1,6 +1,6 @@
 package com.dinedynamo.services;
 
-import com.dinedynamo.collections.Table;
+import com.dinedynamo.collections.table_collections.Table;
 import com.dinedynamo.repositories.TableRepository;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.AggregateIterable;
@@ -10,8 +10,6 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;

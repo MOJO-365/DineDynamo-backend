@@ -1,12 +1,10 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.Order;
-import com.dinedynamo.collections.Table;
+import com.dinedynamo.collections.table_collections.Table;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
 
-import javax.swing.text.html.Option;
 import java.util.List;
 
 public interface TableRepository extends MongoRepository<Table, String>

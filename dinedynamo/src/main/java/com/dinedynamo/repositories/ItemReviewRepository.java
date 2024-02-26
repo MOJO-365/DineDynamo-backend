@@ -1,5 +1,5 @@
 package com.dinedynamo.repositories;
-import com.dinedynamo.collections.ItemReview;
+import com.dinedynamo.collections.rating_collections.ItemReview;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 

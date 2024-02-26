@@ -14,10 +14,10 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 
-import com.dinedynamo.collections.Customer;
-import com.dinedynamo.collections.Restaurant;
-import com.dinedynamo.dto.SignInRequestBody;
-import com.dinedynamo.config.UserDetailsServiceImpl;
+import com.dinedynamo.collections.authentication_collections.Customer;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
+import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.repositories.CustomerRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 

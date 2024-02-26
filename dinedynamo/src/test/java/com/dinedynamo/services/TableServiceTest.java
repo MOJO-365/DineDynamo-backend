@@ -1,14 +1,7 @@
 package com.dinedynamo.services;
-import com.dinedynamo.collections.Table;
+import com.dinedynamo.collections.table_collections.Table;
 import com.dinedynamo.repositories.TableRepository;
-import com.dinedynamo.services.CloudinaryService;
-import com.dinedynamo.services.QRCodeService;
-import com.dinedynamo.services.TableService;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,9 +11,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

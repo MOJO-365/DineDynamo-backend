@@ -1,7 +1,6 @@
 package com.dinedynamo.repositories;
-import com.dinedynamo.collections.Order;
-import com.dinedynamo.repositories.OrderRepository;
-import com.dinedynamo.controllers.OrderController;
+import com.dinedynamo.collections.old_order_collections.Order;
+import com.dinedynamo.controllers.old_orders_controllers.OrderController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

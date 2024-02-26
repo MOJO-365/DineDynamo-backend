@@ -1,14 +1,12 @@
 package com.dinedynamo.services;
 
-import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 

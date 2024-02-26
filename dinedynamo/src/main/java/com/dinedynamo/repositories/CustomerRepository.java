@@ -1,6 +1,6 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.Customer;
+import com.dinedynamo.collections.authentication_collections.Customer;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
 import java.util.List;
 
 @Service

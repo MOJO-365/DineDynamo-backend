@@ -1,12 +1,11 @@
 package com.dinedynamo.services;
 import com.dinedynamo.collections.BugQuery;
-import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;

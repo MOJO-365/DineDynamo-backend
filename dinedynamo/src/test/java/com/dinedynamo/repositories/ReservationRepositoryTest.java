@@ -1,6 +1,6 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.Reservation;
+import com.dinedynamo.collections.table_collections.Reservation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

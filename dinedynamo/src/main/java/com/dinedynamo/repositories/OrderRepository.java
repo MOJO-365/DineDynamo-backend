@@ -1,6 +1,6 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.Order;
+import com.dinedynamo.collections.old_order_collections.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

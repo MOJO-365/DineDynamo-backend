@@ -2,7 +2,7 @@ package com.dinedynamo.services;
 
 
 import com.dinedynamo.collections.BugQuery;
-import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
 import com.dinedynamo.repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
