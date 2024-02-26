@@ -5,6 +5,7 @@ import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.Restaurant;
 import com.dinedynamo.collections.menu_collections.*;
 import com.dinedynamo.dto.edit_menu_dtos.EditMenuItemDTO;
+import com.dinedynamo.repositories.menu_repositories.MenuItemRepository;
 import com.dinedynamo.repositories.menu_repositories.MenusRepository;
 import com.dinedynamo.services.MenusService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class NewMenusController
 
     @Autowired
     private MenusRepository menusRepository;
+
+    @Autowired
+    MenuItemRepository menuItemRepository;
 
 
     @Autowired
@@ -163,4 +167,12 @@ public class NewMenusController
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
     }
 
+
+    @PostMapping("/dinedynamo/restaurant/menu/get-all-items")
+    public ResponseEntity<ApiResponse> getAllItemsByRestaurantId(@RequestBody Restaurant restaurant){
+
+        List<MenuItem> menuItemList = menuItemRepository.findByRestaurantId(restaurant.getRestaurantId());
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menuItemList),HttpStatus.OK);
+    }
 }

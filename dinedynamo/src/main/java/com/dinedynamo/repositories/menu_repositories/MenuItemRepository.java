@@ -17,4 +17,6 @@ public interface MenuItemRepository extends MongoRepository<MenuItem, String> {
 
 
     List<MenuItem> deleteByParentId(String parentId);
+
+    List<MenuItem> findByRestaurantId(String restaurantId);
 }

@@ -15,7 +15,7 @@ public class BugQuery
     //String senderEmail;
 
     @Builder.Default
-    String bugQueryTitle=" ";
+    String bugQueryTitle = " ";
 
     String bugDescription;
 
