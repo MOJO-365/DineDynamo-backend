@@ -19,6 +19,7 @@ import java.util.TimeZone;
 
 
 @SpringBootApplication
+
 @EnableConfigurationProperties
 public class DinedynamoApplication
 {
@@ -33,8 +34,6 @@ public class DinedynamoApplication
 	public static void main(String[] args) {
 		SpringApplication.run(DinedynamoApplication.class, args);
 		System.out.println("Hello, this application is up and running");
-
-
 
 	}
 

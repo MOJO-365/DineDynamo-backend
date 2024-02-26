@@ -22,4 +22,5 @@ public class RestaurantReview
     private double starRating;
     private String comment;
 
+
 }

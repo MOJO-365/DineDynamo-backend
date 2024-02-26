@@ -1,19 +1,19 @@
 package com.dinedynamo.controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.DeliveryOrder;
-import com.dinedynamo.collections.Order;
-import com.dinedynamo.collections.Restaurant;
-import com.dinedynamo.collections.TakeAway;
+import com.dinedynamo.collections.*;
+import com.dinedynamo.collections.order_collections.Addon;
+import com.dinedynamo.collections.order_collections.OrderList;
+import com.dinedynamo.repositories.FinalBillRepository;
 import com.dinedynamo.repositories.RestaurantRepository;
 import com.dinedynamo.repositories.TakeAwayOrderRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -25,14 +25,10 @@ public class TakeAwayController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private FinalBillRepository finalBillRepository;
 
-    @PostMapping("/dinedynamo/restaurant/orders/takeaway")
-    public ResponseEntity<ApiResponse> createTakeAwayOrder(@RequestBody TakeAway takeAway) {
-            TakeAway savedOrder = takeAwayRepository.save(takeAway);
-            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", savedOrder);
-            return new ResponseEntity<>(response, HttpStatus.OK);
 
-    }
 
 
     @PostMapping("/dinedynamo/restaurant/orders/getTakeAway")
@@ -57,23 +53,6 @@ public class TakeAwayController {
 
 
 
-    @PostMapping("/dinedynamo/restaurant/takeaway/updateorder")
-    public ResponseEntity<ApiResponse> updateOrder( @RequestBody TakeAway takeAway) {
-
-            TakeAway existingOrder = takeAwayRepository.findById(takeAway.getTakeAwayId()).orElse(null);
-
-            if (existingOrder != null) {
-
-                existingOrder.setOrderList(takeAway.getOrderList());
-
-                takeAwayRepository.save(existingOrder);
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", null), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
-
-        }
-    }
-
 
     @DeleteMapping("/dinedynamo/restaurant/takeaway/deleteorder")
     public ResponseEntity<ApiResponse> deleteOrder(@RequestBody TakeAway takeAway) {
@@ -86,6 +65,9 @@ public class TakeAwayController {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
         }
     }
+
+
+
 
 
 

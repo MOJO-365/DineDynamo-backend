@@ -100,23 +100,21 @@ public class NewOrderController {
     public ResponseEntity<ApiResponse> processOrderDetail(@RequestBody Order order) {
         List<Order> orders = orderRepository.findByTableId(order.getTableId());
 
-        // Check if any orders are found for the provided tableId
         if (orders.isEmpty()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the provided tableId", null), HttpStatus.NOT_FOUND);
         }
 
-        Order firstOrder = orders.get(0); // Get the first order from the list
+        Order firstOrder = orders.get(0);
 
         List<Map<String, Object>> data = processData(orders);
 
-        // Create FinalBill object and set the relevant fields
         FinalBill finalBill = new FinalBill();
         finalBill.setRestaurantId(firstOrder.getRestaurantId());
         finalBill.setTableId(firstOrder.getTableId());
         finalBill.setDateTime(firstOrder.getDateTime());
-        finalBill.setOrderType("DineIn"); // You may set this value dynamically if needed
+        finalBill.setOrderType("DineIn");
+        finalBill.setPaymentMode("Card");
 
-        // Convert data to OrderList objects
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderList> orderList = new ArrayList<>();
         for (Map<String, Object> item : data) {
@@ -125,13 +123,10 @@ public class NewOrderController {
         }
         finalBill.setOrderList(orderList);
 
-        // Save finalBill to the repository
         finalBillRepository.save(finalBill);
 
-        // Create ApiResponse object
         ApiResponse response = new ApiResponse(HttpStatus.OK, "success", data);
 
-        // Return the response with HttpStatus.OK
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     private List<Map<String, Object>> processData(List<Order> orders) {
@@ -179,6 +174,35 @@ public class NewOrderController {
 
 
 
+
+    @GetMapping("/dinedynamo/restaurant/orders/summary")
+    public ResponseEntity<ApiResponse> getOrderSummary(@RequestBody Restaurant restaurant) {
+        List<FinalBill> orders = finalBillRepository.findByRestaurantId(restaurant.getRestaurantId());
+
+        if (orders.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the provided restaurantId", null), HttpStatus.NOT_FOUND);
+        }
+
+        List<Map<String, Object>> summaryList = new ArrayList<>();
+        for (FinalBill order : orders) {
+            Map<String, Object> summary = new HashMap<>();
+            summary.put("orderId", order.getBillId());
+            summary.put("orderDate", order.getDateTime());
+            summary.put("orderType", order.getOrderType());
+            summary.put("paymentMode", order.getPaymentMode());
+            summary.put("gst", order.getGst());
+            summary.put("totalAmount", order.getTotalAmount());
+            summary.put("orderList",order.getOrderList());
+            summaryList.add(summary);
+        }
+
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", summaryList);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+
+
     @GetMapping("dinedynamo/report/percentage-sales/{restaurantId}/{itemId}")
     public ResponseEntity<Map<String, Object>> generatePercentageSalesReport(
             @PathVariable String restaurantId,
@@ -200,7 +224,6 @@ public class NewOrderController {
             }
         }
 
-        // Calculate percentage sales
         double totalRevenueAllItems = calculateTotalRevenueAllItems(restaurantId);
         double percentageSales = (totalRevenue / totalRevenueAllItems) * 100;
 
@@ -220,8 +243,8 @@ public class NewOrderController {
         return ResponseEntity.ok(responseData);
     }
 
+
     private double calculateTotalRevenueAllItems(String restaurantId) {
-        // Fetch all orders for the restaurant and calculate total revenue
         List<FinalBill> orders = finalBillRepository.findByRestaurantId(restaurantId);
         double totalRevenue = 0.0;
         for (FinalBill order : orders) {

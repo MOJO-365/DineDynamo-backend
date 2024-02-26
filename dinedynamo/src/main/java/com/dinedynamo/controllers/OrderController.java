@@ -87,7 +87,7 @@ public class OrderController {
     //update order using orderId
     @PostMapping("/dinedynamo/restaurant/orders/updateorder")
     public ResponseEntity<ApiResponse> updateOrder( @RequestBody Order order) {
-        try {
+
             Order existingOrder = orderRepository.findById(order.getOrderId()).orElse(null);
 
             if (existingOrder != null) {
@@ -99,10 +99,7 @@ public class OrderController {
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "failure", null), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
 
@@ -111,7 +108,7 @@ public class OrderController {
 
     @PostMapping("/dinedynamo/invoice/get-order-items")
     public ResponseEntity<ApiResponse> getFinalOrderForTable(@RequestBody Order order) {
-        try {
+
             if (order.getTableId() == null) {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, "Table ID cannot be null", null), HttpStatus.BAD_REQUEST);
             }
@@ -120,7 +117,7 @@ public class OrderController {
 
             if (!orderListForTable.isEmpty()) {
                 Order consolidatedOrder = consolidateOrders(orderListForTable);
-                consolidatedOrder.setTableId(order.getTableId()); // Set the table ID in the consolidated order
+                consolidatedOrder.setTableId(order.getTableId());
 
                 Order firstOrder = orderListForTable.get(0);
                 consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId());
@@ -132,10 +129,7 @@ public class OrderController {
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
 
@@ -150,19 +144,17 @@ public class OrderController {
         Map<String, List<Map<String, Object>>> itemNameToAddons = new HashMap<>();
 
         for (Order order : orderList) {
-            List<Map<String, Object>> orderListArray = order.getOrderList(); // Changed to List<Map<String, Object>>
+            List<Map<String, Object>> orderListArray = order.getOrderList();
             for (Map<String, Object> item : orderListArray){
 
                 String itemName = (String) item.get("name");
                 double price = ((Number) item.get("price")).doubleValue();
                 int qty = ((Number) item.get("qty")).intValue();
 
-                // Update total quantity and price for each item
                 String key = itemName + "_" + price;
                 itemNameToTotalQuantity.put(key, itemNameToTotalQuantity.getOrDefault(key, 0) + qty);
                 itemNameToPrice.put(key, price);
 
-                // Handle addons
                 List<Map<String, Object>> addons = (List<Map<String, Object>>) item.get("addons");
                 if (addons != null && !addons.isEmpty()) {
                     for (Map<String, Object> addon : addons) {
@@ -197,10 +189,6 @@ public class OrderController {
         consolidatedOrder.setOrderList(combinedOrderList);
         return consolidatedOrder;
     }
-
-
-
-
 
 
 

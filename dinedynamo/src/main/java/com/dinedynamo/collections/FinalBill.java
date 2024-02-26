@@ -23,7 +23,9 @@ public class FinalBill {
     private String tableId;
     private String dateTime;
     private String orderType;
-    private List<OrderList> orderList;
+    private String paymentMode;
+    private double gst;
     private double totalAmount;
+    private List<OrderList> orderList;
 
 }
