@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Locale;
 
 @Component
@@ -18,7 +19,11 @@ public class DateTimeUtility {
      */
     public LocalDateTime convertJSLocalStringToLocalDateTime(String dateString){
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy, h:mm:ss a", Locale.US);
+        System.out.println("DATE-TIME (IN UTILITY CLASS): "+dateString);
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern("M/d/yyyy, h:mm:ss a")
+                .toFormatter(Locale.US);
 
         // Parse the string to LocalDateTime
         LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
