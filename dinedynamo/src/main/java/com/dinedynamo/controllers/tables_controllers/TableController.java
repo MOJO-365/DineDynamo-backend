@@ -2,16 +2,16 @@ package com.dinedynamo.controllers.tables_controllers;
 
 
 import com.dinedynamo.dto.table_dtos.EditOneTableDTO;
-import com.dinedynamo.services.RestaurantService;
+import com.dinedynamo.services.restaurant_services.RestaurantService;
 import org.bson.Document;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.dto.table_dtos.EditAllTablesRequestBody;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.table_collections.Table;
-import com.dinedynamo.repositories.RestaurantRepository;
-import com.dinedynamo.repositories.TableRepository;
-import com.dinedynamo.services.CloudinaryService;
-import com.dinedynamo.services.TableService;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
+import com.dinedynamo.repositories.table_repositories.TableRepository;
+import com.dinedynamo.services.external_services.CloudinaryService;
+import com.dinedynamo.services.table_services.TableService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

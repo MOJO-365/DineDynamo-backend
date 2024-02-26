@@ -9,13 +9,13 @@ import com.mongodb.client.MongoDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.stereotype.Service;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 @Service
 public class SearchService {

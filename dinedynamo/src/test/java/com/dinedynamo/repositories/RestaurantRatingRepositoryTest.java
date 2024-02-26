@@ -1,6 +1,7 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.report_collections.RestaurantReview;
+import com.dinedynamo.collections.rating_and_review_collections.RestaurantReview;
+import com.dinedynamo.repositories.review_and_rating_repositories.RestaurantReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

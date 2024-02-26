@@ -1,6 +1,6 @@
 package com.dinedynamo.dto.restaurant_dtos;
 
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import lombok.*;
 
 

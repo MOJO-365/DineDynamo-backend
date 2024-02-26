@@ -1,6 +1,9 @@
 package com.dinedynamo.services;
 import com.dinedynamo.collections.table_collections.Table;
-import com.dinedynamo.repositories.TableRepository;
+import com.dinedynamo.repositories.table_repositories.TableRepository;
+import com.dinedynamo.services.external_services.CloudinaryService;
+import com.dinedynamo.services.external_services.QRCodeService;
+import com.dinedynamo.services.table_services.TableService;
 import com.mongodb.client.MongoClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

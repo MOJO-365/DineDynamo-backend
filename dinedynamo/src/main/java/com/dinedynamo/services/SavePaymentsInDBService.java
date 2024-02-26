@@ -3,7 +3,7 @@ package com.dinedynamo.services;
 
 import com.dinedynamo.collections.payment_collections.SuccessfulPayment;
 import com.dinedynamo.dto.payments_dtos.EditPaymentInDBDTO;
-import com.dinedynamo.repositories.SavePaymentsInDBRepository;
+import com.dinedynamo.repositories.invoice_repositories.SavePaymentsInDBRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

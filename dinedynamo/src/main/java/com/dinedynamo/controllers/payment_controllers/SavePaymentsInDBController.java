@@ -2,10 +2,10 @@ package com.dinedynamo.controllers.payment_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.payment_collections.SuccessfulPayment;
 import com.dinedynamo.dto.payments_dtos.EditPaymentInDBDTO;
-import com.dinedynamo.repositories.SavePaymentsInDBRepository;
+import com.dinedynamo.repositories.invoice_repositories.SavePaymentsInDBRepository;
 import com.dinedynamo.services.SavePaymentsInDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

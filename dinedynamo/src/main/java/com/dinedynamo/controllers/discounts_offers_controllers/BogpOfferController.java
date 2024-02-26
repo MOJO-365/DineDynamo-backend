@@ -1,11 +1,11 @@
 package com.dinedynamo.controllers.discounts_offers_controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.discounts_offers.BogpOffer;
 import com.dinedynamo.dto.discount_offers_dtos.EditBogpOfferDTO;
 import com.dinedynamo.repositories.discounts_offers_repositories.BogpOfferRepository;
-import com.dinedynamo.services.RestaurantService;
+import com.dinedynamo.services.restaurant_services.RestaurantService;
 import com.dinedynamo.services.discounts_offers_services.BogpOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

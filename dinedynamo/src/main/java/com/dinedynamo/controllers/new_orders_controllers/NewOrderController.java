@@ -2,13 +2,13 @@ package com.dinedynamo.controllers.new_orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.invoice_collections.FinalBill;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.Order;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.order_collections.Addon;
-import com.dinedynamo.repositories.FinalBillRepository;
+import com.dinedynamo.repositories.invoice_repositories.FinalBillRepository;
 import com.dinedynamo.repositories.order_repositories.NewOrderRepository;
-import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

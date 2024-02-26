@@ -1,7 +1,7 @@
 package com.dinedynamo.controllers.report_controllers;
 
 import com.dinedynamo.collections.report_collections.ItemSale;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.dinedynamo.controllers.review_controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.rating_collections.ItemReview;
-import com.dinedynamo.repositories.ItemReviewRepository;
+import com.dinedynamo.collections.rating_and_review_collections.ItemReview;
+import com.dinedynamo.repositories.review_and_rating_repositories.ItemReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

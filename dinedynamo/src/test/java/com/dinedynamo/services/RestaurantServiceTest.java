@@ -1,7 +1,8 @@
 package com.dinedynamo.services;
 
-import com.dinedynamo.collections.authentication_collections.Restaurant;
-import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
+import com.dinedynamo.services.restaurant_services.RestaurantService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

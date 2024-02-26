@@ -2,12 +2,12 @@ package com.dinedynamo.controllers.invoice_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.old_order_collections.Order;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.table_collections.Table;
-import com.dinedynamo.repositories.InvoiceRepository;
-import com.dinedynamo.repositories.OrderRepository;
-import com.dinedynamo.repositories.RestaurantRepository;
-import com.dinedynamo.repositories.TableRepository;
+import com.dinedynamo.repositories.invoice_repositories.InvoiceRepository;
+import com.dinedynamo.repositories.old_orders_repositories.OrderRepository;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
+import com.dinedynamo.repositories.table_repositories.TableRepository;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;

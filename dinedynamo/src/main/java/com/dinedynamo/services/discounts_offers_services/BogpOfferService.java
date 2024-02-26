@@ -3,7 +3,7 @@ package com.dinedynamo.services.discounts_offers_services;
 import com.dinedynamo.collections.discounts_offers.BogpOffer;
 import com.dinedynamo.collections.discounts_offers.OfferType;
 import com.dinedynamo.repositories.discounts_offers_repositories.BogpOfferRepository;
-import com.dinedynamo.services.RestaurantService;
+import com.dinedynamo.services.restaurant_services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

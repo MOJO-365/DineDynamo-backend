@@ -1,7 +1,7 @@
 package com.dinedynamo.controllers.payment_controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.payment_collections.Product;
-import com.dinedynamo.services.StripeCheckoutService;
+import com.dinedynamo.services.external_services.StripeCheckoutService;
 import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

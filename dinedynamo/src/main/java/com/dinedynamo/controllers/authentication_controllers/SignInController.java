@@ -2,13 +2,13 @@ package com.dinedynamo.controllers.authentication_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.authentication_collections.Customer;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.customer_collections.Customer;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
 import com.dinedynamo.helper.JwtHelper;
-import com.dinedynamo.repositories.CustomerRepository;
-import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

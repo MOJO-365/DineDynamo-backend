@@ -2,12 +2,12 @@ package com.dinedynamo.controllers.menu_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.menu_collections.*;
 import com.dinedynamo.dto.menu_dtos.EditMenuItemDTO;
 import com.dinedynamo.repositories.menu_repositories.MenuItemRepository;
 import com.dinedynamo.repositories.menu_repositories.MenusRepository;
-import com.dinedynamo.services.MenusService;
+import com.dinedynamo.services.menu_services.MenusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

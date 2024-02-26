@@ -7,6 +7,7 @@ import com.dinedynamo.dto.otp_dtos.OtpRequest;
 import com.dinedynamo.dto.otp_dtos.OtpResponse;
 import com.dinedynamo.dto.otp_dtos.OtpStatus;
 import com.dinedynamo.dto.otp_dtos.OtpValidationRequest;
+import com.dinedynamo.services.external_services.SmsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

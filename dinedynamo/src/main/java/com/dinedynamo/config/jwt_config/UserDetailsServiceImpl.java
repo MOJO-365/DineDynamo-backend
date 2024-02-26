@@ -1,11 +1,11 @@
 package com.dinedynamo.config.jwt_config;
 
 
-import com.dinedynamo.collections.authentication_collections.Customer;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.customer_collections.Customer;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
-import com.dinedynamo.repositories.CustomerRepository;
-import com.dinedynamo.repositories.RestaurantRepository;
+import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import lombok.Getter;
 import lombok.Setter;

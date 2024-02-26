@@ -3,7 +3,7 @@ package com.dinedynamo.services;
 import com.dinedynamo.collections.invoice_collections.FinalBill;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.report_collections.ItemSale;
-import com.dinedynamo.repositories.FinalBillRepository;
+import com.dinedynamo.repositories.invoice_repositories.FinalBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

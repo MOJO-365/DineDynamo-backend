@@ -1,7 +1,7 @@
 package com.dinedynamo.controllers.new_orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.DeliveryOrder;
 import com.dinedynamo.repositories.order_repositories.NewDeliveryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
