@@ -1,8 +1,7 @@
 package com.dinedynamo.helper;
 
-import com.dinedynamo.dto.StripePayRequestDTO;
+import com.dinedynamo.dto.payments_dtos.StripePayRequestDTO;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Address;
 import com.stripe.model.Customer;
 import com.stripe.model.CustomerSearchResult;
 import com.stripe.param.CustomerCreateParams;

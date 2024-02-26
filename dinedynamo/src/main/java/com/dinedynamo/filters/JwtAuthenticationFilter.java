@@ -1,6 +1,6 @@
 package com.dinedynamo.filters;
 
-import com.dinedynamo.config.UserDetailsServiceImpl;
+import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.helper.JwtHelper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -45,8 +45,7 @@ public class SmsService {
 
             otpResponseDto = new OtpResponse(OtpStatus.DELIVERED, otpMessage);
         } catch (Exception e) {
-            e.printStackTrace();
-            otpResponseDto = new OtpResponse(OtpStatus.FAILED, e.getMessage());
+             otpResponseDto = new OtpResponse(OtpStatus.FAILED, e.getMessage());
         }
         return otpResponseDto;
     }
@@ -108,14 +107,11 @@ public class SmsService {
 
 
 
-
-
-
-
     public String generateOTP() {
         return new DecimalFormat("000000")
                 .format(new Random().nextInt(999999));
     }
+
 
 
     public void sendMessageToCustomer(String customerPhone, String messageContent){

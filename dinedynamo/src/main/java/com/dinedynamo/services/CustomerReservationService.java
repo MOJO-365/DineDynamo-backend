@@ -1,23 +1,16 @@
 package com.dinedynamo.services;
 
 
-import com.dinedynamo.collections.Reservation;
-import com.dinedynamo.collections.RestaurantReservationSettings;
+import com.dinedynamo.collections.table_collections.Reservation;
+import com.dinedynamo.collections.table_collections.RestaurantReservationSettings;
 import com.dinedynamo.helper.DateTimeUtility;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantReservationSettingsRepository;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

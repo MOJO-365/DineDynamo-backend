@@ -2,15 +2,14 @@ package com.dinedynamo.controllers.reservation_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.Reservation;
-import com.dinedynamo.collections.Restaurant;
-import com.dinedynamo.collections.RestaurantReservationSettings;
-import com.dinedynamo.dto.GetPreviousReservationDTO;
+import com.dinedynamo.collections.table_collections.Reservation;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
+import com.dinedynamo.collections.table_collections.RestaurantReservationSettings;
+import com.dinedynamo.dto.table_dtos.GetPreviousReservationDTO;
 import com.dinedynamo.repositories.ReservationRepository;
 import com.dinedynamo.repositories.RestaurantReservationSettingsRepository;
 import com.dinedynamo.services.CustomerReservationService;
 import com.dinedynamo.services.RestaurantService;
-import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

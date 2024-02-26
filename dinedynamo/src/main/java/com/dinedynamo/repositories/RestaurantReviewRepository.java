@@ -1,6 +1,6 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.RestaurantReview;
+import com.dinedynamo.collections.report_collections.RestaurantReview;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

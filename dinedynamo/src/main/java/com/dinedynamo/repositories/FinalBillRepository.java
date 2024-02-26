@@ -1,7 +1,6 @@
 package com.dinedynamo.repositories;
 
-import com.dinedynamo.collections.FinalBill;
-import com.dinedynamo.collections.Order;
+import com.dinedynamo.collections.invoice_collections.FinalBill;
 import com.dinedynamo.collections.order_collections.OrderList;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

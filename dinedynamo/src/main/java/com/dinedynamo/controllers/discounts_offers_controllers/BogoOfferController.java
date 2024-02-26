@@ -2,7 +2,7 @@ package com.dinedynamo.controllers.discounts_offers_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.Restaurant;
+import com.dinedynamo.collections.authentication_collections.Restaurant;
 import com.dinedynamo.collections.discounts_offers.BogoOffer;
 
 import com.dinedynamo.dto.discount_offers_dtos.EditBogoOfferDTO;

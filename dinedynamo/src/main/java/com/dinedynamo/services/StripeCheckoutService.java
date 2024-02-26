@@ -1,12 +1,10 @@
 package com.dinedynamo.services;
 
 
-import com.dinedynamo.collections.PaymentResponse;
-import com.dinedynamo.collections.Product;
+import com.dinedynamo.collections.payment_collections.PaymentResponse;
+import com.dinedynamo.collections.payment_collections.Product;
 import com.stripe.exception.StripeException;
 
-import com.stripe.model.PaymentIntent;
-import com.stripe.param.PaymentIntentCreateParams;
 import org.springframework.stereotype.Service;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
