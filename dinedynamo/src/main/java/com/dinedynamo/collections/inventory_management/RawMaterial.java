@@ -5,6 +5,10 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,9 +33,9 @@ public class RawMaterial {
 
     String reorderLevel;
 
-    String purchaseDate;
+    Date purchaseDate;
 
-    String expirationDate;
+    Date expirationDate;
 
     double costPerUnit;
 
@@ -39,5 +43,13 @@ public class RawMaterial {
 
     @DBRef
     SupplierDetails supplierDetails;
+
+
+    @DBRef
+    List<WastageLog> wastageLogList;
+
+
+    @DBRef
+    List<ReplenishmentLog> replenishmentLogList;
 
 }

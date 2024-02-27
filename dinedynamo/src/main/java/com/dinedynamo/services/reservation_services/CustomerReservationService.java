@@ -10,6 +10,7 @@ import com.mongodb.client.MongoClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -39,10 +40,8 @@ public class CustomerReservationService
     public  boolean validateReservationRequest(Reservation reservation){
 
         if(reservation.getGuestCount() == 0 || reservation.getCustomerPhone() == null ||
-        reservation.getCustomerName() == null || reservation.getReservationDateAndTime() == null ||
-                reservation.getDineInDateAndTime() == null || reservation.getRestaurantId() == null ||
-                reservation.getCustomerPhone() == ""  || reservation.getCustomerName() == "" || reservation.getDineInDateAndTime() == "" ||
-                reservation.getReservationDateAndTime() == ""
+        reservation.getCustomerName() == null || reservation.getDineInDate() == null || reservation.getRestaurantId() == null ||
+                reservation.getCustomerPhone() == ""  || reservation.getCustomerName() == ""
         ){
             return false;
         }
@@ -60,14 +59,20 @@ public class CustomerReservationService
      */
     public Reservation save(Reservation reservation){
 
+        reservation.setReservationDateAndTime(LocalDateTime.now());
 
-        //System.out.println("---->"+reservationRepository.findByRestaurantIdAndCustomerPhone(reservation.getReservationId(),reservation.getCustomerPhone()));
-        if(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).isBefore(LocalDateTime.now())){
-
+        if(reservation.getDineInDate().isBefore(LocalDate.now())){
             System.out.println("DATE OF RESERVATION IMPROPER");
             reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.INVALID);
             return reservation;
         }
+
+//        if(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).isBefore(LocalDateTime.now())){
+//
+//            System.out.println("DATE OF RESERVATION IMPROPER");
+//            reservation.setReservationRequestStatus(Reservation.ReservationRequestStatus.INVALID);
+//            return reservation;
+//        }
 
 
         int slot = getSlot(reservation);
@@ -132,19 +137,28 @@ public class CustomerReservationService
 
         for(Reservation reservationObj: existingReservations){
 
+//            LocalDate dineInDateOfExistingObj = reservationObj.getDineInDate();
+//
+//            LocalTime dineInTimeOfExistingObj = reservationObj.getDineInTime();
+            //String dateStringOfDineInDateAndTime = reservationObj.getDineInDateAndTime();
 
-            String dateStringOfDineInDateAndTime = reservationObj.getDineInDateAndTime();
+
+            //LocalDateTime localDateTimeDineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dateStringOfDineInDateAndTime);
 
 
-
-            LocalDateTime localDateTimeDineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dateStringOfDineInDateAndTime);
-
-            if(localDateTimeDineInDateAndTime.toLocalDate().equals(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).toLocalDate())
-            && localDateTimeDineInDateAndTime.toLocalTime().isAfter(firstSlotStartTime) && localDateTimeDineInDateAndTime.toLocalTime().isBefore(firstSlotEndTime)
-            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED){
+            if(reservationObj.getDineInDate().equals(reservation.getDineInDate()) &&
+            reservationObj.getDineInTime().isAfter(firstSlotStartTime) && reservationObj.getDineInTime().isBefore(firstSlotEndTime)
+            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED
+            ){
                 System.out.println("CANNOT HAVE 2 BOOKINGS IN ONE SLOT");
                 return true;
             }
+//            if(reservationObj.getDineInDate().equals(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).toLocalDate())
+//            && localDateTimeDineInDateAndTime.toLocalTime().isAfter(firstSlotStartTime) && localDateTimeDineInDateAndTime.toLocalTime().isBefore(firstSlotEndTime)
+//            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED){
+//                System.out.println("CANNOT HAVE 2 BOOKINGS IN ONE SLOT");
+//                return true;
+//            }
 
         }
 
@@ -181,16 +195,26 @@ public class CustomerReservationService
 
         for(Reservation reservationObj: existingReservations){
 
-            String dateStringOfDineInDateAndTime = reservationObj.getDineInDateAndTime();
+            //String dateStringOfDineInDateAndTime = reservationObj.getDineInDateAndTime();
 
-            LocalDateTime localDateTimeDineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dateStringOfDineInDateAndTime);
 
-            if(localDateTimeDineInDateAndTime.toLocalDate().equals(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).toLocalDate())
-            && localDateTimeDineInDateAndTime.toLocalTime().isAfter(secondSlotStartTime) && localDateTimeDineInDateAndTime.toLocalTime().isBefore(secondSlotEndTime)
-            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED
+            //LocalDateTime localDateTimeDineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dateStringOfDineInDateAndTime);
+
+            if(reservationObj.getDineInDate().equals(reservation.getDineInDate()) &&
+                    reservationObj.getDineInTime().isAfter(secondSlotStartTime) && reservationObj.getDineInTime().isBefore(secondSlotEndTime)
+                    && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED
             ){
+                System.out.println("CANNOT HAVE 2 BOOKINGS IN ONE SLOT");
                 return true;
             }
+
+
+//            if(localDateTimeDineInDateAndTime.toLocalDate().equals(dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime()).toLocalDate())
+//            && localDateTimeDineInDateAndTime.toLocalTime().isAfter(secondSlotStartTime) && localDateTimeDineInDateAndTime.toLocalTime().isBefore(secondSlotEndTime)
+//            && reservationObj.getReservationRequestStatus()!= Reservation.ReservationRequestStatus.CANCELLED
+//            ){
+//                return true;
+//            }
         }
 
         return false;
@@ -205,7 +229,7 @@ public class CustomerReservationService
 
         RestaurantReservationSettings restaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(reservation.getRestaurantId()).orElse(null);
 
-        LocalDateTime requestedLocalDateTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(reservation.getDineInDateAndTime());
+        LocalTime requestedLocalTime = reservation.getDineInTime();
 
         //String firstSlotStartLocalDateTimeString = restaurantReservationSettings.getFirstSlotStartTime();
         LocalTime firstSlotStartLocalTime = restaurantReservationSettings.getFirstSlotStartTime();
@@ -214,7 +238,7 @@ public class CustomerReservationService
         LocalTime firstSlotEndLocalTime = restaurantReservationSettings.getFirstSlotEndTime();
 
         if(firstSlotStartLocalTime!=null && firstSlotEndLocalTime!=null){
-            if(requestedLocalDateTime.toLocalTime().isBefore(firstSlotEndLocalTime) && requestedLocalDateTime.toLocalTime().isAfter(firstSlotStartLocalTime)){
+            if(requestedLocalTime.isBefore(firstSlotEndLocalTime) && requestedLocalTime.isAfter(firstSlotStartLocalTime)){
                 return 1;
             }
         }
@@ -226,7 +250,7 @@ public class CustomerReservationService
         LocalTime secondSlotEndLocalTime = restaurantReservationSettings.getSecondSlotEndTime();
 
         if(secondSlotEndLocalTime!=null && secondSlotStartLocalTime!=null){
-            if(requestedLocalDateTime.toLocalTime().isBefore(secondSlotEndLocalTime) && requestedLocalDateTime.toLocalTime().isAfter(secondSlotStartLocalTime)){
+            if(requestedLocalTime.isBefore(secondSlotEndLocalTime) && requestedLocalTime.isAfter(secondSlotStartLocalTime)){
                 return 2;
 
             }

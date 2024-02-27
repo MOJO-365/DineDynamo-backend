@@ -5,6 +5,10 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,9 +26,13 @@ public class Reservation {
 
     String customerName;
 
-    String dineInDateAndTime;  //Time when cutomer will come to the restaurant
+    LocalDate dineInDate;
 
-    String reservationDateAndTime;  //Time when customer requests for reservation
+    LocalTime dineInTime;
+
+    //String dineInDateAndTime;  //Time when cutomer will come to the restaurant
+
+    LocalDateTime reservationDateAndTime;  //Time when customer requests for reservation
 
     int guestCount;
 

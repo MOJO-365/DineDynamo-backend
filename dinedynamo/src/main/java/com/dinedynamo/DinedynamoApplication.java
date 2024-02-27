@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 
 @SpringBootApplication
@@ -19,8 +20,8 @@ public class DinedynamoApplication
 		System.out.println("Hello, this application is up and running");
 
 
-		LocalDate localDate = LocalDate.now();
-		System.out.println("Local Date: " + localDate);
+		System.out.println("DATE: "+new Date());
+		System.out.println("--> "+LocalDate.now());
 
 
 	}
