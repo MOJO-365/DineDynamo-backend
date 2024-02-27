@@ -6,6 +6,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,13 +28,13 @@ public class RestaurantReservationSettings
 
     String slotDuration;
 
-    String firstSlotStartTime;
+    LocalTime firstSlotStartTime;
 
-    String firstSlotEndTime;
+    LocalTime firstSlotEndTime;
 
-    String secondSlotStartTime;
+    LocalTime secondSlotStartTime;
 
-    String secondSlotEndTime;
+    LocalTime secondSlotEndTime;
 
 
 

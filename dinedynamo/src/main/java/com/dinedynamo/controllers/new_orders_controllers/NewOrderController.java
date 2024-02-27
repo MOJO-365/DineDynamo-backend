@@ -1,12 +1,12 @@
 package com.dinedynamo.controllers.new_orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.invoice_collections.FinalBill;
+import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.Order;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.order_collections.Addon;
-import com.dinedynamo.repositories.invoice_repositories.FinalBillRepository;
+import com.dinedynamo.repositories.invoice_repositories.DineInBillRepository;
 import com.dinedynamo.repositories.order_repositories.NewOrderRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,7 +29,7 @@ public class NewOrderController {
     private NewOrderRepository orderRepository;
 
     @Autowired
-    private FinalBillRepository finalBillRepository;
+    private DineInBillRepository dineInBillRepository;
 
     // Place order
     @PostMapping("dinedynamo/restaurant/orders/place")
@@ -107,12 +107,12 @@ public class NewOrderController {
 
         List<Map<String, Object>> data = processData(orders);
 
-        FinalBill finalBill = new FinalBill();
-        finalBill.setRestaurantId(firstOrder.getRestaurantId());
-        finalBill.setTableId(firstOrder.getTableId());
-        finalBill.setDateTime(firstOrder.getDateTime());
-        finalBill.setOrderType("DineIn");
-        finalBill.setPaymentMode("Card");
+        DineInFinalBill dineInFinalBill = new DineInFinalBill();
+        dineInFinalBill.setRestaurantId(firstOrder.getRestaurantId());
+        dineInFinalBill.setTableId(firstOrder.getTableId());
+        dineInFinalBill.setDatetime(firstOrder.getDateTime());
+        dineInFinalBill.setOrderType("DineIn");
+        dineInFinalBill.setPaymentMode("Card");
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderList> orderList = new ArrayList<>();
@@ -120,9 +120,9 @@ public class NewOrderController {
             OrderList orderListItem = objectMapper.convertValue(item, OrderList.class);
             orderList.add(orderListItem);
         }
-        finalBill.setOrderList(orderList);
+        dineInFinalBill.setOrderList(orderList);
 
-        finalBillRepository.save(finalBill);
+        dineInBillRepository.save(dineInFinalBill);
 
         ApiResponse response = new ApiResponse(HttpStatus.OK, "success", data);
 
@@ -176,17 +176,17 @@ public class NewOrderController {
 
     @GetMapping("/dinedynamo/restaurant/orders/summary")
     public ResponseEntity<ApiResponse> getOrderSummary(@RequestBody Restaurant restaurant) {
-        List<FinalBill> orders = finalBillRepository.findByRestaurantId(restaurant.getRestaurantId());
+        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantId(restaurant.getRestaurantId());
 
         if (orders.isEmpty()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the provided restaurantId", null), HttpStatus.NOT_FOUND);
         }
 
         List<Map<String, Object>> summaryList = new ArrayList<>();
-        for (FinalBill order : orders) {
+        for (DineInFinalBill order : orders) {
             Map<String, Object> summary = new HashMap<>();
             summary.put("orderId", order.getBillId());
-            summary.put("orderDate", order.getDateTime());
+            summary.put("orderDate", order.getDatetime());
             summary.put("orderType", order.getOrderType());
             summary.put("paymentMode", order.getPaymentMode());
             summary.put("gst", order.getGst());
@@ -207,13 +207,13 @@ public class NewOrderController {
             @PathVariable String restaurantId,
             @PathVariable String itemId) {
 
-        List<FinalBill> orders = finalBillRepository.findByRestaurantIdAndOrderListItemId(restaurantId, itemId);
+        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantIdAndOrderListItemId(restaurantId, itemId);
 
         int totalQuantity = 0;
         double totalRevenue = 0.0;
         int itemQuantity = 0;
 
-        for (FinalBill order : orders) {
+        for (DineInFinalBill order : orders) {
             for (OrderList orderItem : order.getOrderList()) {
                 if (itemId.equals(orderItem.getItemId())) {
                     totalQuantity += orderItem.getQty();
@@ -244,9 +244,9 @@ public class NewOrderController {
 
 
     private double calculateTotalRevenueAllItems(String restaurantId) {
-        List<FinalBill> orders = finalBillRepository.findByRestaurantId(restaurantId);
+        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantId(restaurantId);
         double totalRevenue = 0.0;
-        for (FinalBill order : orders) {
+        for (DineInFinalBill order : orders) {
             for (OrderList orderItem : order.getOrderList()) {
                 totalRevenue += orderItem.getPrice() * orderItem.getQty();
             }

@@ -2,10 +2,10 @@ package com.dinedynamo.controllers.old_orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.collections.invoice_collections.FinalBill;
+import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.old_order_collections.DeliveryOrder;
 import com.dinedynamo.repositories.old_orders_repositories.DeliveryOrderRepository;
-import com.dinedynamo.repositories.invoice_repositories.FinalBillRepository;
+import com.dinedynamo.repositories.invoice_repositories.DineInBillRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class DeliveryController {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private FinalBillRepository finalBillRepository;
+    private DineInBillRepository dineInBillRepository;
 
 
     @PostMapping("/dinedynamo/restaurant/orders/delivery")
@@ -39,16 +39,16 @@ public class DeliveryController {
         // Additional data preparation as needed...
 
         // Step 3: Create Final Bill object
-        FinalBill finalBill = new FinalBill();
-        finalBill.setRestaurantId(restaurantId);
-        finalBill.setOrderList(deliveryOrder.getOrderList());
+        DineInFinalBill dineInFinalBill = new DineInFinalBill();
+        dineInFinalBill.setRestaurantId(restaurantId);
+        dineInFinalBill.setOrderList(deliveryOrder.getOrderList());
         // Set other relevant fields for the Final Bill
 
         // Step 4: Save the Final Bill
-        finalBillRepository.save(finalBill);
+        dineInBillRepository.save(dineInFinalBill);
 
         // Prepare and return the response
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", finalBill);
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", dineInFinalBill);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

@@ -1,4 +1,4 @@
-package com.dinedynamo.collections.rating_and_review_collections;
+package com.dinedynamo.collections.review_collections;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,16 +11,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Getter
 @Setter
-@Document(collection = "item_reviews")
-public class ItemReview {
-
+@Document(collection = "restaurant_reviews")
+public class RestaurantReview
+{
 
     @Id
     private String feedbackId;
     private String restaurantId;
-    private String itemId;
     private String customerName;
     private double starRating;
     private String comment;
+
 
 }
