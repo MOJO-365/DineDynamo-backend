@@ -34,7 +34,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 @RestController
 @CrossOrigin("*")
-public class InvoiceController {
+public class DineInInvoiceController {
 
     @Autowired
     OrderRepository orderRepository;
@@ -50,7 +50,7 @@ public class InvoiceController {
 
     @PostMapping("/dinedynamo/invoice/getorder")
     public ResponseEntity<ApiResponse> getOrderForTable(@RequestBody Order requestOrder) {
-        try {
+
             List<Order> orderListForTable = orderRepository.findByTableId(requestOrder.getTableId());
 
             if (!orderListForTable.isEmpty()) {
@@ -59,10 +59,7 @@ public class InvoiceController {
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the specified table", null), HttpStatus.NOT_FOUND);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
     @PostMapping("/dinedynamo/invoice/getinvoice")
@@ -83,7 +80,7 @@ public class InvoiceController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (IOException | DocumentException e) {
-            e.printStackTrace();
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -181,7 +178,7 @@ public class InvoiceController {
     }
 
     private float calculateTotalHeightWithIncreasedPageSize(float baseContentHeight, float orderDetailsHeight, float thankYouHeight) {
-        int pageSize = 300;
+        int pageSize = 500;
 
         switch (pageSize) {
             case 400:
@@ -387,10 +384,10 @@ public class InvoiceController {
 
             document.add(qrCodeParagraph);
         } catch (WriterException e) {
-            e.printStackTrace();
+
+            System.out.println(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
+            System.out.println(e.getMessage());        }
     }
 
     private void addHorizontalLine(Document document) throws DocumentException {

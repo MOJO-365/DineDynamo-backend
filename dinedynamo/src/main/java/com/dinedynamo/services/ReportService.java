@@ -1,9 +1,9 @@
 package com.dinedynamo.services;
 
-import com.dinedynamo.collections.invoice_collections.FinalBill;
+import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.report_collections.ItemSale;
-import com.dinedynamo.repositories.invoice_repositories.FinalBillRepository;
+import com.dinedynamo.repositories.invoice_repositories.DineInBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ import java.util.*;
 public class ReportService {
 
     @Autowired
-    private FinalBillRepository finalBillRepository;
+    private DineInBillRepository dineInBillRepository;
 
     public List<ItemSale> getHighestSellingItems(String restaurantId) {
-        List<FinalBill> finalBills = finalBillRepository.findByRestaurantId(restaurantId);
+        List<DineInFinalBill> dineInFinalBills = dineInBillRepository.findByRestaurantId(restaurantId);
         Map<String, Integer> totalQuantities = new HashMap<>();
         Map<String, Double> totalSales = new HashMap<>();
 
-        for (FinalBill finalBill : finalBills) {
-            List<OrderList> orderList = finalBill.getOrderList();
+        for (DineInFinalBill dineInFinalBill : dineInFinalBills) {
+            List<OrderList> orderList = dineInFinalBill.getOrderList();
             if (orderList != null) {
                 for (OrderList order : orderList) {
                     String itemId = order.getItemId();
@@ -39,8 +39,8 @@ public class ReportService {
             int totalQuantity = entry.getValue();
             double totalItemSales = totalSales.get(itemId);
             String itemName = "";
-            Optional<String> optionalName = finalBills.stream()
-                    .flatMap(finalBill -> finalBill.getOrderList().stream())
+            Optional<String> optionalName = dineInFinalBills.stream()
+                    .flatMap(dineInFinalBill -> dineInFinalBill.getOrderList().stream())
                     .filter(orderList -> orderList.getItemId().equals(itemId))
                     .map(OrderList::getName)
                     .findFirst();
@@ -48,8 +48,8 @@ public class ReportService {
                 itemName = optionalName.get();
             }
             double itemPrice = 0.0;
-            Optional<Double> optionalPrice = finalBills.stream()
-                    .flatMap(finalBill -> finalBill.getOrderList().stream())
+            Optional<Double> optionalPrice = dineInFinalBills.stream()
+                    .flatMap(dineInFinalBill -> dineInFinalBill.getOrderList().stream())
                     .filter(orderList -> orderList.getItemId().equals(itemId))
                     .map(OrderList::getPrice)
                     .findFirst();

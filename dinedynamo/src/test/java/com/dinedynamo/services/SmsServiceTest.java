@@ -2,7 +2,7 @@ package com.dinedynamo.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import com.dinedynamo.config.TwilioConfig;
+import com.dinedynamo.config.twilio_config.TwilioConfig;
 import com.dinedynamo.dto.otp_dtos.OtpRequest;
 import com.dinedynamo.dto.otp_dtos.OtpResponse;
 import com.dinedynamo.dto.otp_dtos.OtpStatus;

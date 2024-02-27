@@ -3,7 +3,7 @@ package com.dinedynamo.controllers.old_orders_controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.old_order_collections.TakeAway;
-import com.dinedynamo.repositories.invoice_repositories.FinalBillRepository;
+import com.dinedynamo.repositories.invoice_repositories.DineInBillRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.repositories.old_orders_repositories.TakeAwayOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class TakeAwayController {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private FinalBillRepository finalBillRepository;
+    private DineInBillRepository dineInBillRepository;
 
 
 
