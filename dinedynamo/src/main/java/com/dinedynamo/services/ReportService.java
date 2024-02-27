@@ -26,7 +26,7 @@ public class ReportService {
                 for (OrderList order : orderList) {
                     String itemId = order.getItemId();
                     int quantity = order.getQty();
-                    double price = order.getPrice();
+                    double price = order.getItemPrice();
                     totalQuantities.put(itemId, totalQuantities.getOrDefault(itemId, 0) + quantity);
                     totalSales.put(itemId, totalSales.getOrDefault(itemId, 0.0) + (quantity * price));
                 }
@@ -42,7 +42,7 @@ public class ReportService {
             Optional<String> optionalName = dineInFinalBills.stream()
                     .flatMap(dineInFinalBill -> dineInFinalBill.getOrderList().stream())
                     .filter(orderList -> orderList.getItemId().equals(itemId))
-                    .map(OrderList::getName)
+                    .map(OrderList::getItemName)
                     .findFirst();
             if (optionalName.isPresent()) {
                 itemName = optionalName.get();
@@ -51,7 +51,7 @@ public class ReportService {
             Optional<Double> optionalPrice = dineInFinalBills.stream()
                     .flatMap(dineInFinalBill -> dineInFinalBill.getOrderList().stream())
                     .filter(orderList -> orderList.getItemId().equals(itemId))
-                    .map(OrderList::getPrice)
+                    .map(OrderList::getItemPrice)
                     .findFirst();
             if (optionalPrice.isPresent()) {
                 itemPrice = optionalPrice.get();
