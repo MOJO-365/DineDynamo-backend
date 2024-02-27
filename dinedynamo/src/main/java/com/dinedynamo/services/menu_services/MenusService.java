@@ -180,14 +180,14 @@ public class MenusService
     public Menus addSubSubCategory(SubSubCategory subSubCategory){
 
         if(subSubCategory.getRestaurantId().equals("") || subSubCategory.getRestaurantId().equals(" ") || subSubCategory.getRestaurantId()==null
-        || subSubCategory.getSubCategoryId() == null || subSubCategory.getSubCategoryId().equals("") || subSubCategory.getSubSubCategoryId().equals(" ")
+        || subSubCategory.getSubCategoryId() == null || subSubCategory.getSubCategoryId().equals("")
         ){
             System.out.println("PASS SUB-CATEGORY-ID AND RESTAURANT-ID IN REQUEST");
             return null;
         }
 
         subSubCategoryRepository.save(subSubCategory);
-
+        System.out.println("sub-sub id: "+subSubCategory.getSubSubCategoryId());
         if(subSubCategory.getListOfMenuItems() != null){
             for(MenuItem menuItem: subSubCategory.getListOfMenuItems()){
 
@@ -368,8 +368,6 @@ public class MenusService
         menuItemRepository.delete(menuItem);
         return updateWholeMenu(menuItem.getRestaurantId());
     }
-
-
 
     //DONE
     public Menus deleteSubSubCategory(SubSubCategory subSubCategory){

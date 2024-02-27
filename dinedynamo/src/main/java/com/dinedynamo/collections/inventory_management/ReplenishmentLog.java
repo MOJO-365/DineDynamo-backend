@@ -1,28 +1,28 @@
 package com.dinedynamo.collections.inventory_management;
 
-
 import lombok.*;
 import org.springframework.data.annotation.Id;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class SupplierDetails
-{
+public class ReplenishmentLog {
+
 
     @Id
-    String supplierId;
+    String replenishmentLogId;
 
-    String supplierName;
+    String operatorName;
 
-    String supplierPhone;
+    double replenishedQuantity;
 
-    String supplierAddress;
+    LocalDateTime timestamp;
 
-    String supplierEmailId;
+    String replenishmentLocation;
 
     String restaurantId;
-
 }

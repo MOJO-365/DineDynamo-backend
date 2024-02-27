@@ -10,6 +10,7 @@ import com.dinedynamo.services.external_services.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -113,13 +114,13 @@ public class RestaurantReservationService
 
         for(Reservation reservation: listOfReservations){
 
-            String dineInDateAndTimeString = reservation.getDineInDateAndTime();
+            LocalDate dineInDate = reservation.getDineInDate();
 
-            LocalDateTime dineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dineInDateAndTimeString);
+            //LocalDateTime dineInDateAndTime = dateTimeUtility.convertJSLocalStringToLocalDateTime(dineInDateAndTimeString);
 
-            LocalDateTime today = LocalDateTime.now();
+            LocalDate today = LocalDate.now();
 
-            if(today.isAfter(dineInDateAndTime)){
+            if(today.isAfter(dineInDate)){
                 reservationRepository.delete(reservation);
             }
 

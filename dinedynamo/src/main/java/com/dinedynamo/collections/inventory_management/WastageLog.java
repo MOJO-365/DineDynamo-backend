@@ -4,24 +4,29 @@ package com.dinedynamo.collections.inventory_management;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class SupplierDetails
+public class WastageLog
 {
-
     @Id
-    String supplierId;
+    String wastageLogId;
 
-    String supplierName;
 
-    String supplierPhone;
 
-    String supplierAddress;
+    String wastageReason;
 
-    String supplierEmailId;
+    String operatorName;
+
+    double wastedQuantity;
+
+    String wastageLocation;
+
+    LocalDateTime timestamp;
 
     String restaurantId;
 
