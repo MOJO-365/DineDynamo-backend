@@ -5,7 +5,6 @@ import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.Order;
 import com.dinedynamo.collections.order_collections.OrderList;
-import com.dinedynamo.collections.order_collections.Addon;
 import com.dinedynamo.repositories.invoice_repositories.DineInBillRepository;
 import com.dinedynamo.repositories.order_repositories.NewOrderRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
@@ -38,30 +37,27 @@ public class NewOrderController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
     }
 
-    // Get all orders for a restaurant using restaurantId
-    @PostMapping("dinedynamo/restaurant/orders/all")
-    public ResponseEntity<ApiResponse> getAllOrders(@RequestBody Restaurant restaurant) {
+    //get all orders restaurant using restaurantId
+    @PostMapping("/dinedynamo/restaurant/orders/all")
+    public ResponseEntity<ApiResponse> getAllOrders(@RequestBody Restaurant restaurant){
+
+
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
 
-        if (restaurant == null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Restaurant not found", null), HttpStatus.NOT_FOUND);
-        } else {
+
+        if (restaurant == null)
+        {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "success", null), HttpStatus.NOT_FOUND);
+        }
+        else
+        {
             List<Order> orders = orderRepository.findByRestaurantId(restaurant.getRestaurantId());
-            // Extracting data array from orders
-            List<Map<String, Object>> data = new ArrayList<>();
-            for (Order order : orders) {
-                for (OrderList orderList : order.getOrderList()) {
-                    Map<String, Object> item = new HashMap<>();
-                    item.put("itemId", orderList.getItemId());
-                    item.put("name", orderList.getName());
-                    item.put("qty", orderList.getQty());
-                    item.put("price", orderList.getPrice());
-                    data.add(item);
-                }
-            }
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", data), HttpStatus.OK);
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
+
         }
     }
+
 
     // Delete order using orderId
     @DeleteMapping("dinedynamo/restaurant/orders/delete")
@@ -79,7 +75,7 @@ public class NewOrderController {
     // Update order using orderId
     @PostMapping("dinedynamo/restaurant/orders/update")
     public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order order) {
-        try {
+
             Order existingOrder = orderRepository.findById(order.getOrderId()).orElse(null);
 
             if (existingOrder != null) {
@@ -89,10 +85,7 @@ public class NewOrderController {
             } else {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Order not found", null), HttpStatus.NOT_FOUND);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", null), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
     @PostMapping("dinedynamo/restaurant/dine-in-orders/final-bill")
@@ -128,12 +121,15 @@ public class NewOrderController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+
     private List<Map<String, Object>> processData(List<Order> orders) {
         Map<String, Map<String, Object>> itemMap = new HashMap<>();
 
         for (Order order : orders) {
             for (OrderList orderList : order.getOrderList()) {
-                String key = orderList.getName() + "_" + orderList.getPrice();
+                String key = orderList.getItemName() + "_" + orderList.getItemPrice();
                 if (itemMap.containsKey(key)) {
                     Map<String, Object> item = itemMap.get(key);
                     int qty = (int) item.get("qty") + orderList.getQty();
@@ -141,29 +137,10 @@ public class NewOrderController {
                 } else {
                     Map<String, Object> item = new HashMap<>();
                     item.put("itemId", orderList.getItemId());
-                    item.put("name", orderList.getName());
+                    item.put("name", orderList.getItemPrice());
                     item.put("qty", orderList.getQty());
-                    item.put("price", orderList.getPrice());
+                    item.put("price", orderList.getItemPrice());
                     itemMap.put(key, item);
-                }
-
-
-                if (orderList.getAddons() != null) {
-                    for (Addon addon : orderList.getAddons()) {
-                        String addonKey = addon.getName() + "_" + addon.getPrice();
-                        if (itemMap.containsKey(addonKey)) {
-                            Map<String, Object> addonItem = itemMap.get(addonKey);
-                            int addonQty = (int) addonItem.get("qty") + addon.getQty();
-                            addonItem.put("qty", addonQty);
-                        } else {
-                            Map<String, Object> addonItem = new HashMap<>();
-                            addonItem.put("itemId", addon.getItemId());
-                            addonItem.put("name", addon.getName());
-                            addonItem.put("qty", addon.getQty());
-                            addonItem.put("price", addon.getPrice());
-                            itemMap.put(addonKey, addonItem);
-                        }
-                    }
                 }
             }
         }
@@ -171,6 +148,60 @@ public class NewOrderController {
         return new ArrayList<>(itemMap.values());
     }
 
+
+
+
+
+
+
+
+
+
+
+
+//    private List<Map<String, Object>> processData(List<Order> orders) {
+//        Map<String, Map<String, Object>> itemMap = new HashMap<>();
+//
+//        for (Order order : orders) {
+//            for (OrderList orderList : order.getOrderList()) {
+//                String key = orderList.getName() + "_" + orderList.getPrice();
+//                if (itemMap.containsKey(key)) {
+//                    Map<String, Object> item = itemMap.get(key);
+//                    int qty = (int) item.get("qty") + orderList.getQty();
+//                    item.put("qty", qty);
+//                } else {
+//                    Map<String, Object> item = new HashMap<>();
+//                    item.put("itemId", orderList.getItemId());
+//                    item.put("name", orderList.getName());
+//                    item.put("qty", orderList.getQty());
+//                    item.put("price", orderList.getPrice());
+//                    itemMap.put(key, item);
+//                }
+//
+//
+//                if (orderList.getAddons() != null) {
+//                    for (Addon addon : orderList.getAddons()) {
+//                        String addonKey = addon.getName() + "_" + addon.getPrice();
+//                        if (itemMap.containsKey(addonKey)) {
+//                            Map<String, Object> addonItem = itemMap.get(addonKey);
+//                            int addonQty = (int) addonItem.get("qty") + addon.getQty();
+//                            addonItem.put("qty", addonQty);
+//                        } else {
+//                            Map<String, Object> addonItem = new HashMap<>();
+//                            addonItem.put("itemId", addon.getItemId());
+//                            addonItem.put("name", addon.getName());
+//                            addonItem.put("qty", addon.getQty());
+//                            addonItem.put("price", addon.getPrice());
+//                            itemMap.put(addonKey, addonItem);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        return new ArrayList<>(itemMap.values());
+//    }
+//
 
 
 
@@ -217,7 +248,7 @@ public class NewOrderController {
             for (OrderList orderItem : order.getOrderList()) {
                 if (itemId.equals(orderItem.getItemId())) {
                     totalQuantity += orderItem.getQty();
-                    totalRevenue += orderItem.getPrice() * orderItem.getQty();
+                    totalRevenue += orderItem.getItemPrice() * orderItem.getQty();
                     itemQuantity++;
                 }
             }
@@ -248,7 +279,7 @@ public class NewOrderController {
         double totalRevenue = 0.0;
         for (DineInFinalBill order : orders) {
             for (OrderList orderItem : order.getOrderList()) {
-                totalRevenue += orderItem.getPrice() * orderItem.getQty();
+                totalRevenue += orderItem.getItemPrice() * orderItem.getQty();
             }
         }
         return totalRevenue;

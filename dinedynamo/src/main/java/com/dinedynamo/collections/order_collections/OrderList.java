@@ -14,11 +14,11 @@ import java.util.List;
 public class OrderList {
 
     private String itemId;
-    private String name;
+    private String itemName;
     private int qty;
-    private double price;
-    private String desc;
+    private double itemPrice;
+    private String itemDescription;
     private String note;
-    private List<Addon> addons;
+//    private List<Addon> addons;
 
 }

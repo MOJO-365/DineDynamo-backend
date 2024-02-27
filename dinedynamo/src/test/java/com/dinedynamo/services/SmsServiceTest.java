@@ -28,6 +28,20 @@ public class SmsServiceTest {
     }
 
 
+
+    @Test
+    public void testSendSMS() {
+        OtpRequest otpRequest = new OtpRequest();
+        otpRequest.setPhoneNumber("+917046535398");
+        when(twilioConfig.getPhoneNumber()).thenReturn("+16592445130");
+
+        OtpResponse otpResponse = smsService.sendSMS(otpRequest);
+
+        assertEquals(OtpStatus.FAILED, otpResponse.getStatus());
+        assertNotNull(otpResponse.getMessage());
+    }
+
+
     @Test
     public void testResendOTP() {
 
@@ -57,17 +71,6 @@ public class SmsServiceTest {
     }
 
 
-    @Test
-    public void testSendSMS() {
-        OtpRequest otpRequest = new OtpRequest();
-        otpRequest.setPhoneNumber("+917046535398");
-        when(twilioConfig.getPhoneNumber()).thenReturn("+16592445130");
-
-        OtpResponse otpResponse = smsService.sendSMS(otpRequest);
-
-        assertEquals(OtpStatus.FAILED, otpResponse.getStatus());
-        assertNotNull(otpResponse.getMessage());
-    }
 
 
 }

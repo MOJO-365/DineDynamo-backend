@@ -178,7 +178,7 @@ public class DineInInvoiceController {
     }
 
     private float calculateTotalHeightWithIncreasedPageSize(float baseContentHeight, float orderDetailsHeight, float thankYouHeight) {
-        int pageSize = 500;
+        int pageSize = 400;
 
         switch (pageSize) {
             case 400:

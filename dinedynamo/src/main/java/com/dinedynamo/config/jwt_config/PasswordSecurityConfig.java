@@ -1,4 +1,4 @@
-package com.dinedynamo.config;
+package com.dinedynamo.config.jwt_config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
