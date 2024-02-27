@@ -16,7 +16,9 @@ public class WastageLog
     @Id
     String wastageLogId;
 
+    String rawMaterialId;
 
+    String restaurantId;
 
     String wastageReason;
 
@@ -28,6 +30,6 @@ public class WastageLog
 
     LocalDateTime timestamp;
 
-    String restaurantId;
+
 
 }

@@ -11,4 +11,6 @@ import java.util.List;
 public interface RawMaterialRepository extends MongoRepository<RawMaterial, String>
 {
     List<RawMaterial> findByRestaurantId(String restaurantId);
+
+    List<RawMaterial> deleteByRestaurantId(String restaurantId);
 }

@@ -16,6 +16,10 @@ public class ReplenishmentLog {
     @Id
     String replenishmentLogId;
 
+    String restaurantId;
+
+    String rawMaterialId;
+
     String operatorName;
 
     double replenishedQuantity;
@@ -24,5 +28,4 @@ public class ReplenishmentLog {
 
     String replenishmentLocation;
 
-    String restaurantId;
 }

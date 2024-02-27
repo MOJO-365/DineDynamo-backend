@@ -15,6 +15,10 @@ public class SupplierDetails
     @Id
     String supplierId;
 
+    String restaurantId;
+
+    String rawMaterialId;
+
     String supplierName;
 
     String supplierPhone;
@@ -23,6 +27,5 @@ public class SupplierDetails
 
     String supplierEmailId;
 
-    String restaurantId;
 
 }

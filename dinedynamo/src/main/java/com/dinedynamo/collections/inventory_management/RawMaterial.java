@@ -29,9 +29,9 @@ public class RawMaterial {
 
     String measurementUnits;
 
-    String currentLevel;
+    double currentLevel;
 
-    String reorderLevel;
+    double reorderLevel;
 
     Date purchaseDate;
 
@@ -41,15 +41,15 @@ public class RawMaterial {
 
     double totalCost;
 
-    @DBRef
-    SupplierDetails supplierDetails;
-
-
-    @DBRef
-    List<WastageLog> wastageLogList;
-
-
-    @DBRef
-    List<ReplenishmentLog> replenishmentLogList;
+//    @DBRef
+//    SupplierDetails supplierDetails;
+//
+//
+//    @DBRef
+//    List<WastageLog> wastageLogList;
+//
+//
+//    @DBRef
+//    List<ReplenishmentLog> replenishmentLogList;
 
 }
