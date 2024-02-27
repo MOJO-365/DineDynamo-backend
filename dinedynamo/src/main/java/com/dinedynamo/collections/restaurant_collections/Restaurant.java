@@ -42,9 +42,9 @@ public class Restaurant
 
     double restaurantRating;
 
-    String startTime;
+    LocalTime startTime;
 
-    String endTime;
+    LocalTime endTime;
 
     @Builder.Default
     double costForTwo=0.0;
