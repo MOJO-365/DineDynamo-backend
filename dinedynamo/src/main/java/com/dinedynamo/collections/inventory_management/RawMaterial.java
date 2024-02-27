@@ -29,9 +29,6 @@ public class RawMaterial {
 
     String reorderLevel;
 
-    //The optimal or target quantity to have in stock to meet demand without overstocking.
-    String parLevel;
-
     String purchaseDate;
 
     String expirationDate;

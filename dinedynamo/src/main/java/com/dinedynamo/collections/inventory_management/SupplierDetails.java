@@ -23,6 +23,6 @@ public class SupplierDetails
 
     String supplierEmailId;
 
-
+    String restaurantId;
 
 }
