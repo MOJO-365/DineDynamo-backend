@@ -2,9 +2,9 @@ package com.dinedynamo.controllers.reservation_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.table_collections.Reservation;
+import com.dinedynamo.collections.reservation_collections.Reservation;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.collections.table_collections.RestaurantReservationSettings;
+import com.dinedynamo.collections.reservation_collections.RestaurantReservationSettings;
 import com.dinedynamo.dto.table_dtos.GetPreviousReservationDTO;
 import com.dinedynamo.repositories.reservation_repositories.ReservationRepository;
 import com.dinedynamo.repositories.reservation_repositories.RestaurantReservationSettingsRepository;

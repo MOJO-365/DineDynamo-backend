@@ -3,11 +3,9 @@ package com.dinedynamo.collections.inventory_management;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
+
 
 @Data
 @NoArgsConstructor
@@ -33,23 +31,15 @@ public class RawMaterial {
 
     double reorderLevel;
 
-    Date purchaseDate;
+    LocalDate purchaseDate;
 
-    Date expirationDate;
+    LocalDate expirationDate;
 
     double costPerUnit;
 
     double totalCost;
 
-//    @DBRef
-//    SupplierDetails supplierDetails;
-//
-//
-//    @DBRef
-//    List<WastageLog> wastageLogList;
-//
-//
-//    @DBRef
-//    List<ReplenishmentLog> replenishmentLogList;
+    LocalDateTime timestamp;
 
+    String operatorName;
 }

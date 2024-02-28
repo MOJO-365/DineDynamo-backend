@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @CrossOrigin("*")
 public class RawMaterialController {
@@ -22,10 +24,10 @@ public class RawMaterialController {
     @Autowired
     RawMaterialService rawMaterialService;
 
-    @PostMapping("/dinedynamo/restaurant/inventory/save-raw-material")
-    ResponseEntity<ApiResponse> saveRawMaterial(@RequestBody RawMaterial rawMaterial){
+    @PostMapping("/dinedynamo/restaurant/inventory/add-raw-material")
+    ResponseEntity<ApiResponse> addRawMaterial(@RequestBody RawMaterial rawMaterial){
 
-        rawMaterialRepository.save(rawMaterial);
+        rawMaterial = rawMaterialService.save(rawMaterial);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterial),HttpStatus.OK);
     }
 
@@ -35,7 +37,7 @@ public class RawMaterialController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantId(restaurant.getRestaurantId())),HttpStatus.OK);
     }
 
-    @PutMapping("/dinedynamo/restaurant/inventory/edit-raw-materials")
+    @PutMapping("/dinedynamo/restaurant/inventory/edit-raw-material")
     ResponseEntity<ApiResponse> editRawMaterial(@RequestBody EditRawMaterialDTO editRawMaterialDTO){
 
         RawMaterial updatedRawMaterial = rawMaterialService.updateRawMaterial(editRawMaterialDTO.getRawMaterialId(), editRawMaterialDTO.getRawMaterial());
@@ -54,6 +56,7 @@ public class RawMaterialController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialService.deleteAllRawMaterials(restaurant)),HttpStatus.OK);
     }
 
+    //Used to change the current level of raw material
     @PutMapping("/dinedynamo/restaurant/inventory/add-usage")
     ResponseEntity<ApiResponse> addUsage(@RequestParam double amountUsed, @RequestBody RawMaterial rawMaterial){
 

@@ -1,4 +1,4 @@
-package com.dinedynamo.collections.table_collections;
+package com.dinedynamo.collections.reservation_collections;
 
 
 import lombok.*;
