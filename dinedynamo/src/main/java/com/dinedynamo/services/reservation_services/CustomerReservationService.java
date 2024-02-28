@@ -1,8 +1,8 @@
 package com.dinedynamo.services.reservation_services;
 
 
-import com.dinedynamo.collections.table_collections.Reservation;
-import com.dinedynamo.collections.table_collections.RestaurantReservationSettings;
+import com.dinedynamo.collections.reservation_collections.Reservation;
+import com.dinedynamo.collections.reservation_collections.RestaurantReservationSettings;
 import com.dinedynamo.helper.DateTimeUtility;
 import com.dinedynamo.repositories.reservation_repositories.ReservationRepository;
 import com.dinedynamo.repositories.reservation_repositories.RestaurantReservationSettingsRepository;

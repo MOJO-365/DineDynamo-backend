@@ -1,6 +1,6 @@
 package com.dinedynamo.repositories.reservation_repositories;
 
-import com.dinedynamo.collections.table_collections.RestaurantReservationSettings;
+import com.dinedynamo.collections.reservation_collections.RestaurantReservationSettings;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

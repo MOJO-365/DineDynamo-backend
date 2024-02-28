@@ -1,7 +1,7 @@
 package com.dinedynamo.dto.table_dtos;
 
 
-import com.dinedynamo.collections.table_collections.Reservation;
+import com.dinedynamo.collections.reservation_collections.Reservation;
 import lombok.*;
 
 
