@@ -22,6 +22,7 @@ public class DeliveryOrder {
         private String customerEmail;
         private String  customerName;
         private String  customerPhone;
+        private String  customerAddress;
         private String  dateTime;
         private boolean prepared;
         private List<OrderList> orderLists;
