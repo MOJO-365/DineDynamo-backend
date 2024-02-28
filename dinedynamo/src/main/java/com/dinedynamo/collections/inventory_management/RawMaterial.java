@@ -45,4 +45,8 @@ public class RawMaterial {
     LocalDateTime timestamp;
 
     String operatorName;
+
+    RawMaterialStatus status;
+
+
 }
