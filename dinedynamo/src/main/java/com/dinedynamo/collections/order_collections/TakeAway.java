@@ -22,8 +22,8 @@ public class TakeAway {
         private String  customerName;
         private String  customerPhone;
         private String  dateTime;
-        private boolean prepared;
-        private List<OrderList> OrderLists;
+        private boolean pickedUp;
+        private List<OrderList> orderList;
 
 
 }

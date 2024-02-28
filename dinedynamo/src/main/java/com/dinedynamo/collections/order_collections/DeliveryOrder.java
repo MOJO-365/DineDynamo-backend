@@ -24,8 +24,8 @@ public class DeliveryOrder {
         private String  customerPhone;
         private String  customerAddress;
         private String  dateTime;
-        private boolean prepared;
-        private List<OrderList> orderLists;
+        private boolean deliveryStatus;
+        private List<OrderList> orderList;
 
 
 }
