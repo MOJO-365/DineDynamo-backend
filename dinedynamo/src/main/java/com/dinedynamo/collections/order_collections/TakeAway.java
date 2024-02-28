@@ -18,10 +18,12 @@ public class TakeAway {
         @Id
         private String takeAwayId;
         private String restaurantId;
-        private String tableId;
-        private String dateTime;
-        private boolean prepared;
-        private List<OrderList> orderLists;
+        private String customerEmail;
+        private String  customerName;
+        private String  customerPhone;
+        private String  dateTime;
+        private boolean pickedUp;
+        private List<OrderList> orderList;
 
 
 }

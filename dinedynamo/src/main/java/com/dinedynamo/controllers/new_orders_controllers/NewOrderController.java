@@ -103,9 +103,7 @@ public class NewOrderController {
         DineInFinalBill dineInFinalBill = new DineInFinalBill();
         dineInFinalBill.setRestaurantId(firstOrder.getRestaurantId());
         dineInFinalBill.setTableId(firstOrder.getTableId());
-        dineInFinalBill.setDatetime(firstOrder.getDateTime());
-        dineInFinalBill.setOrderType("DineIn");
-        dineInFinalBill.setPaymentMode("Card");
+       
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<OrderList> orderList = new ArrayList<>();
