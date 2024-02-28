@@ -19,8 +19,10 @@ public class DeliveryOrder {
         @Id
         private String deliveryId;
         private String restaurantId;
-        private String tableId;
-        private String dateTime;
+        private String customerEmail;
+        private String  customerName;
+        private String  customerPhone;
+        private String  dateTime;
         private boolean prepared;
         private List<OrderList> orderLists;
 
