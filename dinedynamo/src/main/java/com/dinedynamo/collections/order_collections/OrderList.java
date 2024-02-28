@@ -19,6 +19,9 @@ public class OrderList {
     private double itemPrice;
     private String itemDescription;
     private String note;
-//    private List<Addon> addons;
 
 }
+
+
+
+//    private List<Addon> addons;

@@ -21,7 +21,7 @@ public class TakeAway {
         private String tableId;
         private String dateTime;
         private boolean prepared;
-        private List<OrderList> orderLists;
+        private List<OrderList> OrderLists;
 
 
 }
