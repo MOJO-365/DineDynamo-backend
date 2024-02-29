@@ -100,54 +100,42 @@ public class NewOrderController {
 
         Order firstOrder = orders.get(0);
 
-        List<Map<String, Object>> data = processData(orders);
+        List<OrderList> orderList = processOrderList(orders);
 
         DineInFinalBill dineInFinalBill = new DineInFinalBill();
         dineInFinalBill.setRestaurantId(firstOrder.getRestaurantId());
         dineInFinalBill.setTableId(firstOrder.getTableId());
-       
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<OrderList> orderList = new ArrayList<>();
-        for (Map<String, Object> item : data) {
-            OrderList orderListItem = objectMapper.convertValue(item, OrderList.class);
-            orderList.add(orderListItem);
-        }
         dineInFinalBill.setOrderList(orderList);
 
         dineInBillRepository.save(dineInFinalBill);
 
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", data);
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", orderList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-
-    private List<Map<String, Object>> processData(List<Order> orders) {
-        Map<String, Map<String, Object>> itemMap = new HashMap<>();
+    private List<OrderList> processOrderList(List<Order> orders) {
+        Map<String, OrderList> orderListMap = new HashMap<>();
 
         for (Order order : orders) {
-            for (OrderList orderList : order.getOrderList()) {
-                String key = orderList.getItemName() + "_" + orderList.getItemPrice();
-                if (itemMap.containsKey(key)) {
-                    Map<String, Object> item = itemMap.get(key);
-                    int qty = (int) item.get("qty") + orderList.getQty();
-                    item.put("qty", qty);
+            for (OrderList orderListItem : order.getOrderList()) {
+                String key = orderListItem.getItemName() + "_" + orderListItem.getItemPrice();
+                if (orderListMap.containsKey(key)) {
+                    OrderList existingOrderListItem = orderListMap.get(key);
+                    existingOrderListItem.setQty(existingOrderListItem.getQty() + orderListItem.getQty());
                 } else {
-                    Map<String, Object> item = new HashMap<>();
-                    item.put("itemId", orderList.getItemId());
-                    item.put("itemName", orderList.getItemPrice());
-                    item.put("qty", orderList.getQty());
-                    item.put("itemPrice", orderList.getItemPrice());
-                    itemMap.put(key, item);
+                    OrderList newOrderListItem = new OrderList();
+                    newOrderListItem.setItemId(orderListItem.getItemId());
+                    newOrderListItem.setItemName(orderListItem.getItemName());
+                    newOrderListItem.setQty(orderListItem.getQty());
+                    newOrderListItem.setItemPrice(orderListItem.getItemPrice());
+                    orderListMap.put(key, newOrderListItem);
                 }
             }
         }
 
-        return new ArrayList<>(itemMap.values());
+        return new ArrayList<>(orderListMap.values());
     }
-
 
 
 
