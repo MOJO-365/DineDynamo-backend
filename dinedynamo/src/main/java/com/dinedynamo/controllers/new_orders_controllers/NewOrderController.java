@@ -202,84 +202,83 @@ public class NewOrderController {
 //
 
 
-
-    @GetMapping("/dinedynamo/restaurant/orders/summary")
-    public ResponseEntity<ApiResponse> getOrderSummary(@RequestBody Restaurant restaurant) {
-        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantId(restaurant.getRestaurantId());
-
-        if (orders.isEmpty()) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the provided restaurantId", null), HttpStatus.NOT_FOUND);
-        }
-
-        List<Map<String, Object>> summaryList = new ArrayList<>();
-        for (DineInFinalBill order : orders) {
-            Map<String, Object> summary = new HashMap<>();
-            summary.put("orderId", order.getBillId());
-            summary.put("orderDate", order.getDatetime());
-            summary.put("orderType", order.getOrderType());
-            summary.put("paymentMode", order.getPaymentMode());
-            summary.put("gst", order.getGst());
-            summary.put("totalAmount", order.getTotalAmount());
-            summary.put("orderList",order.getOrderList());
-            summaryList.add(summary);
-        }
-
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", summaryList);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
+//
+//    @PostMapping("/dinedynamo/restaurant/orders/summary")
+//    public ResponseEntity<ApiResponse> getOrderSummary(@RequestBody Restaurant restaurant) {
+//        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantId(restaurant.getRestaurantId());
+//
+//        if (orders.isEmpty()) {
+//            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the provided restaurantId", null), HttpStatus.NOT_FOUND);
+//        }
+//
+//        List<Map<String, Object>> summaryList = new ArrayList<>();
+//        for (DineInFinalBill order : orders) {
+//            Map<String, Object> summary = new HashMap<>();
+//            summary.put("orderId", order.getDineInBillId());
+//            summary.put("orderDate", order.getDatetime());
+//            summary.put("paymentMode", order.getPaymentMode());
+//            summary.put("gst", order.getGst());
+//            summary.put("totalAmount", order.getTotalAmount());
+//            summary.put("orderList",order.getOrderList());
+//            summaryList.add(summary);
+//        }
+//
+//        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", summaryList);
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
 
 
-    @GetMapping("dinedynamo/report/percentage-sales/{restaurantId}/{itemId}")
-    public ResponseEntity<Map<String, Object>> generatePercentageSalesReport(
-            @PathVariable String restaurantId,
-            @PathVariable String itemId) {
 
-        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantIdAndOrderListItemId(restaurantId, itemId);
-
-        int totalQuantity = 0;
-        double totalRevenue = 0.0;
-        int itemQuantity = 0;
-
-        for (DineInFinalBill order : orders) {
-            for (OrderList orderItem : order.getOrderList()) {
-                if (itemId.equals(orderItem.getItemId())) {
-                    totalQuantity += orderItem.getQty();
-                    totalRevenue += orderItem.getItemPrice() * orderItem.getQty();
-                    itemQuantity++;
-                }
-            }
-        }
-
-        double totalRevenueAllItems = calculateTotalRevenueAllItems(restaurantId);
-        double percentageSales = (totalRevenue / totalRevenueAllItems) * 100;
-
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("status", "OK");
-        responseData.put("message", "Percentage sales report generated successfully");
-        responseData.put("data", Map.of(
-                "percentageSales", percentageSales,
-                "dateTime", LocalDateTime.now(),
-                "itemId", itemId,
-                "totalQuantity", totalQuantity,
-                "itemQuantity", itemQuantity,
-                "totalRevenue", totalRevenue,
-                "restaurantId", restaurantId
-        ));
-
-        return ResponseEntity.ok(responseData);
-    }
-
-
-    private double calculateTotalRevenueAllItems(String restaurantId) {
-        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantId(restaurantId);
-        double totalRevenue = 0.0;
-        for (DineInFinalBill order : orders) {
-            for (OrderList orderItem : order.getOrderList()) {
-                totalRevenue += orderItem.getItemPrice() * orderItem.getQty();
-            }
-        }
-        return totalRevenue;
-    }
+//    @PostMapping("dinedynamo/report/percentage-sales/{restaurantId}/{itemId}")
+//    public ResponseEntity<Map<String, Object>> generatePercentageSalesReport(
+//            @PathVariable String restaurantId,
+//            @PathVariable String itemId) {
+//
+//        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantIdAndOrderListItemId(restaurantId, itemId);
+//
+//        int totalQuantity = 0;
+//        double totalRevenue = 0.0;
+//        int itemQuantity = 0;
+//
+//        for (DineInFinalBill order : orders) {
+//            for (OrderList orderItem : order.getOrderList()) {
+//                if (itemId.equals(orderItem.getItemId())) {
+//                    totalQuantity += orderItem.getQty();
+//                    totalRevenue += orderItem.getItemPrice() * orderItem.getQty();
+//                    itemQuantity++;
+//                }
+//            }
+//        }
+//
+//        double totalRevenueAllItems = calculateTotalRevenueAllItems(restaurantId);
+//        double percentageSales = (totalRevenue / totalRevenueAllItems) * 100;
+//
+//        Map<String, Object> responseData = new HashMap<>();
+//        responseData.put("status", "OK");
+//        responseData.put("message", "Percentage sales report generated successfully");
+//        responseData.put("data", Map.of(
+//                "percentageSales", percentageSales,
+//                "dateTime", LocalDateTime.now(),
+//                "itemId", itemId,
+//                "totalQuantity", totalQuantity,
+//                "itemQuantity", itemQuantity,
+//                "totalRevenue", totalRevenue,
+//                "restaurantId", restaurantId
+//        ));
+//
+//        return ResponseEntity.ok(responseData);
+//    }
+//
+//
+//    private double calculateTotalRevenueAllItems(String restaurantId) {
+//        List<DineInFinalBill> orders = dineInBillRepository.findByRestaurantId(restaurantId);
+//        double totalRevenue = 0.0;
+//        for (DineInFinalBill order : orders) {
+//            for (OrderList orderItem : order.getOrderList()) {
+//                totalRevenue += orderItem.getItemPrice() * orderItem.getQty();
+//            }
+//        }
+//        return totalRevenue;
+//    }
 }

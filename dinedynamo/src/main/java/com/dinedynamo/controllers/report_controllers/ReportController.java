@@ -30,7 +30,7 @@ public class ReportController {
 //    }
 
     @GetMapping("dinedynamo/reports/orders/total")
-    public ResponseEntity<ApiResponse> getTotalOrdersReport(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<ApiResponse> getTotalOrdersCount(@RequestBody Restaurant restaurant) {
         OrderCounts orders = reportService.getTotalOrders(restaurant.getRestaurantId());
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", orders);
         return new ResponseEntity<>(response, HttpStatus.OK);

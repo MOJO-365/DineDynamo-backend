@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class DinedynamoApplication
 {
 	public static void main(String[] args) {
+
 		SpringApplication.run(DinedynamoApplication.class, args);
 		System.out.println("Hello, this application is up and running");
 
