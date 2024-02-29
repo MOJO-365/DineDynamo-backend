@@ -14,4 +14,5 @@ public interface NewOrderRepository extends MongoRepository<Order, String> {
 
     List<Order> findByTableId(String tableId);
 
+
 }

@@ -8,23 +8,25 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "final-bills")
+@Document(collection = "dinein_final_bills")
 public class DineInFinalBill {
 
     @Id
-    private String billId;
+    private String dineInBillId;
     private String restaurantId;
     private String tableId;
-    private String datetime;
-    private List<OrderList> orderList;
-    private String orderType;
+    private LocalDateTime datetime;
     private String paymentMode;
     private double gst;
     private double totalAmount;
+    private List<OrderList> orderList;
+
 
 }
+//private String orderType;

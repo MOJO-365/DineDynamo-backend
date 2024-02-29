@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 
-@Document(collection = "dine_in_orders")
+@Document(collection = "dineIn_orders")
 public class Order
 {
     @Id
