@@ -33,8 +33,10 @@ public class NewOrderController {
     // Place order
     @PostMapping("dinedynamo/restaurant/orders/place")
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody Order order) {
+        order.setDateTime(LocalDateTime.now());
         orderRepository.save(order);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", order), HttpStatus.OK);
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", order);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //get all orders restaurant using restaurantId

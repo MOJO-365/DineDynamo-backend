@@ -21,7 +21,6 @@ public class TakeAway {
         @Id
         private String takeAwayId;
         private String restaurantId;
-        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         private LocalDateTime dateTime;
         private String customerEmail;
         private String  customerName;
