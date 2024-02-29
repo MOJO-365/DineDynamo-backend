@@ -1,6 +1,5 @@
 package com.dinedynamo.repositories.inventory_repositories;
 
-import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.inventory_management.SupplierDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -13,5 +12,9 @@ public interface SupplierDetailsRepository extends MongoRepository<SupplierDetai
 
     List<SupplierDetails> deleteByRestaurantId(String restaurantId);
 
-    List<RawMaterial> deleteByRawMaterialId(String rawMaterialId);
+    List<SupplierDetails> deleteByRawMaterialId(String rawMaterialId);
+
+    List<SupplierDetails> findByRestaurantId(String restaurantId);
+
+    List<SupplierDetails> findByRawMaterialId(String rawMateterialId);
 }

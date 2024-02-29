@@ -30,4 +30,17 @@ public class SupplierDetailsService
         supplierDetailsRepository.save(supplierDetails);
         return supplierDetails;
     }
+
+    public SupplierDetails updateSupplierDetails(String supplierId, SupplierDetails updatedSupplierDetails){
+
+        RawMaterial rawMaterial = rawMaterialRepository.findById(updatedSupplierDetails.getRawMaterialId()).orElse(null);
+
+        if(rawMaterial == null){
+            System.out.println("RAW MATERIAL ID NOT IN DATABASE");
+            return null;
+        }
+        updatedSupplierDetails.setSupplierId(supplierId);
+        supplierDetailsRepository.save(updatedSupplierDetails);
+        return updatedSupplierDetails;
+    }
 }
