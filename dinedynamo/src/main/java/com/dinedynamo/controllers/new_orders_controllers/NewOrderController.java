@@ -109,7 +109,7 @@ public class NewOrderController {
 
         dineInBillRepository.save(dineInFinalBill);
 
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", orderList);
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", dineInFinalBill);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -136,8 +136,6 @@ public class NewOrderController {
 
         return new ArrayList<>(orderListMap.values());
     }
-
-
 
 
 
