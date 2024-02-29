@@ -1,5 +1,6 @@
 package com.dinedynamo.collections.order_collections;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class Order
     private String orderId;
     private String restaurantId;
     private String tableId;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private String dateTime;
     private boolean prepared;
     private List<OrderList> orderList;
