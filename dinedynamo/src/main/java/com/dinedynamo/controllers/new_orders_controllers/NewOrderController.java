@@ -137,9 +137,9 @@ public class NewOrderController {
                 } else {
                     Map<String, Object> item = new HashMap<>();
                     item.put("itemId", orderList.getItemId());
-                    item.put("name", orderList.getItemPrice());
+                    item.put("itemName", orderList.getItemPrice());
                     item.put("qty", orderList.getQty());
-                    item.put("price", orderList.getItemPrice());
+                    item.put("itemPrice", orderList.getItemPrice());
                     itemMap.put(key, item);
                 }
             }
