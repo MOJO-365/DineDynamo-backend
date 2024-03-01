@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class NewDeliveryController {
     // for Creating delivery order
     @PostMapping("/dinedynamo/restaurant/orders/delivery/create")
     public ResponseEntity<ApiResponse> createDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder) {
+        deliveryOrder.setDateTime(LocalDateTime.now());
         DeliveryOrder savedOrder = deliveryOrderRepository.save(deliveryOrder);
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", savedOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);

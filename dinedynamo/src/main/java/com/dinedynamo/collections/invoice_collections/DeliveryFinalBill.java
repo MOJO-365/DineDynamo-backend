@@ -21,9 +21,13 @@ public class DeliveryFinalBill {
     private String deliveryBillId;
     private String restaurantId;
     private String datetime;
-    private List<OrderList> orderList;
-    private String orderType;
+    private String customerEmail;
     private double gst;
     private double totalAmount;
+    private List<OrderList> orderList;
 
 }
+
+
+
+//private String orderType;
