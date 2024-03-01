@@ -118,9 +118,15 @@ public class SignInController
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
 
         }
+        else if(userRole.equalsIgnoreCase("chef")){
+
+        }
+
 
         System.out.println("UserRole PROVIDED IN THE REQUEST IS INVALID (userRole is other than RESTAURANT OR CUSTOMER)");
         return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
+
+
 
 
 /////////////////////////////////////
