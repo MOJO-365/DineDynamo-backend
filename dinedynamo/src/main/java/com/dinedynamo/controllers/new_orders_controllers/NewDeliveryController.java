@@ -43,11 +43,7 @@ public class NewDeliveryController {
         if (existingDeliveryOrderOptional.isPresent()) {
             DeliveryOrder existingDeliveryOrder = existingDeliveryOrderOptional.get();
             existingDeliveryOrder.setRestaurantId(updatedDeliveryOrder.getRestaurantId());
-            existingDeliveryOrder.setDateTime(updatedDeliveryOrder.getDateTime());
-            existingDeliveryOrder.setCustomerEmail(updatedDeliveryOrder.getCustomerEmail());
-            existingDeliveryOrder.setCustomerName(updatedDeliveryOrder.getCustomerName());
-            existingDeliveryOrder.setCustomerPhone(updatedDeliveryOrder.getCustomerPhone());
-            existingDeliveryOrder.setCustomerAddress(updatedDeliveryOrder.getCustomerAddress());
+
             existingDeliveryOrder.setDeliveryStatus(updatedDeliveryOrder.isDeliveryStatus());
             existingDeliveryOrder.setOrderList(updatedDeliveryOrder.getOrderList());
 

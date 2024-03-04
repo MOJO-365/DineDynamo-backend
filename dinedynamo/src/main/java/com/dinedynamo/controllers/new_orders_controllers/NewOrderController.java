@@ -81,9 +81,7 @@ public class NewOrderController {
         if (existingOrderOptional.isPresent()) {
             Order existingOrder = existingOrderOptional.get();
             existingOrder.setRestaurantId(updatedOrder.getRestaurantId());
-            existingOrder.setTableId(updatedOrder.getTableId());
-            existingOrder.setDateTime(updatedOrder.getDateTime());
-            existingOrder.setPrepared(updatedOrder.isPrepared());
+.setPrepared(updatedOrder.isPrepared());
             existingOrder.setOrderList(updatedOrder.getOrderList());
 
             orderRepository.save(existingOrder);

@@ -52,10 +52,6 @@ public class NewTakeAwayController {
             TakeAway existingTakeAway = existingTakeAwayOptional.get();
             existingTakeAway.setRestaurantId(updatedTakeAway.getRestaurantId());
             existingTakeAway.setPickedUp(updatedTakeAway.isPickedUp());
-            existingTakeAway.setDateTime(updatedTakeAway.getDateTime());
-            existingTakeAway.setCustomerEmail(updatedTakeAway.getCustomerEmail());
-            existingTakeAway.setCustomerName(updatedTakeAway.getCustomerName());
-            existingTakeAway.setCustomerPhone(updatedTakeAway.getCustomerPhone());
             existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
 
             newTakeAwayRepository.save(existingTakeAway);
