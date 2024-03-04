@@ -81,7 +81,6 @@ public class NewOrderController {
 
         if (existingOrderOptional.isPresent()) {
             Order existingOrder = existingOrderOptional.get();
-            existingOrder.setRestaurantId(updatedOrder.getRestaurantId());
             existingOrder.setPrepared(updatedOrder.isPrepared());
             existingOrder.setOrderList(updatedOrder.getOrderList());
 

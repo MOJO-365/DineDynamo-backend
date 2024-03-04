@@ -42,7 +42,6 @@ public class NewDeliveryController {
 
         if (existingDeliveryOrderOptional.isPresent()) {
             DeliveryOrder existingDeliveryOrder = existingDeliveryOrderOptional.get();
-            existingDeliveryOrder.setRestaurantId(updatedDeliveryOrder.getRestaurantId());
 
             existingDeliveryOrder.setDeliveryStatus(updatedDeliveryOrder.isDeliveryStatus());
             existingDeliveryOrder.setOrderList(updatedDeliveryOrder.getOrderList());

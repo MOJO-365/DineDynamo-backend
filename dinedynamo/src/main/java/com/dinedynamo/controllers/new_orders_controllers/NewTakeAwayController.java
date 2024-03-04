@@ -50,7 +50,6 @@ public class NewTakeAwayController {
 
         if (existingTakeAwayOptional.isPresent()) {
             TakeAway existingTakeAway = existingTakeAwayOptional.get();
-            existingTakeAway.setRestaurantId(updatedTakeAway.getRestaurantId());
             existingTakeAway.setPickedUp(updatedTakeAway.isPickedUp());
             existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
 
