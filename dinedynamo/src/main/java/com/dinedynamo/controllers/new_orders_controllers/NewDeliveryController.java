@@ -36,7 +36,7 @@ public class NewDeliveryController {
         List<DeliveryOrder> orders = deliveryOrderRepository.findByRestaurantId(restaurantId);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", orders), HttpStatus.OK);
     }
-
+    @PostMapping("/dinedynamo/restaurant/delivery/update")
     public ResponseEntity<ApiResponse> updateDeliveryOrder(@RequestBody DeliveryOrder updatedDeliveryOrder) {
         Optional<DeliveryOrder> existingDeliveryOrderOptional = deliveryOrderRepository.findById(updatedDeliveryOrder.getDeliveryId());
 
