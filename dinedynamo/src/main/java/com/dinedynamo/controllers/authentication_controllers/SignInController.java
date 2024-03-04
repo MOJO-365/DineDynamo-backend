@@ -3,11 +3,13 @@ package com.dinedynamo.controllers.authentication_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.customer_collections.Customer;
+import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
 import com.dinedynamo.helper.JwtHelper;
 import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ public class SignInController
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    AppUserRepository appUserRepository;
 
     @Autowired
     JwtHelper jwtHelper;
@@ -113,21 +118,23 @@ public class SignInController
                 return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
             }
 
-
             System.out.println("IN SIGNIN CONTROLLER: INVALID CUSTOMER CREDENTIALS: WRONG USERNAME/PASSWORD");
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
 
         }
-        else if(userRole.equalsIgnoreCase("chef")){
+        else {
 
+            boolean isUserAutheticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword(), signInRequestBody.getUserType());
+
+            if(!isUserAutheticated){
+                return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
+            }
+            else {
+                AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
+
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", appUser),HttpStatus.OK);
+            }
         }
-
-
-        System.out.println("UserRole PROVIDED IN THE REQUEST IS INVALID (userRole is other than RESTAURANT OR CUSTOMER)");
-        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
-
-
-
 
 /////////////////////////////////////
 //        String token = null;
@@ -212,5 +219,32 @@ public class SignInController
 //            return true;
 //        }
 //        return false;
+    }
+
+    private boolean authenticateAppUserSignIn(String userEmail, String userPassword, String userType){
+
+        AppUser appUserFromDB = appUserRepository.findByUserEmail(userEmail).orElse(null);
+        if(appUserFromDB == null){
+            System.out.println("NO SUCH USER FOUND");
+            throw new RuntimeException("No such user found in db");
+        }
+
+        else {
+            if(appUserFromDB.getUserPassword().equals(userPassword)){
+                if(!appUserFromDB.getUserType().equalsIgnoreCase(userType)){
+
+                    System.out.println("Incorrect user type in request");
+                    return false;
+                }
+
+                else{
+                    return true;
+                }
+            }
+            else {
+                System.out.println("INCORRECT USERNAME OR PASSWORD ");
+                return false;
+            }
+        }
     }
 }
