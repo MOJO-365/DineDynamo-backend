@@ -75,13 +75,14 @@ public class NewOrderController {
     }
 
     // Update order using orderId
+    @PostMapping("/dinedynamo/restaurant/dinein/update")
     public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order updatedOrder) {
         Optional<Order> existingOrderOptional = orderRepository.findById(updatedOrder.getOrderId());
 
         if (existingOrderOptional.isPresent()) {
             Order existingOrder = existingOrderOptional.get();
             existingOrder.setRestaurantId(updatedOrder.getRestaurantId());
-.setPrepared(updatedOrder.isPrepared());
+            existingOrder.setPrepared(updatedOrder.isPrepared());
             existingOrder.setOrderList(updatedOrder.getOrderList());
 
             orderRepository.save(existingOrder);
