@@ -75,20 +75,18 @@ public class NewOrderController {
     }
 
     // Update order using orderId
-    @PostMapping("dinedynamo/restaurant/orders/update")
+    @PostMapping("/dinedynamo/restaurant/orders/update")
     public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order order) {
+        Optional<Order> existingOrderOptional = orderRepository.findById(order.getOrderId());
 
-            Order existingOrder = orderRepository.findById(order.getOrderId()).orElse(null);
-
-            if (existingOrder != null) {
-                existingOrder.setOrderList(order.getOrderList());
-                orderRepository.save(existingOrder);
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Order updated successfully", null), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Order not found", null), HttpStatus.NOT_FOUND);
-            }
-
+        if (existingOrderOptional.isPresent()) {
+            orderRepository.save(order);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Order updated successfully", null), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Order not found", null), HttpStatus.NOT_FOUND);
+        }
     }
+
 
     @PostMapping("dinedynamo/restaurant/dine-in-orders/final-bill")
     public ResponseEntity<ApiResponse> processOrderDetail(@RequestBody Order order) {
