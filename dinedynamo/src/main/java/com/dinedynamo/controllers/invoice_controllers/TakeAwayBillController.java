@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 public class TakeAwayBillController {
 
@@ -19,8 +21,9 @@ public class TakeAwayBillController {
 
     @PostMapping("/dinedynamo/restaurant/orders/save/takeaway-final-bill")
     public ResponseEntity<ApiResponse> saveTakeAwayBill(@RequestBody TakeAwayFinalBill takeAwayFinalBill){
-
+        takeAwayFinalBill.setDatetime(LocalDateTime.now());
         takeAwayBillService.saveTakeAwayBill(takeAwayFinalBill);
+
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"Data Stored",takeAwayFinalBill),HttpStatus.OK);
     }
 

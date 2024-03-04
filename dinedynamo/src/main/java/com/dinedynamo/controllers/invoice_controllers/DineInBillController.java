@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 public class DineInBillController {
 
@@ -18,6 +20,7 @@ public class DineInBillController {
 
     @PostMapping("/dinedynamo/restaurant/orders/save/dinein-final-bill")
     public ResponseEntity<ApiResponse> saveDineInBill(@RequestBody DineInFinalBill dineInFinalBill) {
+        dineInFinalBill.setDatetime(LocalDateTime.now());
         dineInBillService.saveDineInBill(dineInFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", dineInFinalBill), HttpStatus.OK);
     }
