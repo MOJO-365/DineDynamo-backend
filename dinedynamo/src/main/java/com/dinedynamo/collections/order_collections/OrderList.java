@@ -19,6 +19,8 @@ public class OrderList {
     private double itemPrice;
     private String itemDescription;
     private String note;
+    private boolean itemPrepared;
+
 
 }
 
