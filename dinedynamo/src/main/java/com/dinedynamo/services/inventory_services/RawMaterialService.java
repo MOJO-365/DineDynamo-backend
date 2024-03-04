@@ -1,4 +1,4 @@
-package com.dinedynamo.services.inventory_service;
+package com.dinedynamo.services.inventory_services;
 
 
 

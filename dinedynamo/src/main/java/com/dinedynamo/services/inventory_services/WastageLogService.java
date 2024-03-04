@@ -1,4 +1,4 @@
-package com.dinedynamo.services.inventory_service;
+package com.dinedynamo.services.inventory_services;
 
 
 import com.dinedynamo.collections.inventory_management.RawMaterial;

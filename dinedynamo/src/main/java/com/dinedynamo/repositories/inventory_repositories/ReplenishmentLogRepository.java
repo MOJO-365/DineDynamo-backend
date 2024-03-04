@@ -13,4 +13,8 @@ public interface ReplenishmentLogRepository extends MongoRepository<Replenishmen
     List<ReplenishmentLog> deleteByRestaurantId(String restaurantId);
 
     List<ReplenishmentLog> deleteByRawMaterialId(String rawMaterialId);
+
+    List<ReplenishmentLog> findByRawMaterialId(String rawMaterialId);
+
+    List<ReplenishmentLog> findByRestaurantId(String restaurantId);
 }

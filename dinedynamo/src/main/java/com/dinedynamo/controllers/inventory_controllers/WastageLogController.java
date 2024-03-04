@@ -5,9 +5,8 @@ import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.inventory_management.WastageLog;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.dto.inventory_dtos.EditWastageLogDTO;
 import com.dinedynamo.repositories.inventory_repositories.WastageLogRepository;
-import com.dinedynamo.services.inventory_service.WastageLogService;
+import com.dinedynamo.services.inventory_services.WastageLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +30,19 @@ public class WastageLogController {
 
     }
 
-    @PostMapping("/dinedynamo/restaurant/inventory/get-all-wastage-logs")
+    @PostMapping("/dinedynamo/restaurant/inventory/get-all-wastage-logs-for-raw-material")
     public ResponseEntity<ApiResponse> getAllWastageLogs(@RequestBody RawMaterial rawMaterial){
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId())),HttpStatus.OK);
     }
 
-    @PutMapping("/dinedynamo/restaurant/inventory/edit-wastage-log")
-    public ResponseEntity<ApiResponse> editWastageLog(@RequestBody EditWastageLogDTO editWastageLogDTO){
-
-        WastageLog updatedWastageLog = wastageLogService.updateWastageLog(editWastageLogDTO.getWastageLogId(), editWastageLogDTO.getWastageLog());
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedWastageLog),HttpStatus.OK);
-
-    }
+//    @PutMapping("/dinedynamo/restaurant/inventory/edit-wastage-log")
+//    public ResponseEntity<ApiResponse> editWastageLog(@RequestBody EditWastageLogDTO editWastageLogDTO){
+//
+//        WastageLog updatedWastageLog = wastageLogService.updateWastageLog(editWastageLogDTO.getWastageLogId(), editWastageLogDTO.getWastageLog());
+//        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedWastageLog),HttpStatus.OK);
+//
+//    }
 
     @DeleteMapping("/dinedynamo/restaurant/inventory/delete-wastage-log")
     public ResponseEntity<ApiResponse> deleteWastageLog(@RequestBody WastageLog wastageLog){

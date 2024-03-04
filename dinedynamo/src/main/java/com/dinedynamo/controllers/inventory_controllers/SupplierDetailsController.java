@@ -9,7 +9,7 @@ import com.dinedynamo.dto.inventory_dtos.EditSupplierDetailsDTO;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.SupplierDetailsRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
-import com.dinedynamo.services.inventory_service.SupplierDetailsService;
+import com.dinedynamo.services.inventory_services.SupplierDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
