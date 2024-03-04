@@ -55,7 +55,7 @@ public class NewOrderController {
         {
             List<Order> orders = orderRepository.findByRestaurantId(restaurant.getRestaurantId());
 
-            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
 
         }
     }
