@@ -1,6 +1,7 @@
 package com.dinedynamo.controllers.new_orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.DeliveryOrder;
 import com.dinedynamo.repositories.order_repositories.NewDeliveryRepository;
@@ -24,10 +25,17 @@ public class NewDeliveryController {
     @PostMapping("/dinedynamo/restaurant/orders/delivery/create")
     public ResponseEntity<ApiResponse> createDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder) {
         deliveryOrder.setDateTime(LocalDateTime.now());
+        deliveryOrder.setDeliveryStatus(false);
+        if (deliveryOrder.getOrderList() != null) {
+            for (OrderList orderListItem : deliveryOrder.getOrderList()) {
+                orderListItem.setPrepared(false);
+            }
+        }
         DeliveryOrder savedOrder = deliveryOrderRepository.save(deliveryOrder);
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", savedOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
     // Get all delivery orders for a restaurant using restaurantId
     @PostMapping("/dinedynamo/restaurant/orders/delivery/getAll")
@@ -45,6 +53,12 @@ public class NewDeliveryController {
 
             existingDeliveryOrder.setDeliveryStatus(updatedDeliveryOrder.isDeliveryStatus());
             existingDeliveryOrder.setOrderList(updatedDeliveryOrder.getOrderList());
+
+            if (existingDeliveryOrder.getOrderList() != null) {
+                for (OrderList orderListItem : existingDeliveryOrder.getOrderList()) {
+                    orderListItem.setPrepared(false);
+                }
+            }
 
             deliveryOrderRepository.save(existingDeliveryOrder);
             return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Delivery order updated successfully", null));

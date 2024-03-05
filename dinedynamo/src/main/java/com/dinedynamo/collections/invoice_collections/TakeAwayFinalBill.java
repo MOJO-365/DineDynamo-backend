@@ -23,6 +23,7 @@ public class TakeAwayFinalBill {
     private String restaurantId;
     private LocalDateTime datetime;
     private String customerPhone;
+    private boolean pickedUp;
     private double gst;
     private double totalAmount;
     private List<OrderList> orderList;

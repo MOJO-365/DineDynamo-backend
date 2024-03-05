@@ -26,8 +26,8 @@ public class DineInFinalBill {
     private double totalAmount;
     private List<OrderList> orderList;
 
-
 }
+
 //private String orderType;
 //private String paymentMode;
 

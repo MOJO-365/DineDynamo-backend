@@ -21,6 +21,7 @@ public class TakeAwayBillController {
 
     @PostMapping("/dinedynamo/restaurant/orders/save/takeaway-final-bill")
     public ResponseEntity<ApiResponse> saveTakeAwayBill(@RequestBody TakeAwayFinalBill takeAwayFinalBill){
+        takeAwayFinalBill.setPickedUp(true);
         takeAwayFinalBill.setDatetime(LocalDateTime.now());
         takeAwayBillService.saveTakeAwayBill(takeAwayFinalBill);
 
