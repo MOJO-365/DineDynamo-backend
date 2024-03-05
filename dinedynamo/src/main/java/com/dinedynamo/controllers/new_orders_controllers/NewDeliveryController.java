@@ -36,19 +36,23 @@ public class NewDeliveryController {
         List<DeliveryOrder> orders = deliveryOrderRepository.findByRestaurantId(restaurantId);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", orders), HttpStatus.OK);
     }
+    @PostMapping("/dinedynamo/restaurant/delivery/update")
+    public ResponseEntity<ApiResponse> updateDeliveryOrder(@RequestBody DeliveryOrder updatedDeliveryOrder) {
+        Optional<DeliveryOrder> existingDeliveryOrderOptional = deliveryOrderRepository.findById(updatedDeliveryOrder.getDeliveryId());
 
-    // Update delivery order using deliveryId
-    @PostMapping("/dinedynamo/restaurant/orders/delivery/update")
-    public ResponseEntity<ApiResponse> updateDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder) {
-        Optional<DeliveryOrder> existingOrder = deliveryOrderRepository.findById(deliveryOrder.getDeliveryId());
+        if (existingDeliveryOrderOptional.isPresent()) {
+            DeliveryOrder existingDeliveryOrder = existingDeliveryOrderOptional.get();
 
-        if (existingOrder.isPresent()) {
-            deliveryOrderRepository.save(deliveryOrder);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Success", null), HttpStatus.OK);
+            existingDeliveryOrder.setDeliveryStatus(updatedDeliveryOrder.isDeliveryStatus());
+            existingDeliveryOrder.setOrderList(updatedDeliveryOrder.getOrderList());
+
+            deliveryOrderRepository.save(existingDeliveryOrder);
+            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Delivery order updated successfully", null));
         } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Delivery order not found", null), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, "Delivery order not found", null));
         }
     }
+
 
     // Delete delivery order using deliveryId
     @DeleteMapping("/dinedynamo/restaurant/orders/delivery/delete")

@@ -22,7 +22,6 @@ public class DeliveryFinalBill {
     private String deliveryBillId;
     private String restaurantId;
     private LocalDateTime datetime;
-    private String customerEmail;
     private String customerPhone;
     private double gst;
     private double totalAmount;

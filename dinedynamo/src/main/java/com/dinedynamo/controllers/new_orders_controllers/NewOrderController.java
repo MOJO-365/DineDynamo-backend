@@ -55,7 +55,7 @@ public class NewOrderController {
         {
             List<Order> orders = orderRepository.findByRestaurantId(restaurant.getRestaurantId());
 
-            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
 
         }
     }
@@ -75,19 +75,20 @@ public class NewOrderController {
     }
 
     // Update order using orderId
-    @PostMapping("dinedynamo/restaurant/orders/update")
-    public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order order) {
+    @PostMapping("/dinedynamo/restaurant/dinein/update")
+    public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order updatedOrder) {
+        Optional<Order> existingOrderOptional = orderRepository.findById(updatedOrder.getOrderId());
 
-            Order existingOrder = orderRepository.findById(order.getOrderId()).orElse(null);
+        if (existingOrderOptional.isPresent()) {
+            Order existingOrder = existingOrderOptional.get();
+            existingOrder.setPrepared(updatedOrder.isPrepared());
+            existingOrder.setOrderList(updatedOrder.getOrderList());
 
-            if (existingOrder != null) {
-                existingOrder.setOrderList(order.getOrderList());
-                orderRepository.save(existingOrder);
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Order updated successfully", null), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "Order not found", null), HttpStatus.NOT_FOUND);
-            }
-
+            orderRepository.save(existingOrder);
+            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Order updated successfully", null));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, "Order not found", null));
+        }
     }
 
     @PostMapping("dinedynamo/restaurant/dine-in-orders/final-bill")
