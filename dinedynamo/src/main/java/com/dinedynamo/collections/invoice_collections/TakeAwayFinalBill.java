@@ -23,7 +23,6 @@ public class TakeAwayFinalBill {
     private String restaurantId;
     private LocalDateTime datetime;
     private String customerPhone;
-    private String paymentMode;
     private double gst;
     private double totalAmount;
     private List<OrderList> orderList;
@@ -32,5 +31,5 @@ public class TakeAwayFinalBill {
 }
 
 
-
+//private String paymentMode;
 //private String orderType;
