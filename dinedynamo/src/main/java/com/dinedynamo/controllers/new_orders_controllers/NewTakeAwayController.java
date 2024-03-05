@@ -50,7 +50,7 @@ public class NewTakeAwayController {
 
         if (existingTakeAwayOptional.isPresent()) {
             TakeAway existingTakeAway = existingTakeAwayOptional.get();
-            existingTakeAway.setPickedUp(updatedTakeAway.isPickedUp());
+            existingTakeAway.setPickedUp(true);
             existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
 
             newTakeAwayRepository.save(existingTakeAway);

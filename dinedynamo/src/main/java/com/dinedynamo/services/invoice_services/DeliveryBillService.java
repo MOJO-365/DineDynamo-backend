@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 public class DeliveryBillService {
     @Autowired
     private DeliveryBillRepository deliveryBillRepository;
-
-
     public void saveDeliveryBill(DeliveryFinalBill deliveryFinalBill) {
         deliveryBillRepository.save(deliveryFinalBill);
     }

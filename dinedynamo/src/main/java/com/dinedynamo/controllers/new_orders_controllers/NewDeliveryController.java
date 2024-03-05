@@ -29,6 +29,7 @@ public class NewDeliveryController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+
     // Get all delivery orders for a restaurant using restaurantId
     @PostMapping("/dinedynamo/restaurant/orders/delivery/getAll")
     public ResponseEntity<ApiResponse> getAllDeliveryOrders(@RequestBody Restaurant restaurant) {
@@ -43,7 +44,7 @@ public class NewDeliveryController {
         if (existingDeliveryOrderOptional.isPresent()) {
             DeliveryOrder existingDeliveryOrder = existingDeliveryOrderOptional.get();
 
-            existingDeliveryOrder.setDeliveryStatus(updatedDeliveryOrder.isDeliveryStatus());
+            existingDeliveryOrder.setDeliveryStatus(true);
             existingDeliveryOrder.setOrderList(updatedDeliveryOrder.getOrderList());
 
             deliveryOrderRepository.save(existingDeliveryOrder);
