@@ -53,9 +53,9 @@ public class RawMaterialService {
 
     public RawMaterial save(RawMaterial rawMaterial){
 
-        if(!isRequestValid(rawMaterial)){
-            return null;
-        }
+//        if(!isRequestValid(rawMaterial)){
+//            return null;
+//        }
         rawMaterial.setTimestamp(LocalDateTime.now());
         rawMaterialRepository.save(rawMaterial);
 

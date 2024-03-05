@@ -4,7 +4,6 @@ package com.dinedynamo.controllers.inventory_controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.inventory_management.ReplenishmentLog;
-import com.dinedynamo.collections.inventory_management.WastageLog;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.ReplenishmentLogRepository;
@@ -81,7 +80,7 @@ public class ReplenishmentLogController {
     }
 
 
-    @DeleteMapping("/dinedynamo/restaurant/inventory/deletel-replenishment-logs-for-restaurant")
+    @DeleteMapping("/dinedynamo/restaurant/inventory/delete-replenishment-logs-for-restaurant")
     public ResponseEntity<ApiResponse> deleteAllReplenishmentLog(@RequestBody Restaurant restaurant){
 
 
