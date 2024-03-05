@@ -107,7 +107,6 @@ public class NewOrderController {
         dineInFinalBill.setRestaurantId(firstOrder.getRestaurantId());
         dineInFinalBill.setOrderList(orderList);
 
-        dineInBillRepository.save(dineInFinalBill);
 
         ApiResponse response = new ApiResponse(HttpStatus.OK, "success", dineInFinalBill);
 
