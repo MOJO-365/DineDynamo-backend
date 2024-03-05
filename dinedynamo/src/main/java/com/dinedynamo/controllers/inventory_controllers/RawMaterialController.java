@@ -39,6 +39,13 @@ public class RawMaterialController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantId(restaurant.getRestaurantId())),HttpStatus.OK);
     }
 
+    @PostMapping("/dinedynamo/restaurant/inventory/get-raw-material-by-id")
+    ResponseEntity<ApiResponse> findRawMaterialById(@RequestParam String rawMaterialId){
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findById(rawMaterialId)),HttpStatus.OK);
+
+    }
+
     @PutMapping("/dinedynamo/restaurant/inventory/edit-raw-material")
     ResponseEntity<ApiResponse> editRawMaterial(@RequestBody EditRawMaterialDTO editRawMaterialDTO){
         RawMaterial updatedRawMaterial = rawMaterialService.updateRawMaterial(editRawMaterialDTO.getRawMaterialId(), editRawMaterialDTO.getRawMaterial());
