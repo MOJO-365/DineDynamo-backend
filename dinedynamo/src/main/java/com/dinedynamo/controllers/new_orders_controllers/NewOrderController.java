@@ -105,7 +105,6 @@ public class NewOrderController {
 
         DineInFinalBill dineInFinalBill = new DineInFinalBill();
         dineInFinalBill.setRestaurantId(firstOrder.getRestaurantId());
-        dineInFinalBill.setTableId(firstOrder.getTableId());
         dineInFinalBill.setOrderList(orderList);
 
         dineInBillRepository.save(dineInFinalBill);
