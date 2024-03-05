@@ -22,7 +22,6 @@ public class DineInFinalBill {
     private String restaurantId;
     private String tableId;
     private LocalDateTime datetime;
-    private String paymentMode;
     private double gst;
     private double totalAmount;
     private List<OrderList> orderList;
@@ -30,3 +29,5 @@ public class DineInFinalBill {
 
 }
 //private String orderType;
+//private String paymentMode;
+

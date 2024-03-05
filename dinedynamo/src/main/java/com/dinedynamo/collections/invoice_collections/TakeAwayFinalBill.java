@@ -22,7 +22,6 @@ public class TakeAwayFinalBill {
     private String takeAwayBillId;
     private String restaurantId;
     private LocalDateTime datetime;
-    private String customerEmail;
     private String customerPhone;
     private String paymentMode;
     private double gst;
