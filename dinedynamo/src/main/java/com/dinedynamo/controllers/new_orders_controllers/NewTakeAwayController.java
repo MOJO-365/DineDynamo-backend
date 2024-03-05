@@ -1,6 +1,7 @@
 package com.dinedynamo.controllers.new_orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.repositories.order_repositories.NewOrderRepository;
@@ -29,6 +30,11 @@ public class NewTakeAwayController {
     public ResponseEntity<ApiResponse> createTakeAwayOrder(@RequestBody TakeAway takeAway) {
         takeAway.setDateTime(LocalDateTime.now());
         takeAway.setPickedUp(false);
+        if (takeAway.getOrderList() != null) {
+            for (OrderList orderListItem : takeAway.getOrderList()) {
+                orderListItem.setPrepared(false);
+            }
+        }
         TakeAway savedOrder = newTakeAwayRepository.save(takeAway);
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", savedOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -53,6 +59,11 @@ public class NewTakeAwayController {
             TakeAway existingTakeAway = existingTakeAwayOptional.get();
             existingTakeAway.setPickedUp(true);
             existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
+            if (existingTakeAway.getOrderList() != null) {
+                for (OrderList orderListItem : existingTakeAway.getOrderList()) {
+                    orderListItem.setPrepared(true);
+                }
+            }
 
             newTakeAwayRepository.save(existingTakeAway);
             return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", null));
