@@ -20,9 +20,7 @@ public class DineInFinalBill {
     @Id
     private String dineInBillId;
     private String restaurantId;
-    private String tableId;
     private LocalDateTime datetime;
-    private double gst;
     private double totalAmount;
     private List<OrderList> orderList;
 
