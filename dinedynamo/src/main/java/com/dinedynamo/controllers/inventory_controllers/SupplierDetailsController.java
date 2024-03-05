@@ -75,7 +75,7 @@ public class SupplierDetailsController {
     }
 
 
-    @DeleteMapping("/dinedynamo/restaurant/inventory/supplier/delete-suppliers-for-raw-material")
+    @DeleteMapping("/dinedynamo/restaurant/inventory/supplier/delete-all-suppliers-for-raw-material")
     ResponseEntity<ApiResponse> deleteSuppliersForRawMaterial(@RequestBody RawMaterial rawMaterial){
         rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
         if(rawMaterial == null){
@@ -87,7 +87,7 @@ public class SupplierDetailsController {
     }
 
 
-    @DeleteMapping("/dinedynamo/restaurant/inventory/supplier/delete-suppliers-for-restaurant")
+    @DeleteMapping("/dinedynamo/restaurant/inventory/supplier/delete-all-suppliers-for-restaurant")
     ResponseEntity<ApiResponse> deleteSuppliersForRawMaterial(@RequestBody Restaurant restaurant){
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
         if(restaurant == null){

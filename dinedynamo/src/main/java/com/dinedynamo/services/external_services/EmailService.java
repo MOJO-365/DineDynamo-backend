@@ -1,7 +1,6 @@
 package com.dinedynamo.services.external_services;
 
 import com.dinedynamo.collections.inventory_management.PurchaseOrder;
-import com.dinedynamo.collections.inventory_management.SupplierDetails;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -63,17 +62,40 @@ public class EmailService {
 
     }
 
-    public boolean  raisePurchaseOrderTicket(PurchaseOrder purchaseOrder, String restaurantName){
+    public boolean sendMailForPurchaseOrder(PurchaseOrder purchaseOrder, String restaurantName){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("Purchase Order from: "+restaurantName);
         message.setTo(purchaseOrder.getSupplierDetails().getSupplierEmailId());
 
         String emailContent = "Purchase order details: "+ "\n"
                 + "Item Name: " + purchaseOrder.getItemName() + "\n"
-                + "Quantity: " + purchaseOrder.getQuantity() + "Measurement Units: " + purchaseOrder.getMeasurementUnits() + "\n"
+                + "Quantity: " + purchaseOrder.getQuantity() + "\n"
+                + "Measurement Units: " + purchaseOrder.getMeasurementUnits() + "\n"
                 + "Description: " + purchaseOrder.getDescription() + "\n"
                 + "Date of Purchase Request: " + purchaseOrder.getDateOfPurchaseRequest();
 
+
+
+        message.setText(emailContent);
+        mailSender.send(message);
+        System.out.println("PURCHASE ORDER MAIL SENT TO SUPPLIER");
+        return true;
+    }
+
+    public boolean sendMailForCancelPurchaseOrder(PurchaseOrder purchaseOrder, String restaurantName){
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Cancel Purchase Order from: "+restaurantName);
+        message.setTo(purchaseOrder.getSupplierDetails().getSupplierEmailId());
+
+
+        String emailContent = "Purchase order details: "+ "\n"
+                + "Item Name: " + purchaseOrder.getItemName() + "\n"
+                + "Quantity: " + purchaseOrder.getQuantity() + "\n"
+                + "Measurement Units: " + purchaseOrder.getMeasurementUnits() + "\n"
+                + "Description: " + purchaseOrder.getDescription() + "\n"
+                + "Date of Purchase Request: " + purchaseOrder.getDateOfPurchaseRequest() + "\n\n"
+                + "Above order has been cancelled from the restaurant";
 
 
         message.setText(emailContent);

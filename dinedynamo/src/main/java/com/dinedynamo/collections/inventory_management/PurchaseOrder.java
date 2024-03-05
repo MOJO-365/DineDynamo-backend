@@ -23,6 +23,8 @@ public class PurchaseOrder
 
     String restaurantEmail;
 
+    String rawMaterialId;
+
     SupplierDetails supplierDetails;
 
     String itemName;
@@ -34,5 +36,7 @@ public class PurchaseOrder
     String description;
 
     LocalDate dateOfPurchaseRequest;
+
+    PurchaseOrderStatus status;
 
 }

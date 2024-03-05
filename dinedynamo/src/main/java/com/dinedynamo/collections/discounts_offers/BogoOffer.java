@@ -34,6 +34,7 @@ public class BogoOffer {
     private String minQty=" ";
 
     @Builder.Default
+    //Item ids for which the offer is valid are stored in this array
     private String[] items={};
 
     @Builder.Default
