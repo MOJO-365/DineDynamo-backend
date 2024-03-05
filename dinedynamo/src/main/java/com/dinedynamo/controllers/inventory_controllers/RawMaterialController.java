@@ -53,6 +53,7 @@ public class RawMaterialController {
 
     }
 
+
     @DeleteMapping("/dinedynamo/restaurant/inventory/delete-raw-material")
     ResponseEntity<ApiResponse> deleteRawMaterial(@RequestBody RawMaterial rawMaterial){
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialService.deleteRawMaterial(rawMaterial)),HttpStatus.OK);

@@ -53,9 +53,9 @@ public class RawMaterialService {
 
     public RawMaterial save(RawMaterial rawMaterial){
 
-        if(!isRequestValid(rawMaterial)){
-            return null;
-        }
+//        if(!isRequestValid(rawMaterial)){
+//            return null;
+//        }
         rawMaterial.setTimestamp(LocalDateTime.now());
         rawMaterialRepository.save(rawMaterial);
 
@@ -69,9 +69,9 @@ public class RawMaterialService {
             System.out.println("PASS RAW MATERIAL ID IN REQUEST BODY: editRawMaterialDTO");
             return null;
         }
-        if(!isRequestValid(updatedRawMaterial)){
-            return null;
-        }
+//        if(!isRequestValid(updatedRawMaterial)){
+//            return null;
+//        }
 
 
         updatedRawMaterial.setRawMaterialId(rawMaterialId);
