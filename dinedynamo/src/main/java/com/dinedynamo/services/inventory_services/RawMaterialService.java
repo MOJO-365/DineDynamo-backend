@@ -69,9 +69,9 @@ public class RawMaterialService {
             System.out.println("PASS RAW MATERIAL ID IN REQUEST BODY: editRawMaterialDTO");
             return null;
         }
-        if(!isRequestValid(updatedRawMaterial)){
-            return null;
-        }
+//        if(!isRequestValid(updatedRawMaterial)){
+//            return null;
+//        }
 
 
         updatedRawMaterial.setRawMaterialId(rawMaterialId);
