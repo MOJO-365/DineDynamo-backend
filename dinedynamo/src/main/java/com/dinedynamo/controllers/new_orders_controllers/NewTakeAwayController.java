@@ -28,6 +28,7 @@ public class NewTakeAwayController {
     @PostMapping("/dinedynamo/restaurant/takeaway/place")
     public ResponseEntity<ApiResponse> createTakeAwayOrder(@RequestBody TakeAway takeAway) {
         takeAway.setDateTime(LocalDateTime.now());
+        takeAway.setPickedUp(false);
         TakeAway savedOrder = newTakeAwayRepository.save(takeAway);
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", savedOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
