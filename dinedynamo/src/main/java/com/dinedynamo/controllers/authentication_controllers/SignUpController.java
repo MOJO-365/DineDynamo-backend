@@ -43,7 +43,7 @@ public class SignUpController
 
         System.out.println(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()));
 
-        //System.out.println();
+
         if(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null) == null)
         {
             restaurantRepository.save(restaurant);
@@ -51,11 +51,6 @@ public class SignUpController
 
             System.out.println("Data of restaurant saved");
             ApiResponse apiResponse = new ApiResponse(HttpStatus.OK,"success",restaurant);
-
-            //Now as the account of restaurant is created, create the same in 'Users' collection and store it for the purpose of JWT
-//            User restaurantUser = userService.createUser(restaurant);
-//            userService.save(restaurantUser);
-
 
             return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
         }
