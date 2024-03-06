@@ -80,4 +80,45 @@ public class AppUserService {
             return appUserList;
         }
     }
+
+    public AppUser updateRestaurant(Restaurant restaurant){
+        restaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
+
+        AppUser appUser = appUserRepository.findByUserEmail(restaurant.getRestaurantEmail()).orElse(null);
+
+        if(appUser == null){
+            appUser = saveRestaurant(restaurant);
+            return appUser;
+        }
+        else{
+
+            appUser.setRestaurantId(restaurant.getRestaurantId());
+            appUser.setUserEmail(restaurant.getRestaurantEmail());
+            appUser.setUserPassword(restaurant.getRestaurantPassword());
+            appUser.setUserType("RESTAURANT");
+            appUserRepository.save(appUser);
+            return appUser;
+        }
+
+    }
+
+
+    public AppUser saveRestaurant(Restaurant restaurant){
+
+        Restaurant existingRestaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
+
+        if(existingRestaurant != null){
+            AppUser appUser = new AppUser();
+            appUser.setRestaurantId(restaurant.getRestaurantId());
+            appUser.setUserEmail(restaurant.getRestaurantEmail());
+            appUser.setUserPassword(restaurant.getRestaurantPassword());
+            appUser.setUserType("RESTAURANT");
+            appUserRepository.save(appUser);
+            return appUser;
+        }
+        else{
+            System.out.println("Restaurant not saved in 'restaurant' collection ");
+            throw new RuntimeException("Restaurant not saved in 'restaurant' collection");
+        }
+    }
 }

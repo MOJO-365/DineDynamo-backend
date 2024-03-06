@@ -92,49 +92,49 @@ public class JwtHelper
 
 
     // Generates token for user:
-    public String generateToken(UserDetails userDetails, SignInRequestBody signInRequestBody) throws NoSuchAlgorithmException, InvalidKeyException, java.security.InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException
-    {
-        String token = null;
-        Map<String, Object> claims = new HashMap<>();
-
-        if(signInRequestBody.getUserType().toUpperCase().equals("RESTAURANT")){
-
-            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
-
-            if(restaurant == null){
-                System.out.println("In generateToken(): Restaurant Data does not exist in DB");
-                System.out.println("Token generation failed");
-                return null;
-            }
-
-            claims.put("userEmail", signInRequestBody.getUserEmail());
-            claims.put("restaurantId",restaurant.getRestaurantId());
-            claims.put("userRole","RESTAURANT");
-
-        }
-        else if(signInRequestBody.getUserType().toUpperCase().equals("CUSTOMER")){
-
-            Customer customer = customerRepository.findByCustomerEmail(signInRequestBody.getUserEmail()).orElse(null);
-
-            if(customer == null){
-                System.out.println("In generateToken(): Customer Data does not exist in DB");
-                System.out.println("Token generation failed");
-                return null;
-            }
-
-
-            claims.put("userEmail", signInRequestBody.getUserEmail());
-            claims.put("restaurantOrCustomerId",customer.getCustomerId());
-            claims.put("userRole","CUSTOMER");
-
-        }
-
-        token =  doGenerateToken(claims, signInRequestBody.getUserEmail());
-
-        return token;
-
-    }
-
+//    public String generateToken(UserDetails userDetails, SignInRequestBody signInRequestBody) throws NoSuchAlgorithmException, InvalidKeyException, java.security.InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException
+//    {
+//        String token = null;
+//        Map<String, Object> claims = new HashMap<>();
+//
+//        if(signInRequestBody.getUserType().toUpperCase().equals("RESTAURANT")){
+//
+//            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
+//
+//            if(restaurant == null){
+//                System.out.println("In generateToken(): Restaurant Data does not exist in DB");
+//                System.out.println("Token generation failed");
+//                return null;
+//            }
+//
+//            claims.put("userEmail", signInRequestBody.getUserEmail());
+//            claims.put("restaurantId",restaurant.getRestaurantId());
+//            claims.put("userRole","RESTAURANT");
+//
+//        }
+//        else if(signInRequestBody.getUserType().toUpperCase().equals("CUSTOMER")){
+//
+//            Customer customer = customerRepository.findByCustomerEmail(signInRequestBody.getUserEmail()).orElse(null);
+//
+//            if(customer == null){
+//                System.out.println("In generateToken(): Customer Data does not exist in DB");
+//                System.out.println("Token generation failed");
+//                return null;
+//            }
+//
+//
+//            claims.put("userEmail", signInRequestBody.getUserEmail());
+//            claims.put("restaurantOrCustomerId",customer.getCustomerId());
+//            claims.put("userRole","CUSTOMER");
+//
+//        }
+//
+//        token =  doGenerateToken(claims, signInRequestBody.getUserEmail());
+//
+//        return token;
+//
+//    }
+//
 
     // This will set all claims of token
     private String doGenerateToken(Map<String, Object> claims, String subject)

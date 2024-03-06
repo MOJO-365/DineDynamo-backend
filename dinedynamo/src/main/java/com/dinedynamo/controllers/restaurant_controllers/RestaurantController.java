@@ -4,6 +4,7 @@ import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.dto.restaurant_dtos.EditRestaurantDTO;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
+import com.dinedynamo.services.restaurant_services.AppUserService;
 import com.dinedynamo.services.restaurant_services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,9 @@ public class RestaurantController
 
     @Autowired
     RestaurantService restaurantService;
+
+    @Autowired
+    AppUserService appUserService;
 
     /**
      *
@@ -95,6 +99,9 @@ public class RestaurantController
         newRestaurantDetails.setRestaurantId(restaurantIdFromRequest);
 
         restaurantRepository.save(newRestaurantDetails);
+        Restaurant updatedRestaurant = restaurantRepository.findByRestaurantId(editRestaurantDTO.getRestaurantId());
+        appUserService.updateRestaurant(updatedRestaurant);
+
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",newRestaurantDetails),HttpStatus.OK);
 

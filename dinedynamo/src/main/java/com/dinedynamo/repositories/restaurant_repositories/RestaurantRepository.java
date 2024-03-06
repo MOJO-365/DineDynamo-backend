@@ -43,4 +43,6 @@ public interface RestaurantRepository extends MongoRepository<Restaurant, String
     @Query("{'isPureVeg': false, 'restaurantCity': ?0}")
     List<Restaurant> findAllNonPureVegRestaurantsByCity(String restaurantCity);
 
+
+
 }

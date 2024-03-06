@@ -12,6 +12,6 @@ public class SignInRequestBody
 {
     String userEmail;
     String userPassword;
-    String userType;
+//    String userType;
 
 }
