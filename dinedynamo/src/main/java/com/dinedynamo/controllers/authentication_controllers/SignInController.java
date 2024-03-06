@@ -86,23 +86,17 @@ public class SignInController
 
         AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
 
-        if(appUser == null){
-            System.out.println("no such user found in db");
+        boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
+
+        if(!isUserAuthenticated){
+            System.out.println("WRONG USERNAME OR PASSWORD");
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
         }
-
         else{
-
-            boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
-
-            if(!isUserAuthenticated){
-                System.out.println("WRONG USERNAME OR PASSWORD");
-                return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
-            }
-            else{
-                return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",appUser),HttpStatus.OK);
-            }
+            appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",appUser),HttpStatus.OK);
         }
+
 
 
 //        if(userRole.toLowerCase().equals("restaurant")){
@@ -259,7 +253,15 @@ public class SignInController
             }
             else{
                 AppUser appUser = appUserService.saveRestaurant(restaurant);
-                return appUser.getUserPassword().equals(userPassword);
+
+                appUserFromDB = appUserRepository.findByUserEmail(userEmail).orElse(null);
+
+                if(appUser.getUserPassword().equals(userPassword)){
+                    return true;
+                }
+                else{
+                    return false;
+                }
             }
 
 

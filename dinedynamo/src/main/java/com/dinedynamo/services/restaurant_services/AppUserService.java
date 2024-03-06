@@ -115,15 +115,16 @@ public class AppUserService {
 
     public AppUser saveRestaurant(Restaurant restaurant){
 
-        Restaurant existingRestaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
+        restaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
 
-        if(existingRestaurant != null){
+        if(restaurant != null){
             AppUser appUser = new AppUser();
             appUser.setRestaurantId(restaurant.getRestaurantId());
             appUser.setUserEmail(restaurant.getRestaurantEmail());
             appUser.setUserPassword(restaurant.getRestaurantPassword());
             appUser.setUserType("RESTAURANT");
             appUserRepository.save(appUser);
+
             return appUser;
         }
         else{
