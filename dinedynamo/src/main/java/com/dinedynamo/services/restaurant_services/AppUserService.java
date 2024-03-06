@@ -21,16 +21,26 @@ public class AppUserService {
 
     public AppUser save(AppUser appUser){
 
-        Restaurant restaurant = restaurantRepository.findById(appUser.getRestaurantId()).orElse(null);
+        AppUser existingAppUser = appUserRepository.findByUserEmail(appUser.getUserEmail()).orElse(null);
 
-        if(restaurant == null){
-            System.out.println("RESTAURANT NOT FOUND IN DB");
-            throw new RuntimeException("Restaurant not found in database");
+        if(existingAppUser!=null){
+            System.out.println("NO DUPLICATE EMAILS ALLOWED IN APP USER COLLECTION");
+            return null;
         }
 
+
         else{
-            appUserRepository.save(appUser);
-            return appUser;
+            Restaurant restaurant = restaurantRepository.findById(appUser.getRestaurantId()).orElse(null);
+
+            if(restaurant == null){
+                System.out.println("RESTAURANT NOT FOUND IN DB");
+                throw new RuntimeException("Restaurant not found in database");
+            }
+
+            else{
+                appUserRepository.save(appUser);
+                return appUser;
+            }
         }
     }
 

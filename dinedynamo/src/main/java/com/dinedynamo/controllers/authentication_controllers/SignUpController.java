@@ -43,9 +43,14 @@ public class SignUpController
 
         System.out.println(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()));
 
+        Restaurant existingRestaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
+        if(existingRestaurant != null){
+            System.out.println("Restaurant email already exists in database");
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.CONFLICT,"success",null),HttpStatus.OK);
+        }
 
-        if(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null) == null)
-        {
+        else{
+
             restaurantRepository.save(restaurant);
             appUserService.saveRestaurant(restaurant);
 
@@ -55,9 +60,6 @@ public class SignUpController
             return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
         }
 
-        System.out.println("Data already exists");
-
-        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.CONFLICT,"success"),HttpStatus.OK);
 
     }
 

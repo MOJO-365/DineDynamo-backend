@@ -12,6 +12,7 @@ import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
 import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
+import com.dinedynamo.services.restaurant_services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +46,16 @@ public class SignInController
     JwtHelper jwtHelper;
 
     @Autowired
+    AppUserService appUserService;
+
+    @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+
+
 
 
     UserDetails userDetails;
@@ -243,8 +250,19 @@ public class SignInController
 
         AppUser appUserFromDB = appUserRepository.findByUserEmail(userEmail).orElse(null);
         if(appUserFromDB == null){
-            System.out.println("NO SUCH USER FOUND");
-            throw new RuntimeException("No such user found in db");
+
+            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
+
+            if(restaurant==null){
+                throw new RuntimeException("No such user/restaurant found in database");
+
+            }
+            else{
+                AppUser appUser = appUserService.saveRestaurant(restaurant);
+                return appUser.getUserPassword().equals(userPassword);
+            }
+
+
         }
         else {
             return appUserFromDB.getUserPassword().equals(userPassword);
