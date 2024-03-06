@@ -72,7 +72,7 @@ public class RawMaterialController {
     // If returns false -> currentLevel not updated
     @PutMapping("/dinedynamo/restaurant/inventory/add-usage")
     ResponseEntity<ApiResponse> addUsage(@RequestBody AddUsageForRawMaterialDTO addUsageForRawMaterialDTO){
-        RawMaterialDTO rawMaterialDTO = rawMaterialService.addUsage(addUsageForRawMaterialDTO.getRawMaterial(), addUsageForRawMaterialDTO.getAmountUsed());
+        RawMaterialDTO rawMaterialDTO = rawMaterialService.addUsage(addUsageForRawMaterialDTO.getRawMaterialId(), addUsageForRawMaterialDTO.getAmountUsed());
 
         if(rawMaterialDTO.getStatus() == RawMaterialStatus.NEGATIVE){
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",false), HttpStatus.OK);

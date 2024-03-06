@@ -124,9 +124,9 @@ public class RawMaterialService {
     }
 
     @Transactional
-    public RawMaterialDTO addUsage(RawMaterial rawMaterial, double amountUsed){
+    public RawMaterialDTO addUsage(String rawMaterialId, double amountUsed){
 
-        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
+        RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialId).orElse(null);
         if(rawMaterial == null){
             System.out.println("In addUsage(): RawMaterial not in db");
             throw new RuntimeException("No such raw material found in database");
