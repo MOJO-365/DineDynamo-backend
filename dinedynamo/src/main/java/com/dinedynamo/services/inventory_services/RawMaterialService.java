@@ -4,10 +4,11 @@ package com.dinedynamo.services.inventory_services;
 
 import com.dinedynamo.collections.inventory_management.RawMaterial;
 
-import com.dinedynamo.collections.inventory_management.RawMaterialStatus;
 import com.dinedynamo.collections.inventory_management.WastageLog;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
+import com.dinedynamo.dto.inventory_dtos.RawMaterialDTO;
+import com.dinedynamo.dto.inventory_dtos.RawMaterialStatus;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.ReplenishmentLogRepository;
 import com.dinedynamo.repositories.inventory_repositories.SupplierDetailsRepository;
@@ -51,35 +52,55 @@ public class RawMaterialService {
         return true;
     }
 
-    public RawMaterial save(RawMaterial rawMaterial){
+    public RawMaterialDTO save(RawMaterial rawMaterial){
 
-//        if(!isRequestValid(rawMaterial)){
-//            return null;
-//        }
-        rawMaterial.setTimestamp(LocalDateTime.now());
-        rawMaterialRepository.save(rawMaterial);
 
-        rawMaterial = updateStatusOfRawMaterial(rawMaterial);
-        return rawMaterial;
+        if(rawMaterial.getExpirationDate().isBefore(rawMaterial.getPurchaseDate())){
+            System.out.println("EXP DATE CANNOT BE BEFORE THE PURCHASE DATE");
+            RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+            rawMaterialDTO.setStatus(RawMaterialStatus.INVALID_EXPIRY);
+            rawMaterialDTO.setRawMaterial(rawMaterial);
+            return rawMaterialDTO;
+        }
+
+        else{
+            rawMaterial.setTimestamp(LocalDateTime.now());
+            rawMaterialRepository.save(rawMaterial);
+
+            rawMaterial = updateStatusOfRawMaterial(rawMaterial);
+
+            RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+            rawMaterialDTO.setStatus(RawMaterialStatus.VALID_AND_SAVED);
+            rawMaterialDTO.setRawMaterial(rawMaterial);
+            return rawMaterialDTO;
+
+        }
     }
 
-    public RawMaterial updateRawMaterial(String rawMaterialId, RawMaterial updatedRawMaterial){
+    public RawMaterialDTO updateRawMaterial(String rawMaterialId, RawMaterial updatedRawMaterial){
 
-        if(rawMaterialId.equals("") || rawMaterialId.equals(" ") || rawMaterialId == null){
-            System.out.println("PASS RAW MATERIAL ID IN REQUEST BODY: editRawMaterialDTO");
-            return null;
+
+        if(updatedRawMaterial.getExpirationDate().isBefore(updatedRawMaterial.getPurchaseDate())){
+            System.out.println("EXP DATE CANNOT BE BEFORE THE PURCHASE DATE");
+            RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+            rawMaterialDTO.setStatus(RawMaterialStatus.INVALID_EXPIRY);
+            rawMaterialDTO.setRawMaterial(updatedRawMaterial);
+            return rawMaterialDTO;
         }
-//        if(!isRequestValid(updatedRawMaterial)){
-//            return null;
-//        }
+        else{
+            updatedRawMaterial.setRawMaterialId(rawMaterialId);
+            updatedRawMaterial.setTimestamp(LocalDateTime.now());
+            rawMaterialRepository.save(updatedRawMaterial);
+
+            updatedRawMaterial = updateStatusOfRawMaterial(updatedRawMaterial);
 
 
-        updatedRawMaterial.setRawMaterialId(rawMaterialId);
-        updatedRawMaterial.setTimestamp(LocalDateTime.now());
-        rawMaterialRepository.save(updatedRawMaterial);
+            RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+            rawMaterialDTO.setStatus(RawMaterialStatus.VALID_AND_SAVED);
+            rawMaterialDTO.setRawMaterial(updatedRawMaterial);
+            return rawMaterialDTO;
 
-        updatedRawMaterial = updateStatusOfRawMaterial(updatedRawMaterial);
-        return updatedRawMaterial;
+        }
     }
 
     public boolean deleteRawMaterial(RawMaterial rawMaterial){
@@ -103,52 +124,86 @@ public class RawMaterialService {
     }
 
     @Transactional
-    public RawMaterial addUsage(RawMaterial rawMaterial, double amountUsed){
+    public RawMaterialDTO addUsage(RawMaterial rawMaterial, double amountUsed){
 
         rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
         if(rawMaterial == null){
             System.out.println("In addUsage(): RawMaterial not in db");
-            return null;
-        }
-        double currentLevel = rawMaterial.getCurrentLevel();
-        currentLevel -= amountUsed;
+            throw new RuntimeException("No such raw material found in database");
 
-        if(currentLevel < 0){
-            System.out.println("CURRENT LEVEL VALUE LESS THAN USAGE QTY");
-            currentLevel = 0;
         }
+        else{
 
-        rawMaterial.setCurrentLevel(currentLevel);
-        rawMaterial.setTimestamp(LocalDateTime.now());
-        rawMaterialRepository.save(rawMaterial);
-        rawMaterial = updateStatusOfRawMaterial(rawMaterial);
-        return rawMaterial;
+            double currentLevel = rawMaterial.getCurrentLevel();
+            currentLevel -= amountUsed;
+
+            boolean isUpdationOfCurrentLevelValid = isUpdationOfCurrentLevelValid(rawMaterial, amountUsed);
+
+            if(!isUpdationOfCurrentLevelValid){
+                System.out.println("NEGATIVE CURRENT LEVEL AFTER REMOVING WASTAGE QTY");
+
+                RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+                rawMaterialDTO.setRawMaterial(rawMaterial);
+                rawMaterialDTO.setStatus(RawMaterialStatus.NEGATIVE);
+                return rawMaterialDTO;
+            }
+
+            else{
+                rawMaterial.setCurrentLevel(currentLevel);
+                rawMaterial.setTimestamp(LocalDateTime.now());
+                rawMaterialRepository.save(rawMaterial);
+                rawMaterial = updateStatusOfRawMaterial(rawMaterial);
+
+
+                RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+                rawMaterialDTO.setStatus(RawMaterialStatus.POSITIVE);
+                rawMaterialDTO.setRawMaterial(rawMaterial);
+                return rawMaterialDTO;
+            }
+
+        }
     }
 
     @Transactional
-    public RawMaterial addWastage(WastageLog wastageLog){
+    public RawMaterialDTO addWastage(WastageLog wastageLog){
 
         RawMaterial rawMaterial = rawMaterialRepository.findById(wastageLog.getRawMaterialId()).orElse(null);
+
         if(rawMaterial == null){
             System.out.println("NO SUCH RAW MATERIAL EXISTS IN DB");
-            return null;
+            throw new RuntimeException("No such raw material found in database");
         }
 
-        double currentLevel = rawMaterial.getCurrentLevel();
-        currentLevel -= wastageLog.getWastedQuantity();
+        else{
 
-        if(currentLevel < 0){
-            System.out.println("CURRENT LEVEL VALUE LESS THAN WASTAGE QTY");
-            currentLevel = 0;
+            boolean isUpdationOfCurrentLevelValid = isUpdationOfCurrentLevelValid(rawMaterial, wastageLog.getWastedQuantity());
+
+            if(!isUpdationOfCurrentLevelValid){
+                System.out.println("NEGATIVE CURRENT LEVEL AFTER REMOVING WASTAGE QTY");
+
+                RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+                rawMaterialDTO.setRawMaterial(rawMaterial);
+                rawMaterialDTO.setStatus(RawMaterialStatus.NEGATIVE);
+                return rawMaterialDTO;
+            }
+
+            else{
+                double currentLevel = rawMaterial.getCurrentLevel();
+                currentLevel -= wastageLog.getWastedQuantity();
+
+                rawMaterial.setCurrentLevel(currentLevel);
+                rawMaterial.setTimestamp(LocalDateTime.now());
+
+                rawMaterialRepository.save(rawMaterial);
+
+                rawMaterial = updateStatusOfRawMaterial(rawMaterial);
+
+                RawMaterialDTO rawMaterialDTO = new RawMaterialDTO();
+                rawMaterialDTO.setStatus(RawMaterialStatus.POSITIVE);
+                rawMaterialDTO.setRawMaterial(rawMaterial);
+                return rawMaterialDTO;
+            }
         }
-
-        rawMaterial.setCurrentLevel(currentLevel);
-        rawMaterial.setTimestamp(LocalDateTime.now());
-        rawMaterialRepository.save(rawMaterial);
-
-        rawMaterial = updateStatusOfRawMaterial(rawMaterial);
-
-        return rawMaterial;
     }
 
 
@@ -179,15 +234,31 @@ public class RawMaterialService {
         double reorderLevel = rawMaterial.getReorderLevel();
 
         if (currentLevel <= reorderLevel) {
-            rawMaterial.setStatus(RawMaterialStatus.CRITICAL);
+            rawMaterial.setStatus(com.dinedynamo.collections.inventory_management.RawMaterialStatus.CRITICAL);
         } else if (currentLevel <= reorderLevel + 5) {
-            rawMaterial.setStatus(RawMaterialStatus.NEAR_REORDER);
+            rawMaterial.setStatus(com.dinedynamo.collections.inventory_management.RawMaterialStatus.NEAR_REORDER);
         } else {
-            rawMaterial.setStatus(RawMaterialStatus.SUFFICIENT);
+            rawMaterial.setStatus(com.dinedynamo.collections.inventory_management.RawMaterialStatus.SUFFICIENT);
         }
 
         rawMaterialRepository.save(rawMaterial);
         return rawMaterial;
+    }
+
+
+    public boolean isUpdationOfCurrentLevelValid(RawMaterial rawMaterial, double level){
+
+        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
+        if(rawMaterial == null){
+            throw new RuntimeException("Raw material does not exist in db");
+        }
+        else{
+            double currentLevel = rawMaterial.getCurrentLevel();
+            if(currentLevel - level < 0){
+                return false;
+            }
+            return true;
+        }
     }
 }
 

@@ -28,6 +28,5 @@ public class ReplenishmentLog {
 
     LocalDateTime timestamp;
 
-    String replenishmentLocation;
 
 }

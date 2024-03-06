@@ -28,8 +28,6 @@ public class WastageLog
 
     double wastedQuantity;
 
-    String wastageLocation;
-
     LocalDateTime timestamp;
 
 

@@ -23,6 +23,8 @@ public class WastageLogController {
     @Autowired
     WastageLogService wastageLogService;
 
+
+    //If returns true, means wastage log saved and currentLevel of RawMaterial is updated. If returns false, means invalid updation
     @PostMapping("/dinedynamo/restaurant/inventory/add-wastage-log")
     public ResponseEntity<ApiResponse> addWastageLog(@RequestBody WastageLog wastageLog){
 
@@ -36,13 +38,11 @@ public class WastageLogController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId())),HttpStatus.OK);
     }
 
-//    @PutMapping("/dinedynamo/restaurant/inventory/edit-wastage-log")
-//    public ResponseEntity<ApiResponse> editWastageLog(@RequestBody EditWastageLogDTO editWastageLogDTO){
-//
-//        WastageLog updatedWastageLog = wastageLogService.updateWastageLog(editWastageLogDTO.getWastageLogId(), editWastageLogDTO.getWastageLog());
-//        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedWastageLog),HttpStatus.OK);
-//
-//    }
+    @PostMapping("/dinedynamo/restaurant/inventory/get-all-wastage-logs-for-restaurant")
+    public ResponseEntity<ApiResponse> getAllWastageLogs(@RequestBody Restaurant restaurant){
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRestaurantId(restaurant.getRestaurantId())),HttpStatus.OK);
+    }
 
     @DeleteMapping("/dinedynamo/restaurant/inventory/delete-wastage-log")
     public ResponseEntity<ApiResponse> deleteWastageLog(@RequestBody WastageLog wastageLog){

@@ -1,8 +1,9 @@
 package com.dinedynamo.services.inventory_services;
 
 
-import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.inventory_management.WastageLog;
+import com.dinedynamo.dto.inventory_dtos.RawMaterialDTO;
+import com.dinedynamo.dto.inventory_dtos.RawMaterialStatus;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.WastageLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,55 +39,19 @@ public class WastageLogService {
 
 
     @Transactional
-    public WastageLog save(WastageLog wastageLog){
+    public boolean save(WastageLog wastageLog){
 
-        boolean isRequestValid = isRequestValid(wastageLog);
-        if(!isRequestValid){
-            System.out.println("PASS RAW MATERIAL ID AND RESTAURANT ID IN REQUEST");
-            return null;
+        RawMaterialDTO rawMaterialDTO = rawMaterialService.addWastage(wastageLog);
+
+        if(rawMaterialDTO.getStatus() == RawMaterialStatus.NEGATIVE){
+            return false;
         }
-
-        RawMaterial rawMaterial = rawMaterialService.addWastage(wastageLog);
-
-        if(rawMaterial == null){
-            //no such raw material exists case
-            return null;
+        else{
+            wastageLog.setTimestamp(LocalDateTime.now());
+            wastageLogRepository.save(wastageLog);
+            return true;
         }
-        wastageLog.setTimestamp(LocalDateTime.now());
-        wastageLogRepository.save(wastageLog);
-        return wastageLog;
 
     }
 
-
-    @Transactional
-    public WastageLog updateWastageLog(String wastageLogId, WastageLog updatedWastageLog){
-
-        if(!isRequestValid(updatedWastageLog)){
-            System.out.println("PASS RAW MATERIAL ID AND RESTAURANT ID WASTAGE LOG OBJ");
-            return null;
-        }
-
-        RawMaterial rawMaterial = rawMaterialRepository.findById(updatedWastageLog.getRawMaterialId()).orElse(null);
-        WastageLog existingWastageLog = wastageLogRepository.findById(wastageLogId).orElse(null);
-        if(rawMaterial == null){
-            System.out.println("RAW MATERIAL WITH THIS ID NOT FOUND IN DB");
-            System.out.println("UPDATION FAILED");
-            return null;
-        }
-        if(existingWastageLog == null){
-            System.out.println("WASTAGE LOG WITH THIS ID NOT FOUND IN DB");
-            System.out.println("UPDATION FAILED");
-            return null;
-        }
-
-        rawMaterial.setCurrentLevel(existingWastageLog.getWastedQuantity() + rawMaterial.getCurrentLevel());
-        rawMaterialRepository.save(rawMaterial);
-        rawMaterialService.addWastage(updatedWastageLog);
-
-        updatedWastageLog.setTimestamp(LocalDateTime.now());
-        updatedWastageLog.setWastageLogId(wastageLogId);
-        wastageLogRepository.save(updatedWastageLog);
-        return updatedWastageLog;
-    }
 }

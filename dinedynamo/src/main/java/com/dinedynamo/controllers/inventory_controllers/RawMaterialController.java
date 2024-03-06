@@ -3,9 +3,11 @@ package com.dinedynamo.controllers.inventory_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.inventory_management.RawMaterial;
-import com.dinedynamo.collections.inventory_management.RawMaterialStatus;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
+import com.dinedynamo.dto.inventory_dtos.AddUsageForRawMaterialDTO;
 import com.dinedynamo.dto.inventory_dtos.EditRawMaterialDTO;
+import com.dinedynamo.dto.inventory_dtos.RawMaterialDTO;
+import com.dinedynamo.dto.inventory_dtos.RawMaterialStatus;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.services.inventory_services.RawMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +32,8 @@ public class RawMaterialController {
 
     @PostMapping("/dinedynamo/restaurant/inventory/add-raw-material")
     ResponseEntity<ApiResponse> addRawMaterial(@RequestBody RawMaterial rawMaterial){
-        rawMaterial = rawMaterialService.save(rawMaterial);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterial),HttpStatus.OK);
+        RawMaterialDTO rawMaterialDTO = rawMaterialService.save(rawMaterial);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialDTO),HttpStatus.OK);
     }
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-all-raw-materials")
@@ -48,8 +50,9 @@ public class RawMaterialController {
 
     @PutMapping("/dinedynamo/restaurant/inventory/edit-raw-material")
     ResponseEntity<ApiResponse> editRawMaterial(@RequestBody EditRawMaterialDTO editRawMaterialDTO){
-        RawMaterial updatedRawMaterial = rawMaterialService.updateRawMaterial(editRawMaterialDTO.getRawMaterialId(), editRawMaterialDTO.getRawMaterial());
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedRawMaterial),HttpStatus.OK);
+
+        RawMaterialDTO rawMaterialDTO = rawMaterialService.updateRawMaterial(editRawMaterialDTO.getRawMaterialId(), editRawMaterialDTO.getRawMaterial());
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialDTO),HttpStatus.OK);
 
     }
 
@@ -65,19 +68,18 @@ public class RawMaterialController {
     }
 
     //Used to change the current level of raw material
+    // If returns true -> currentLevel updated
+    // If returns false -> currentLevel not updated
     @PutMapping("/dinedynamo/restaurant/inventory/add-usage")
-    ResponseEntity<ApiResponse> addUsage(@RequestParam double amountUsed, @RequestBody RawMaterial rawMaterial){
-        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
-        if(rawMaterial == null){
-            System.out.println("RAW MATERIAL ID NOT FOUND IN DB");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null), HttpStatus.OK);
+    ResponseEntity<ApiResponse> addUsage(@RequestBody AddUsageForRawMaterialDTO addUsageForRawMaterialDTO){
+        RawMaterialDTO rawMaterialDTO = rawMaterialService.addUsage(addUsageForRawMaterialDTO.getRawMaterial(), addUsageForRawMaterialDTO.getAmountUsed());
 
+        if(rawMaterialDTO.getStatus() == RawMaterialStatus.NEGATIVE){
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",false), HttpStatus.OK);
         }
-        else
-        {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialService.addUsage(rawMaterial, amountUsed)), HttpStatus.OK);
+        else{
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",true), HttpStatus.OK);
         }
-
     }
 
     @PostMapping("/dinedynamo/restaurant/inventory/search-by-category")
@@ -98,17 +100,17 @@ public class RawMaterialController {
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-critical-raw-materials")
     ResponseEntity<ApiResponse> getAllCriticalRawMaterials(@RequestBody Restaurant restaurant){
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), RawMaterialStatus.CRITICAL)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), com.dinedynamo.collections.inventory_management.RawMaterialStatus.CRITICAL)), HttpStatus.OK);
     }
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-near-reorder-raw-materials")
     ResponseEntity<ApiResponse> getAllNearReorderRawMaterials(@RequestBody Restaurant restaurant){
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), RawMaterialStatus.NEAR_REORDER)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), com.dinedynamo.collections.inventory_management.RawMaterialStatus.NEAR_REORDER)), HttpStatus.OK);
     }
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-sufficient-raw-materials")
     ResponseEntity<ApiResponse> getAllSufficientRawMaterials(@RequestBody Restaurant restaurant){
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), RawMaterialStatus.SUFFICIENT)), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), com.dinedynamo.collections.inventory_management.RawMaterialStatus.SUFFICIENT)), HttpStatus.OK);
     }
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-categories")
@@ -158,6 +160,14 @@ public class RawMaterialController {
     ResponseEntity<ApiResponse> sortByCategory(@RequestBody Restaurant restaurant){
         Sort sortByCategoryAndTimestamp = Sort.by(Sort.Direction.ASC, "category").and(Sort.by(Sort.Direction.DESC, "timestamp"));
         List<RawMaterial> sortedRawMaterials = rawMaterialRepository.findByRestaurantId(restaurant.getRestaurantId(), sortByCategoryAndTimestamp);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",sortedRawMaterials), HttpStatus.OK);
+    }
+
+
+    @PostMapping("/dinedynamo/restaurant/inventory/sort-by-name")
+    ResponseEntity<ApiResponse> sortByName(@RequestBody Restaurant restaurant){
+        Sort sortByNameAndTimestamp = Sort.by(Sort.Direction.ASC, "name").and(Sort.by(Sort.Direction.ASC, "timestamp"));
+        List<RawMaterial> sortedRawMaterials = rawMaterialRepository.findByRestaurantId(restaurant.getRestaurantId(), sortByNameAndTimestamp);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",sortedRawMaterials), HttpStatus.OK);
     }
 
