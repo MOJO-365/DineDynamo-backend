@@ -10,6 +10,7 @@ import com.dinedynamo.repositories.inventory_repositories.ReplenishmentLogReposi
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.services.inventory_services.ReplenishmentLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,13 +51,15 @@ public class ReplenishmentLogController {
 
         }
         else{
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",replenishmentLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId())),HttpStatus.OK);
+            Sort sortByTimestamp = Sort.by(Sort.Direction.DESC, "timestamp");
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",replenishmentLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId(), sortByTimestamp)),HttpStatus.OK);
         }
     }
 
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-all-replenishment-logs-for-restaurant")
     public ResponseEntity<ApiResponse> getReplenishmentLogsForRestaurant(@RequestBody Restaurant restaurant){
+
 
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
 
@@ -66,7 +69,8 @@ public class ReplenishmentLogController {
 
         }
         else{
-            List<ReplenishmentLog> replenishmentLogList = replenishmentLogRepository.findByRestaurantId(restaurant.getRestaurantId());
+            Sort sortByTimestamp = Sort.by(Sort.Direction.DESC, "timestamp");
+            List<ReplenishmentLog> replenishmentLogList = replenishmentLogRepository.findByRestaurantId(restaurant.getRestaurantId(),sortByTimestamp);
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",replenishmentLogList),HttpStatus.OK);
         }
     }

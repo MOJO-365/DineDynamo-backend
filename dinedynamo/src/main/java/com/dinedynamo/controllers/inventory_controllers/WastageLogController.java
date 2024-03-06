@@ -8,6 +8,7 @@ import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.repositories.inventory_repositories.WastageLogRepository;
 import com.dinedynamo.services.inventory_services.WastageLogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,16 @@ public class WastageLogController {
     @PostMapping("/dinedynamo/restaurant/inventory/get-all-wastage-logs-for-raw-material")
     public ResponseEntity<ApiResponse> getAllWastageLogs(@RequestBody RawMaterial rawMaterial){
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId())),HttpStatus.OK);
+
+        Sort sortByTimestamp = Sort.by(Sort.Direction.DESC, "timestamp");
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId(), sortByTimestamp)),HttpStatus.OK);
     }
 
     @PostMapping("/dinedynamo/restaurant/inventory/get-all-wastage-logs-for-restaurant")
     public ResponseEntity<ApiResponse> getAllWastageLogs(@RequestBody Restaurant restaurant){
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRestaurantId(restaurant.getRestaurantId())),HttpStatus.OK);
+        Sort sortByTimestamp = Sort.by(Sort.Direction.DESC, "timestamp");
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",wastageLogRepository.findByRestaurantId(restaurant.getRestaurantId(),sortByTimestamp)),HttpStatus.OK);
     }
 
     @DeleteMapping("/dinedynamo/restaurant/inventory/delete-wastage-log")
