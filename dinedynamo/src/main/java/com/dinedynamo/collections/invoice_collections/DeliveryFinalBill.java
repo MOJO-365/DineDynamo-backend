@@ -23,8 +23,7 @@ public class DeliveryFinalBill {
     private String restaurantId;
     private LocalDateTime datetime;
     private String customerPhone;
-    private boolean deliveryStatus;
-    private double gst;
+    private String customerAddress;
     private double totalAmount;
     private List<OrderList> orderList;
 

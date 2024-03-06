@@ -26,11 +26,7 @@ public class NewDeliveryController {
     public ResponseEntity<ApiResponse> createDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder) {
         deliveryOrder.setDateTime(LocalDateTime.now());
         deliveryOrder.setDeliveryStatus(false);
-        if (deliveryOrder.getOrderList() != null) {
-            for (OrderList orderListItem : deliveryOrder.getOrderList()) {
-                orderListItem.setPrepared(false);
-            }
-        }
+
         DeliveryOrder savedOrder = deliveryOrderRepository.save(deliveryOrder);
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", savedOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -56,7 +52,7 @@ public class NewDeliveryController {
 
             if (existingDeliveryOrder.getOrderList() != null) {
                 for (OrderList orderListItem : existingDeliveryOrder.getOrderList()) {
-                    orderListItem.setPrepared(false);
+                    orderListItem.setPrepared(true);
                 }
             }
 

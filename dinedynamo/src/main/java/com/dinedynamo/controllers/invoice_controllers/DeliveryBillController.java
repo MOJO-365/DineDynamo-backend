@@ -7,6 +7,7 @@ import com.dinedynamo.services.invoice_services.DeliveryBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
+@CrossOrigin("*")
 public class DeliveryBillController {
     @Autowired
     private  DeliveryBillService deliveryBillService;
@@ -21,7 +23,6 @@ public class DeliveryBillController {
     @PostMapping("/dinedynamo/restaurant/orders/save/delivery-final-bill")
     public ResponseEntity<ApiResponse> saveDeliveryBill(@RequestBody DeliveryFinalBill deliveryFinalBill) {
         deliveryFinalBill.setDatetime(LocalDateTime.now());
-        deliveryFinalBill.setDeliveryStatus(true);
         deliveryBillService.saveDeliveryBill(deliveryFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", deliveryFinalBill), HttpStatus.OK);
     }

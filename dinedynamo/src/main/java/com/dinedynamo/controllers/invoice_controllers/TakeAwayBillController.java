@@ -7,6 +7,7 @@ import com.dinedynamo.services.invoice_services.TakeAwayBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
+@CrossOrigin("*")
 public class TakeAwayBillController {
 
     @Autowired
@@ -21,7 +23,6 @@ public class TakeAwayBillController {
 
     @PostMapping("/dinedynamo/restaurant/orders/save/takeaway-final-bill")
     public ResponseEntity<ApiResponse> saveTakeAwayBill(@RequestBody TakeAwayFinalBill takeAwayFinalBill){
-        takeAwayFinalBill.setPickedUp(true);
         takeAwayFinalBill.setDatetime(LocalDateTime.now());
         takeAwayBillService.saveTakeAwayBill(takeAwayFinalBill);
 
