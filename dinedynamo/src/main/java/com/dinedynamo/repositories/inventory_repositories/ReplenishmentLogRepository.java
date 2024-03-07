@@ -17,5 +17,7 @@ public interface ReplenishmentLogRepository extends MongoRepository<Replenishmen
 
     List<ReplenishmentLog> findByRawMaterialId(String rawMaterialId, Sort sort);
 
+    List<ReplenishmentLog> findByRawMaterialId(String rawMaterialId);
+
     List<ReplenishmentLog> findByRestaurantId(String restaurantId, Sort sort);
 }
