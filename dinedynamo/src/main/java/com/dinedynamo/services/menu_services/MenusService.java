@@ -34,6 +34,10 @@ public class MenusService
 
     public Menus save(Menus menus){
 
+        Menus existingMenus = menusRepository.findByRestaurantId(menus.getRestaurantId()).orElse(null);
+
+        if(existingMenus!= null)    menus.setMenuId(existingMenus.getMenuId());
+
         for(Category category: menus.getListOfCategories()){
 
             category.setRestaurantId(menus.getRestaurantId());

@@ -2,7 +2,6 @@ package com.dinedynamo.controllers.authentication_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.collections.customer_collections.Customer;
 import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
@@ -53,10 +52,6 @@ public class SignInController
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-
-
-
 
     UserDetails userDetails;
 

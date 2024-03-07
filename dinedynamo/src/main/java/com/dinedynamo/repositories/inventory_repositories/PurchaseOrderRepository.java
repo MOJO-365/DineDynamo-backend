@@ -2,6 +2,7 @@ package com.dinedynamo.repositories.inventory_repositories;
 
 
 import com.dinedynamo.collections.inventory_management.PurchaseOrder;
+import com.dinedynamo.collections.inventory_management.PurchaseOrderStatus;
 import jdk.dynalink.linker.LinkerServices;
 import org.apache.catalina.LifecycleState;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -15,6 +16,9 @@ public interface PurchaseOrderRepository extends MongoRepository<PurchaseOrder, 
     List<PurchaseOrder> findByRawMaterialId(String rawMaterialId);
 
     List<PurchaseOrder> findByRestaurantId(String rawMaterialId);
+
+    List<PurchaseOrder> findByRestaurantIdAndStatus(String restaurantId, PurchaseOrderStatus status);
+
 
 
 }

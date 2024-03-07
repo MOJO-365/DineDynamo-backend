@@ -107,7 +107,7 @@ public class RawMaterialService {
 
         wastageLogRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
         replenishmentLogRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
-        supplierDetailsRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
+        //supplierDetailsRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
         rawMaterialRepository.delete(rawMaterial);
         return true;
 
@@ -245,6 +245,24 @@ public class RawMaterialService {
         return rawMaterial;
     }
 
+
+    public RawMaterial addNewLevelToCurrentLevelOfMaterial(RawMaterial rawMaterial, double level){
+
+        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
+        if(rawMaterial == null){
+            throw new RuntimeException("No such raw material exists in db");
+        }
+
+        rawMaterial.setCurrentLevel(rawMaterial.getCurrentLevel() + level);
+
+        rawMaterial.setTimestamp(LocalDateTime.now());
+
+        rawMaterialRepository.save(rawMaterial);
+
+        rawMaterial = updateStatusOfRawMaterial(rawMaterial);
+
+        return rawMaterial;
+    }
 
     public boolean isUpdationOfCurrentLevelValid(RawMaterial rawMaterial, double level){
 

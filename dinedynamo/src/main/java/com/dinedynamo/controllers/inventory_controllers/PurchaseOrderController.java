@@ -27,7 +27,7 @@ public class PurchaseOrderController
 
 
     //Use: To send the Purchase order mail to Supplier
-    @PostMapping("/dinedynamo/restaurant/inventory/purchase-order-request")
+    @PostMapping("/dinedynamo/restaurant/inventory/purchase-orders/purchase-order-request")
     public ResponseEntity<ApiResponse> raiseTicketForPurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
 
         purchaseOrder = purchaseOrderService.save(purchaseOrder);
@@ -37,7 +37,7 @@ public class PurchaseOrderController
     }
 
     // Use: When the restaurant owner has received the item, the status of that purchase order needs to be updated in DB
-    @PostMapping("/dinedynamo/restaurant/inventory/complete-purchase-order")
+    @PostMapping("/dinedynamo/restaurant/inventory/purchase-orders/complete-purchase-order")
     public ResponseEntity<ApiResponse> completePurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
 
         purchaseOrder = purchaseOrderService.completePurchaseOrder(purchaseOrder);
@@ -46,7 +46,7 @@ public class PurchaseOrderController
     }
 
     //Use: If the restaurant owner wants to cancel the order, mail will be sent to the supplier of that particular raw material
-    @PostMapping("/dinedynamo/restaurant/inventory/cancel-purchase-order")
+    @PostMapping("/dinedynamo/restaurant/inventory/purchase-orders/cancel-purchase-order")
     public ResponseEntity<ApiResponse> cancelPurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
 
         purchaseOrder = purchaseOrderService.completePurchaseOrder(purchaseOrder);
@@ -55,7 +55,7 @@ public class PurchaseOrderController
     }
 
 
-    @DeleteMapping("/dinedynamo/restaurant/inventory/delete-purchase-order")
+    @DeleteMapping("/dinedynamo/restaurant/inventory/purchase-orders/delete-purchase-order")
     public ResponseEntity<ApiResponse> deletePurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
 
         purchaseOrderRepository.delete(purchaseOrder);
@@ -63,7 +63,7 @@ public class PurchaseOrderController
     }
 
 
-    @PostMapping("/dinedynamo/restaurant/inventory/get-all-purchase-orders-for-raw-material")
+    @PostMapping("/dinedynamo/restaurant/inventory/purchase-orders/get-all-purchase-orders-for-raw-material")
     public ResponseEntity<ApiResponse> getPurchaseOrdersForRawMaterial(@RequestBody RawMaterial rawMaterial){
 
         List<PurchaseOrder> purchaseOrderList = purchaseOrderRepository.findByRawMaterialId(rawMaterial.getRawMaterialId());
@@ -71,7 +71,7 @@ public class PurchaseOrderController
 
     }
 
-    @PostMapping("/dinedynamo/restaurant/inventory/get-all-purchase-orders-for-restaurant")
+    @PostMapping("/dinedynamo/restaurant/inventory/purchase-orders/get-all-purchase-orders-for-restaurant")
     public ResponseEntity<ApiResponse> getPurchaseOrdersForRestaurant(@RequestBody Restaurant restaurant){
 
         List<PurchaseOrder> purchaseOrderList = purchaseOrderRepository.findByRestaurantId(restaurant.getRestaurantId());
@@ -80,7 +80,24 @@ public class PurchaseOrderController
     }
 
 
+    @PostMapping("dinedynamo/restaurant/inventory/purchase-orders/find-completed-purchase-orders")
+    public ResponseEntity<ApiResponse> getCompletedPurchaseOrdersForRestaurants(@RequestBody Restaurant restaurant){
 
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.COMPLETED)),HttpStatus.OK);
 
+    }
 
+    @PostMapping("dinedynamo/restaurant/inventory/purchase-orders/find-requested-purchase-orders")
+    public ResponseEntity<ApiResponse> getRequestedPurchaseOrdersForRestaurants(@RequestBody Restaurant restaurant){
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.COMPLETED)),HttpStatus.OK);
+
+    }
+
+    @PostMapping("dinedynamo/restaurant/inventory/purchase-orders/find-cancelled-purchase-orders")
+    public ResponseEntity<ApiResponse> getCancelledPurchaseOrdersForRestaurants(@RequestBody Restaurant restaurant){
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.COMPLETED)),HttpStatus.OK);
+
+    }
 }
