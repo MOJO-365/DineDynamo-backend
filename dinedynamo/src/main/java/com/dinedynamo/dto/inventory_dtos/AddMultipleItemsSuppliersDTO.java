@@ -17,7 +17,7 @@ public class AddMultipleItemsSuppliersDTO {
 
     String restaurantId;
 
-    List<String> rawMaterialId;
+    String[] rawMaterialIdList;
 
     String supplierName;
 

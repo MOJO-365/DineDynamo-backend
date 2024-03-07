@@ -48,7 +48,7 @@ public class SupplierDetailsService
 
     public void addSupplierForMultipleItems(AddMultipleItemsSuppliersDTO addMultipleItemsSuppliersDTO){
 
-        for(String rawMaterialId: addMultipleItemsSuppliersDTO.getRawMaterialId()){
+        for(String rawMaterialId: addMultipleItemsSuppliersDTO.getRawMaterialIdList()){
 
             RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialId).orElse(null);
 
