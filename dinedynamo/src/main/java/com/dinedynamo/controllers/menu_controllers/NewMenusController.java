@@ -59,7 +59,8 @@ public class NewMenusController
 
         }
 
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
+        menus = menusRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
 
     }
 

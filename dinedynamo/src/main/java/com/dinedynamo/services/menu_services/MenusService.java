@@ -124,10 +124,15 @@ public class MenusService
 
         Menus menus = menusRepository.findByRestaurantId(restaurantId).orElse(null);
 
+        /***********/
         if(menus == null){
-            System.out.println("NO MENU PRESENT IN DB");
-            return null;
+             menus =  new Menus();
+             menus.setRestaurantId(restaurantId);
+             menusRepository.save(menus);
+//            System.out.println("NO MENU PRESENT IN DB");
+//            return null;
         }
+        /************/
 
 
         List<Category> updatedListOfCategories = categoryRepository.findByRestaurantId(restaurantId);
@@ -189,6 +194,17 @@ public class MenusService
             System.out.println("PASS SUB-CATEGORY-ID AND RESTAURANT-ID IN REQUEST");
             return null;
         }
+        Menus menus = menusRepository.findByRestaurantId(subSubCategory.getRestaurantId()).orElse(null);
+
+        /***********/
+        if(menus == null){
+            menus =  new Menus();
+            menus.setRestaurantId(subSubCategory.getRestaurantId());
+            menusRepository.save(menus);
+//            System.out.println("NO MENU PRESENT IN DB");
+//            return null;
+        }
+        /************/
 
         subSubCategoryRepository.save(subSubCategory);
         System.out.println("sub-sub id: "+subSubCategory.getSubSubCategoryId());
@@ -214,6 +230,19 @@ public class MenusService
             System.out.println("PASS CATEGORY-ID AND RESTAURANT-ID IN REQUEST");
             return null;
         }
+
+
+        Menus menus = menusRepository.findByRestaurantId(subCategory.getRestaurantId()).orElse(null);
+
+        /***********/
+        if(menus == null){
+            menus =  new Menus();
+            menus.setRestaurantId(subCategory.getRestaurantId());
+            menusRepository.save(menus);
+//            System.out.println("NO MENU PRESENT IN DB");
+//            return null;
+        }
+        /************/
 
         subCategoryRepository.save(subCategory);
 
@@ -258,6 +287,20 @@ public class MenusService
             System.out.println("RESTAURANT-ID NOT IN CATEGORY-REQUEST BODY");
             return null;
         }
+
+        //Menus menus = menusRepository.findByRestaurantId(category.getRestaurantId()).orElse(null);
+
+        Menus menus = menusRepository.findByRestaurantId(category.getRestaurantId()).orElse(null);
+
+        /***********/
+        if(menus == null){
+            menus =  new Menus();
+            menus.setRestaurantId(category.getRestaurantId());
+            menusRepository.save(menus);
+//            System.out.println("NO MENU PRESENT IN DB");
+//            return null;
+        }
+        /************/
 
         categoryRepository.save(category);
         List<SubCategory> subCategoryList = category.getListOfSubCategories();
@@ -327,6 +370,19 @@ public class MenusService
 
             return null;
         }
+
+
+        Menus menus = menusRepository.findByRestaurantId(menuItem.getRestaurantId()).orElse(null);
+
+        /***********/
+        if(menus == null){
+            menus =  new Menus();
+            menus.setRestaurantId(menuItem.getRestaurantId());
+            menusRepository.save(menus);
+//            System.out.println("NO MENU PRESENT IN DB");
+//            return null;
+        }
+        /************/
 
         menuItem.setParentType(ParentType.CATEGORY);
         menuItemRepository.save(menuItem);
