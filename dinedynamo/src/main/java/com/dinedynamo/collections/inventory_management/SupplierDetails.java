@@ -21,7 +21,7 @@ public class SupplierDetails
 
     String restaurantId;
 
-    String rawMaterialId;
+    String[] rawMaterialIdList;
 
     String supplierName;
 

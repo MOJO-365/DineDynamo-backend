@@ -6,7 +6,6 @@ import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.inventory_management.SupplierDetails;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
-import com.dinedynamo.dto.inventory_dtos.AddMultipleItemsSuppliersDTO;
 import com.dinedynamo.dto.inventory_dtos.EditSupplierDetailsDTO;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.SupplierDetailsRepository;
@@ -37,21 +36,20 @@ public class SupplierDetailsController {
     RestaurantRepository restaurantRepository;
 
     @PostMapping("/dinedynamo/restaurant/inventory/suppliers/add-supplier-for-items")
-    ResponseEntity<ApiResponse> addMultipleItemsSuppliers(@RequestBody AddMultipleItemsSuppliersDTO addAllSuppliersDTO){
+    ResponseEntity<ApiResponse> addMultipleItemsSuppliers(@RequestBody SupplierDetails supplierDetails){
 
-        supplierDetailsService.addSupplierForMultipleItems(addAllSuppliersDTO);
-
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",true), HttpStatus.OK);
-
-    }
-
-
-    @PostMapping("/dinedynamo/restaurant/inventory/suppliers/add-supplier")
-    ResponseEntity<ApiResponse> addSupplierForRawMaterial(@RequestBody SupplierDetails supplierDetails){
-
-        supplierDetails = supplierDetailsService.save(supplierDetails);
+        supplierDetailsService.save(supplierDetails);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetails), HttpStatus.OK);
+
     }
+
+
+//    @PostMapping("/dinedynamo/restaurant/inventory/suppliers/add-supplier")
+//    ResponseEntity<ApiResponse> addSupplierForRawMaterial(@RequestBody SupplierDetails supplierDetails){
+//
+//        supplierDetails = supplierDetailsService.save(supplierDetails);
+//        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetails), HttpStatus.OK);
+//    }
 
     @DeleteMapping("/dinedynamo/restaurant/inventory/suppliers/delete-supplier")
     ResponseEntity<ApiResponse> deleteSupplier(@RequestBody SupplierDetails supplierDetails){
@@ -63,8 +61,8 @@ public class SupplierDetailsController {
     @PutMapping("/dinedynamo/restaurant/inventory/suppliers/edit-supplier")
     ResponseEntity<ApiResponse> editSupplier(@RequestBody EditSupplierDetailsDTO editSupplierDetailsDTO){
 
-        SupplierDetails updatedupplierDetails = supplierDetailsService.updateSupplierDetails(editSupplierDetailsDTO.getSupplierId(),editSupplierDetailsDTO.getSupplierDetails());
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedupplierDetails), HttpStatus.OK);
+        SupplierDetails updatedSupplierDetails = supplierDetailsService.updateSupplierDetails(editSupplierDetailsDTO.getSupplierId(),editSupplierDetailsDTO.getSupplierDetails());
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",updatedSupplierDetails), HttpStatus.OK);
 
     }
 
@@ -74,28 +72,18 @@ public class SupplierDetailsController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetailsList), HttpStatus.OK);
     }
 
-    @PostMapping("/dinedynamo/restaurant/inventory/suppliers/get-suppliers-for-raw-material")
-    ResponseEntity<ApiResponse> getSuppliersForRwaMaterial(@RequestBody RawMaterial rawMaterial){
+    @PostMapping("/dinedynamo/restaurant/inventory/suppliers/get-items-by-supplier")
+    ResponseEntity<ApiResponse> getItemsBySupplier(@RequestBody SupplierDetails supplierDetails){
 
-        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
-        if(rawMaterial == null){
-            System.out.println("RAW MATERIAL ID NOT FOUND IN DB");
-        }
-        List<SupplierDetails> supplierDetailsList = supplierDetailsRepository.findByRawMaterialId(rawMaterial.getRawMaterialId());
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetailsList), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetailsService.getItemsBySupplier(supplierDetails)), HttpStatus.OK);
 
     }
 
+    @PostMapping("/dinedynamo/restaurant/inventory/suppliers/get-supplier-for-raw-material")
+    ResponseEntity<ApiResponse> getItemsBySupplier(@RequestBody RawMaterial rawMaterial){
 
-    @DeleteMapping("/dinedynamo/restaurant/inventory/suppliers/delete-all-suppliers-for-raw-material")
-    ResponseEntity<ApiResponse> deleteSuppliersForRawMaterial(@RequestBody RawMaterial rawMaterial){
-        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
-        if(rawMaterial == null){
-            System.out.println("RAW MATERIAL ID NOT FOUND IN DB");
-        }
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetailsService.getSupplierByRawMaterial(rawMaterial)), HttpStatus.OK);
 
-        List<SupplierDetails> supplierDetailsList = supplierDetailsRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",supplierDetailsList), HttpStatus.OK);
     }
 
 

@@ -14,11 +14,11 @@ public interface SupplierDetailsRepository extends MongoRepository<SupplierDetai
 
     List<SupplierDetails> deleteByRestaurantId(String restaurantId);
 
-    List<SupplierDetails> deleteByRawMaterialId(String rawMaterialId);
+    //List<SupplierDetails> deleteByRawMaterialId(String rawMaterialId);
 
     List<SupplierDetails> findByRestaurantId(String restaurantId);
 
-    List<SupplierDetails> findByRawMaterialId(String rawMaterialId);
+    //List<SupplierDetails> findByRawMaterialId(String rawMaterialId);
 
 
     @Query("{'restaurantId': ?0, 'supplierName': {$regex : ?1, $options: 'i'}}")

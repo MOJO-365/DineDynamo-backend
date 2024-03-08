@@ -2,11 +2,15 @@ package com.dinedynamo.services.inventory_services;
 
 import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.inventory_management.SupplierDetails;
-import com.dinedynamo.dto.inventory_dtos.AddMultipleItemsSuppliersDTO;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.SupplierDetailsRepository;
+import jdk.dynalink.linker.LinkerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class SupplierDetailsService
@@ -18,53 +22,57 @@ public class SupplierDetailsService
     RawMaterialRepository rawMaterialRepository;
 
 
+
     public SupplierDetails save(SupplierDetails supplierDetails){
-
-        RawMaterial rawMaterial = rawMaterialRepository.findById(supplierDetails.getRawMaterialId()).orElse(null);
-
-        if(rawMaterial == null){
-            System.out.println("RAW MATERIAL ID NOT IN DATABASE");
-            return null;
-        }
-
 
         supplierDetailsRepository.save(supplierDetails);
         return supplierDetails;
     }
 
+
     public SupplierDetails updateSupplierDetails(String supplierId, SupplierDetails updatedSupplierDetails){
 
-        RawMaterial rawMaterial = rawMaterialRepository.findById(updatedSupplierDetails.getRawMaterialId()).orElse(null);
-
-        if(rawMaterial == null){
-            System.out.println("RAW MATERIAL ID NOT IN DATABASE");
-            return null;
-        }
         updatedSupplierDetails.setSupplierId(supplierId);
         supplierDetailsRepository.save(updatedSupplierDetails);
         return updatedSupplierDetails;
     }
 
 
-    public void addSupplierForMultipleItems(AddMultipleItemsSuppliersDTO addMultipleItemsSuppliersDTO){
+    public List<RawMaterial> getItemsBySupplier(SupplierDetails supplierDetails){
 
-        for(String rawMaterialId: addMultipleItemsSuppliersDTO.getRawMaterialIdList()){
+        List<RawMaterial> rawMaterialList = new ArrayList<>();
 
-            RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialId).orElse(null);
+        supplierDetails = supplierDetailsRepository.findById(supplierDetails.getSupplierId()).orElse(null);
+        if(supplierDetails == null){
+            throw new RuntimeException("No such supplier found");
+        }
 
-            if(rawMaterial!=null){
+        for(String id: supplierDetails.getRawMaterialIdList()){
 
-                SupplierDetails supplierDetails = new SupplierDetails();
-                supplierDetails.setRawMaterialId(rawMaterialId);
-                supplierDetails.setSupplierName(addMultipleItemsSuppliersDTO.getSupplierName());
-                supplierDetails.setSupplierAddress(addMultipleItemsSuppliersDTO.getSupplierAddress());
-                supplierDetails.setRestaurantId(addMultipleItemsSuppliersDTO.getRestaurantId());
-                supplierDetails.setSupplierPhone(addMultipleItemsSuppliersDTO.getSupplierPhone());
-                supplierDetails.setSupplierEmailId(addMultipleItemsSuppliersDTO.getSupplierEmailId());
+            RawMaterial rawMaterial = rawMaterialRepository.findById(id).orElse(null);
 
-                supplierDetailsRepository.save(supplierDetails);
+            if(rawMaterial!=null)   rawMaterialList.add(rawMaterial);
+        }
+        return rawMaterialList;
+    }
 
+    public List<SupplierDetails> getSupplierByRawMaterial(RawMaterial rawMaterial){
+
+        String restaurantId = rawMaterial.getRestaurantId();
+        List<SupplierDetails> supplierDetailsOfRestaurant = supplierDetailsRepository.findByRestaurantId(restaurantId);
+        List<SupplierDetails> supplierForRawMaterial = new ArrayList<>();
+
+        for(SupplierDetails supplierDetails: supplierDetailsOfRestaurant){
+
+            String[] rawMaterialIdList = supplierDetails.getRawMaterialIdList();
+
+            List<String> rawMaterials = Arrays.asList(rawMaterialIdList);
+
+            if(rawMaterials.contains(rawMaterial.getRawMaterialId())){
+                supplierForRawMaterial.add(supplierDetails);
             }
         }
+
+        return supplierForRawMaterial;
     }
 }
