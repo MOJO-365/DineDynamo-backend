@@ -3,6 +3,8 @@ package com.dinedynamo.controllers.inventory_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.inventory_management.RawMaterial;
+import com.dinedynamo.collections.inventory_management.ReplenishmentLog;
+import com.dinedynamo.collections.inventory_management.WastageLog;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.dto.inventory_dtos.*;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
@@ -182,25 +184,6 @@ public class RawMaterialController {
     @PostMapping("/dinedynamo/restaurant/inventory/view-data-and-logs")
     ResponseEntity<ApiResponse> viewRawMaterialAndLogsCount(@RequestBody Restaurant restaurant){
 
-
-        List<RawMaterialAndLogsDataDTO> rawMaterialAndLogsDataDTOList = new ArrayList<>();
-
-        List<RawMaterial> rawMaterialList = rawMaterialRepository.findByRestaurantId(restaurant.getRestaurantId());
-
-        for(RawMaterial rawMaterial: rawMaterialList){
-            int wastageLogCount = wastageLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId()).size();
-
-            int replenishLogCount = replenishmentLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId()).size();
-
-            RawMaterialAndLogsDataDTO rawMaterialAndLogsDataDTO = new RawMaterialAndLogsDataDTO();
-            rawMaterialAndLogsDataDTO.setRawMaterial(rawMaterial);
-            rawMaterialAndLogsDataDTO.setWastageLogsCount(wastageLogCount);
-            rawMaterialAndLogsDataDTO.setReplenishmentLogsCount(replenishLogCount);
-
-            rawMaterialAndLogsDataDTOList.add(rawMaterialAndLogsDataDTO);
-        }
-
-
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialAndLogsDataDTOList),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialService.viewRawMaterialAndLogs(restaurant)),HttpStatus.OK);
     }
 }
