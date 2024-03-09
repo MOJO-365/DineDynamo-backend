@@ -32,7 +32,11 @@ public class SupplierDetailsService
 
     public SupplierDetails updateSupplierDetails(String supplierId, SupplierDetails updatedSupplierDetails){
 
-        updatedSupplierDetails.setSupplierId(supplierId);
+
+        SupplierDetails existingSupplierDetails = supplierDetailsRepository.findById(supplierId).orElse(null);
+
+        updatedSupplierDetails.setSupplierId(existingSupplierDetails.getSupplierId());
+
         supplierDetailsRepository.save(updatedSupplierDetails);
         return updatedSupplierDetails;
     }
