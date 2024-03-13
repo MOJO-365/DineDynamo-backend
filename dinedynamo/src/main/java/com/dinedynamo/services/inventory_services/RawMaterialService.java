@@ -4,9 +4,11 @@ package com.dinedynamo.services.inventory_services;
 
 import com.dinedynamo.collections.inventory_management.RawMaterial;
 
+import com.dinedynamo.collections.inventory_management.ReplenishmentLog;
 import com.dinedynamo.collections.inventory_management.WastageLog;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
+import com.dinedynamo.dto.inventory_dtos.RawMaterialAndLogsDataDTO;
 import com.dinedynamo.dto.inventory_dtos.RawMaterialDTO;
 import com.dinedynamo.dto.inventory_dtos.RawMaterialStatus;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -107,7 +110,7 @@ public class RawMaterialService {
 
         wastageLogRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
         replenishmentLogRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
-        supplierDetailsRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
+        //supplierDetailsRepository.deleteByRawMaterialId(rawMaterial.getRawMaterialId());
         rawMaterialRepository.delete(rawMaterial);
         return true;
 
@@ -246,6 +249,24 @@ public class RawMaterialService {
     }
 
 
+    public RawMaterial addNewLevelToCurrentLevelOfMaterial(RawMaterial rawMaterial, double level){
+
+        rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
+        if(rawMaterial == null){
+            throw new RuntimeException("No such raw material exists in db");
+        }
+
+        rawMaterial.setCurrentLevel(rawMaterial.getCurrentLevel() + level);
+
+        rawMaterial.setTimestamp(LocalDateTime.now());
+
+        rawMaterialRepository.save(rawMaterial);
+
+        rawMaterial = updateStatusOfRawMaterial(rawMaterial);
+
+        return rawMaterial;
+    }
+
     public boolean isUpdationOfCurrentLevelValid(RawMaterial rawMaterial, double level){
 
         rawMaterial = rawMaterialRepository.findById(rawMaterial.getRawMaterialId()).orElse(null);
@@ -259,6 +280,28 @@ public class RawMaterialService {
             }
             return true;
         }
+    }
+
+
+    public List<RawMaterialAndLogsDataDTO> viewRawMaterialAndLogs(Restaurant restaurant){
+        List<RawMaterialAndLogsDataDTO> rawMaterialAndLogsDataDTOList = new ArrayList<>();
+
+        List<RawMaterial> rawMaterialList = rawMaterialRepository.findByRestaurantId(restaurant.getRestaurantId());
+
+        for(RawMaterial rawMaterial: rawMaterialList){
+
+            List<WastageLog> wastageLogList = wastageLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId());
+            List<ReplenishmentLog> replenishmentLogList = replenishmentLogRepository.findByRawMaterialId(rawMaterial.getRawMaterialId());
+
+            RawMaterialAndLogsDataDTO rawMaterialAndLogsDataDTO = new RawMaterialAndLogsDataDTO();
+            rawMaterialAndLogsDataDTO.setRawMaterial(rawMaterial);
+            rawMaterialAndLogsDataDTO.setReplenishmentLogList(replenishmentLogList);
+            rawMaterialAndLogsDataDTO.setWastageLogList(wastageLogList);
+
+            rawMaterialAndLogsDataDTOList.add(rawMaterialAndLogsDataDTO);
+        }
+
+        return rawMaterialAndLogsDataDTOList;
     }
 }
 

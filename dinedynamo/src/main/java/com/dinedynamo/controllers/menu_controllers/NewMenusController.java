@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -48,9 +49,19 @@ public class NewMenusController
         Menus menus = menusRepository.findByRestaurantId(restaurant.getRestaurantId()).orElse(null);
 
         if(menus == null){
+
+            menus = new Menus();
+            menus.setRestaurantId(restaurant.getRestaurantId());
+            menus.setListOfCategories(new ArrayList<>());
+            //menusRepository.save(menus);
             System.out.println("MENU OF THIS RESTAURANT DOES NOT EXIST");
+            //return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
+
         }
+
+
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",menus),HttpStatus.OK);
+
     }
 
 

@@ -2,8 +2,10 @@ package com.dinedynamo.services.inventory_services;
 
 import com.dinedynamo.collections.inventory_management.PurchaseOrder;
 import com.dinedynamo.collections.inventory_management.PurchaseOrderStatus;
+import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.repositories.inventory_repositories.PurchaseOrderRepository;
+import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
 import com.dinedynamo.repositories.inventory_repositories.SupplierDetailsRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.services.external_services.EmailService;
@@ -24,6 +26,12 @@ public class PurchaseOrderService {
 
     @Autowired
     SupplierDetailsRepository supplierDetailsRepository;
+
+    @Autowired
+    RawMaterialRepository rawMaterialRepository;
+
+    @Autowired
+    RawMaterialService rawMaterialService;
 
     @Autowired
     EmailService emailService;
@@ -58,6 +66,13 @@ public class PurchaseOrderService {
         }
 
         else{
+
+            RawMaterial rawMaterial = rawMaterialRepository.findById(purchaseOrder.getRawMaterialId()).orElse(null);
+            if(rawMaterial == null){
+                throw new RuntimeException("No such raw material found in database");
+
+            }
+            rawMaterialService.addNewLevelToCurrentLevelOfMaterial(rawMaterial, purchaseOrder.getQuantity());
 
             purchaseOrder.setStatus(PurchaseOrderStatus.COMPLETED);
             purchaseOrderRepository.save(purchaseOrder);

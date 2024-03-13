@@ -3,12 +3,13 @@ package com.dinedynamo.controllers.inventory_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.inventory_management.RawMaterial;
+import com.dinedynamo.collections.inventory_management.ReplenishmentLog;
+import com.dinedynamo.collections.inventory_management.WastageLog;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.dto.inventory_dtos.AddUsageForRawMaterialDTO;
-import com.dinedynamo.dto.inventory_dtos.EditRawMaterialDTO;
-import com.dinedynamo.dto.inventory_dtos.RawMaterialDTO;
-import com.dinedynamo.dto.inventory_dtos.RawMaterialStatus;
+import com.dinedynamo.dto.inventory_dtos.*;
 import com.dinedynamo.repositories.inventory_repositories.RawMaterialRepository;
+import com.dinedynamo.repositories.inventory_repositories.ReplenishmentLogRepository;
+import com.dinedynamo.repositories.inventory_repositories.WastageLogRepository;
 import com.dinedynamo.services.inventory_services.RawMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -28,7 +30,13 @@ public class RawMaterialController {
     RawMaterialRepository rawMaterialRepository;
 
     @Autowired
+    ReplenishmentLogRepository replenishmentLogRepository;
+
+    @Autowired
     RawMaterialService rawMaterialService;
+
+    @Autowired
+    WastageLogRepository wastageLogRepository;
 
     @PostMapping("/dinedynamo/restaurant/inventory/add-raw-material")
     ResponseEntity<ApiResponse> addRawMaterial(@RequestBody RawMaterial rawMaterial){
@@ -173,4 +181,9 @@ public class RawMaterialController {
 
 
 
+    @PostMapping("/dinedynamo/restaurant/inventory/view-data-and-logs")
+    ResponseEntity<ApiResponse> viewRawMaterialAndLogsCount(@RequestBody Restaurant restaurant){
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",rawMaterialService.viewRawMaterialAndLogs(restaurant)),HttpStatus.OK);
+    }
 }

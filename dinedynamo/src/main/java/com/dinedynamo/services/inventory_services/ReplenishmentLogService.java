@@ -38,6 +38,7 @@ public class ReplenishmentLogService
 
         else{
 
+
             rawMaterial.setCurrentLevel(rawMaterial.getCurrentLevel() + replenishmentLog.getReplenishedQuantity());
 
             rawMaterialRepository.save(rawMaterial);

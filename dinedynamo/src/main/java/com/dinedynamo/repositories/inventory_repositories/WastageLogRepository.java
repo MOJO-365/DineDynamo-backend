@@ -16,8 +16,12 @@ public interface WastageLogRepository extends MongoRepository<WastageLog, String
 
     List<WastageLog> findByRawMaterialId(String rawMaterialId, Sort sort);
 
+    List<WastageLog> findByRawMaterialId(String rawMaterialId);
+
     List<WastageLog> findByRestaurantId(String restaurantId);
 
 
     List<WastageLog> findByRestaurantId(String restaurantId, Sort sort);
+
+
 }
