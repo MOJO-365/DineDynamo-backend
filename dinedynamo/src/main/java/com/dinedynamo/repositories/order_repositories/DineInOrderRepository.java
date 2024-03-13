@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface NewOrderRepository extends MongoRepository<Order, String> {
+public interface DineInOrderRepository extends MongoRepository<Order, String> {
 
 
     List<Order> findByRestaurantId(String restaurantId);

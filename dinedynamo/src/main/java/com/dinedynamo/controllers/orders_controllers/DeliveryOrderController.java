@@ -1,10 +1,10 @@
-package com.dinedynamo.controllers.new_orders_controllers;
+package com.dinedynamo.controllers.orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.DeliveryOrder;
-import com.dinedynamo.repositories.order_repositories.NewDeliveryRepository;
+import com.dinedynamo.repositories.order_repositories.DeliveryOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
-public class NewDeliveryController {
+public class DeliveryOrderController {
 
     @Autowired
-    private NewDeliveryRepository deliveryOrderRepository;
+    private DeliveryOrderRepository deliveryOrderRepository;
 
     // for Creating delivery order
     @PostMapping("/dinedynamo/restaurant/orders/delivery/create")

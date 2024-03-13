@@ -1,6 +1,7 @@
 package com.dinedynamo.controllers.report_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.collections.report_collections.ItemSale;
 import com.dinedynamo.collections.report_collections.OrderCounts;
@@ -38,12 +39,8 @@ public class ReportController {
 
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
-    public ResponseEntity<Map<String, Object>> getDailyOverallSalesReport(@RequestBody Map<String, String> requestBody) {
-        String restaurantId = requestBody.get("restaurantId");
-        String dateTimeString = requestBody.get("dateTime");
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
-        Map<String, Object> report = reportService.generateDailyOverallSalesReport(restaurantId, dateTime);
+    public ResponseEntity<Map<String, Object>> getDailyOverallSalesReport(@RequestBody TakeAwayFinalBill takeAwayFinalBill) {
+        Map<String, Object> report = reportService.generateDailyOverallSalesReport(takeAwayFinalBill);
         return ResponseEntity.ok(report);
     }
-
 }

@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DineInBillRepository extends MongoRepository<DineInFinalBill, String> {
+public interface DineInFinalBillRepository extends MongoRepository<DineInFinalBill, String> {
 
     List<DineInFinalBill> findByRestaurantId(String restaurantId);
 
     List<DineInFinalBill> findByRestaurantIdAndOrderListItemId(String restaurantId, String itemId);
     OrderList findTopByRestaurantIdAndOrderListItemId(String restaurantId, String itemId);
+
+    long countByRestaurantId(String restaurantId);
+
 
 }
