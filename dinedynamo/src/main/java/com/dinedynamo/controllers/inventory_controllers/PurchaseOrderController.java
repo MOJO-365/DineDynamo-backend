@@ -90,14 +90,14 @@ public class PurchaseOrderController
     @PostMapping("dinedynamo/restaurant/inventory/purchase-orders/find-requested-purchase-orders")
     public ResponseEntity<ApiResponse> getRequestedPurchaseOrdersForRestaurants(@RequestBody Restaurant restaurant){
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.COMPLETED)),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.REQUESTED)),HttpStatus.OK);
 
     }
 
     @PostMapping("dinedynamo/restaurant/inventory/purchase-orders/find-cancelled-purchase-orders")
     public ResponseEntity<ApiResponse> getCancelledPurchaseOrdersForRestaurants(@RequestBody Restaurant restaurant){
 
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.COMPLETED)),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.CANCELLED)),HttpStatus.OK);
 
     }
 }
