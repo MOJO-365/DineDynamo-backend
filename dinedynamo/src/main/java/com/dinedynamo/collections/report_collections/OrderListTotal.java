@@ -1,15 +1,16 @@
 package com.dinedynamo.collections.report_collections;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class OrderCounts {
-    private long totalDineInOrders;
-    private long totalDeliveryOrders;
-    private long totalTakeAwayOrders;
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderListTotal {
+    private long totalDineInItems;
+    private long totalDeliveryItems;
+    private long totalTakeAwayItems;
 }

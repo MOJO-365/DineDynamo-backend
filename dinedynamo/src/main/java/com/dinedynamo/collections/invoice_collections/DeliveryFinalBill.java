@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,13 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "delivery_final_bills")
+@Document(collection = "delivery-final-bills")
 public class DeliveryFinalBill {
 
     @Id
     private String deliveryBillId;
     private String restaurantId;
     private LocalDateTime datetime;
+    private LocalDate date;
     private String customerPhone;
     private String customerAddress;
     private double totalAmount;

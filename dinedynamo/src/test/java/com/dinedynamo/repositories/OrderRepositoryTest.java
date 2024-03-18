@@ -1,7 +1,7 @@
 package com.dinedynamo.repositories;
-import com.dinedynamo.collections.old_order_collections.Order;
-import com.dinedynamo.controllers.old_orders_controllers.OrderController;
-import com.dinedynamo.repositories.old_orders_repositories.OrderRepository;
+import com.dinedynamo.collections.order_collections.Order;
+import com.dinedynamo.controllers.orders_controllers.DineInOrderController;
+import com.dinedynamo.repositories.order_repositories.DineInOrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,13 +16,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OrderRepositoryTest {
 
-    // Mock OrderRepository to isolate the test from the actual repository implementation
-    @Mock
-    private OrderRepository orderRepository;
 
-    // Inject the mock OrderRepository into the OrderController
+    @Mock
+    private DineInOrderRepository orderRepository;
+
+
     @InjectMocks
-    private OrderController orderController;
+    private DineInOrderController orderController;
 
     /**
      * Test the findByRestaurantId method of the OrderRepository.

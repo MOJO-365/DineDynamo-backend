@@ -1,10 +1,12 @@
 package com.dinedynamo.controllers.report_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.collections.report_collections.ItemSale;
 import com.dinedynamo.collections.report_collections.OrderCounts;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
+import com.dinedynamo.dto.report_dtos.DailySalesReport;
 import com.dinedynamo.services.report_services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -38,12 +40,9 @@ public class ReportController {
 
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
-    public ResponseEntity<Map<String, Object>> getDailyOverallSalesReport(@RequestBody Map<String, String> requestBody) {
-        String restaurantId = requestBody.get("restaurantId");
-        String dateTimeString = requestBody.get("dateTime");
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString);
-        Map<String, Object> report = reportService.generateDailyOverallSalesReport(restaurantId, dateTime);
-        return ResponseEntity.ok(report);
+    public ResponseEntity<DailySalesReport> getDailyOverallSalesReport(@RequestBody TakeAwayFinalBill takeAwayFinalBill) {
+        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(takeAwayFinalBill);
+        return ResponseEntity.ok(dailySalesReport);
     }
 
 }

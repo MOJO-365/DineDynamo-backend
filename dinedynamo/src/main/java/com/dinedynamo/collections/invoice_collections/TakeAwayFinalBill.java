@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,12 +16,13 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "takeAway_final_bills")
+@Document(collection = "takeaway-final-bills")
 public class TakeAwayFinalBill {
 
     @Id
     private String takeAwayBillId;
     private String restaurantId;
+    private LocalDate date;
     private LocalDateTime datetime;
     private String customerPhone;
     private boolean pickedUp;

@@ -1,14 +1,13 @@
-package com.dinedynamo.controllers.new_orders_controllers;
+package com.dinedynamo.controllers.orders_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.Order;
 import com.dinedynamo.collections.order_collections.OrderList;
-import com.dinedynamo.repositories.invoice_repositories.DineInBillRepository;
-import com.dinedynamo.repositories.order_repositories.NewOrderRepository;
+import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
+import com.dinedynamo.repositories.order_repositories.DineInOrderRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +18,16 @@ import java.util.*;
 
 @RestController
 @CrossOrigin("*")
-public class NewOrderController {
+public class DineInOrderController {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private NewOrderRepository orderRepository;
+    private DineInOrderRepository orderRepository;
 
     @Autowired
-    private DineInBillRepository dineInBillRepository;
+    private DineInFinalBillRepository dineInFinalBillRepository;
 
     // Place order
     @PostMapping("dinedynamo/restaurant/orders/place")
