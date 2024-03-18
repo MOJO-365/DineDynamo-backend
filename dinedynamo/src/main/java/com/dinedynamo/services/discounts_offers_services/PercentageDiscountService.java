@@ -17,25 +17,6 @@ public class PercentageDiscountService {
     PercentageDiscountRepository percentageDiscountRepository;
 
 
-    public boolean isRequestValid(PercentageDiscount percentageDiscount){
-
-        if(percentageDiscount.getPercentage()!=null || percentageDiscount.getItems()!=null || percentageDiscount.getMaxValue()!= null || percentageDiscount.getRestaurantId() != null
-        || percentageDiscount.getMinValue() != null || percentageDiscount.getMinQty() != null || percentageDiscount.getEndingDate()!=null || percentageDiscount.getStartingDate()!=null
-        ){
-
-            if(restaurantService.isRestaurantPresentinDb(percentageDiscount.getRestaurantId())){
-                return true;
-            }
-            else{
-                System.out.println("RESTAURNT-ID NOT FOUND IN DB");
-                return false;
-            }
-
-
-        }
-        return false;
-    }
-
     public PercentageDiscount save(PercentageDiscount percentageDiscount){
 
         percentageDiscount.setOfferType(OfferType.PERCENTAGE);

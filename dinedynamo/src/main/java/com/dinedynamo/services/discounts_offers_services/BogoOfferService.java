@@ -11,30 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class BogoOfferService {
 
-    @Autowired
-    RestaurantService restaurantService;
+
 
     @Autowired
     BogoOfferRepository bogoOfferRepository;
-
-    public boolean isRequestValid(BogoOffer bogoOffer){
-
-        if(bogoOffer.getOfferName()!=null || bogoOffer.getItems()!=null || bogoOffer.getEndingDate()!= null || bogoOffer.getRestaurantId() != null
-                || bogoOffer.getStartingDate() != null || bogoOffer.getBuyQty() != null || bogoOffer.getGetQty()!=null
-        ){
-
-            if(restaurantService.isRestaurantPresentinDb(bogoOffer.getRestaurantId())){
-                return true;
-            }
-            else{
-                System.out.println("RESTAURNT-ID NOT FOUND IN DB");
-                return false;
-            }
-        }
-
-        return false;
-    }
-
 
     public BogoOffer save(BogoOffer bogoOffer){
 

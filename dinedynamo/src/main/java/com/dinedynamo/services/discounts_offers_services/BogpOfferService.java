@@ -17,21 +17,6 @@ public class BogpOfferService
     @Autowired
     BogpOfferRepository bogpOfferRepository;
 
-    public boolean isRequestValid(BogpOffer bogpOffer){
-
-        if(bogpOffer.getOfferName()!=null || bogpOffer.getItems()!=null || bogpOffer.getEndingDate()!= null || bogpOffer.getRestaurantId() != null || bogpOffer.getStartingDate() != null){
-
-            if(restaurantService.isRestaurantPresentinDb(bogpOffer.getRestaurantId())){
-                return true;
-            }
-            else{
-                System.out.println("RESTAURNT-ID NOT FOUND IN DB");
-                return false;
-            }
-        }
-
-        return false;
-    }
 
 
     public BogpOffer save(BogpOffer bogpOffer){

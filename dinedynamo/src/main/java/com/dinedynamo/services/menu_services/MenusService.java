@@ -525,15 +525,15 @@ public class MenusService
         return updateWholeMenu(menuItem.getRestaurantId());
     }
 
-    public void editCategory(Category category){
-
-    }
-
-    public void editSubCategory(SubSubCategory subSubCategory){
-
-    }
-
-    public void editSubSubCategory(SubSubCategory subSubCategory){
-
-    }
+//    public void editCategory(Category category){
+//
+//    }
+//
+//    public void editSubCategory(SubSubCategory subSubCategory){
+//
+//    }
+//
+//    public void editSubSubCategory(SubSubCategory subSubCategory){
+//
+//    }
 }
