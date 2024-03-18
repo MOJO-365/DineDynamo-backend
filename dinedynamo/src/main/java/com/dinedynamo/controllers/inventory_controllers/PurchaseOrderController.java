@@ -8,6 +8,7 @@ import com.dinedynamo.collections.inventory_management.RawMaterial;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.repositories.inventory_repositories.PurchaseOrderRepository;
 import com.dinedynamo.services.inventory_services.PurchaseOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
+@Slf4j
 public class PurchaseOrderController
 {
     @Autowired
@@ -90,6 +92,7 @@ public class PurchaseOrderController
     @PostMapping("dinedynamo/restaurant/inventory/purchase-orders/find-requested-purchase-orders")
     public ResponseEntity<ApiResponse> getRequestedPurchaseOrdersForRestaurants(@RequestBody Restaurant restaurant){
 
+        log.info("Find requested purchase orders......");
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrderRepository.findByRestaurantIdAndStatus(restaurant.getRestaurantId(), PurchaseOrderStatus.REQUESTED)),HttpStatus.OK);
 
     }

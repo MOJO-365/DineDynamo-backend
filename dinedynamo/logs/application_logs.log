@@ -1,0 +1,4 @@
+11:45:01.615 [http-nio-0.0.0.0-8080-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+11:45:01.616 [http-nio-0.0.0.0-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+11:45:01.618 [http-nio-0.0.0.0-8080-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+11:45:01.720 [http-nio-0.0.0.0-8080-exec-3] INFO  c.d.c.i.PurchaseOrderController - Find requested purchase orders......
