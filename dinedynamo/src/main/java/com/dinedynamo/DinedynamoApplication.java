@@ -12,9 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class DinedynamoApplication
 {
 	public static void main(String[] args) {
-
 		SpringApplication.run(DinedynamoApplication.class, args);
 		System.out.println("Hello, this application is up and running");
-		System.out.println(LocalDate.now());
 	}
 }
