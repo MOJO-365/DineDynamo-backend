@@ -17,4 +17,5 @@ public class ItemSale {
     private int totalQuantity;
     private double price;
     private double totalSales;
+
 }

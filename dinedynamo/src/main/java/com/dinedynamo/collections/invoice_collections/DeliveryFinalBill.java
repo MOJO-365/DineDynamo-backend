@@ -16,14 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@Document(collection = "delivery_final_bills")
+@Document(collection = "delivery-final-bills")
 public class DeliveryFinalBill {
 
     @Id
     private String deliveryBillId;
     private String restaurantId;
     private LocalDateTime datetime;
-    private String date;
+    private LocalDate date;
     private String customerPhone;
     private String customerAddress;
     private double totalAmount;

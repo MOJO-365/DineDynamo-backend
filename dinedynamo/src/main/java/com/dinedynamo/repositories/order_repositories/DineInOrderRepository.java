@@ -4,6 +4,7 @@ package com.dinedynamo.repositories.order_repositories;
 import com.dinedynamo.collections.order_collections.Order;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 

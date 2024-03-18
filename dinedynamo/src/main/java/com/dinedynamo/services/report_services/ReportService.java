@@ -5,6 +5,7 @@ import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.report_collections.ItemSale;
 import com.dinedynamo.collections.report_collections.OrderCounts;
+import com.dinedynamo.dto.report_dtos.DailySalesReport;
 import com.dinedynamo.repositories.invoice_repositories.DeliveryFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.TakeAwayFinalBillRepository;
@@ -42,10 +43,14 @@ public class ReportService {
 
 
 
-    public Map<String, Object> generateDailyOverallSalesReport(TakeAwayFinalBill takeAwayFinalBill) {
-        List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantIdAndDate(takeAwayFinalBill.getRestaurantId());
+    public DailySalesReport generateDailyOverallSalesReport(TakeAwayFinalBill takeAwayFinalBill) {
+        String restaurantId = takeAwayFinalBill.getRestaurantId();
+        LocalDate date = takeAwayFinalBill.getDate();
+
+        List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
 
         Map<String, ItemSale> itemSalesMap = new HashMap<>();
+        double totalRevenue = 0.0; // Initialize total revenue
         for (TakeAwayFinalBill order : takeAwayOrders) {
             for (OrderList orderItem : order.getOrderList()) {
                 String itemId = orderItem.getItemId();
@@ -58,11 +63,12 @@ public class ReportService {
                 itemSale.setTotalQuantity(itemSale.getTotalQuantity() + quantity);
                 itemSale.setTotalSales(itemSale.getTotalSales() + totalSales);
                 itemSalesMap.put(itemId, itemSale);
+
+                totalRevenue += totalSales; // Accumulate total sales for revenue calculation
             }
         }
 
-        Map<String, Object> report = new HashMap<>();
-        report.put("dailyTotalSales", new ArrayList<>(itemSalesMap.values()));
-        return report;
+        return new DailySalesReport(new ArrayList<>(itemSalesMap.values()), totalRevenue);
     }
+
 }

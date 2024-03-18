@@ -5,6 +5,7 @@ import com.dinedynamo.collections.order_collections.TakeAway;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -17,5 +18,5 @@ public interface TakeAwayFinalBillRepository extends MongoRepository<TakeAwayFin
     List<TakeAwayFinalBill> findByRestaurantId(String restaurantId);
 
     @Query("{ 'restaurantId' : ?0}")
-    List<TakeAwayFinalBill> findByRestaurantIdAndDate(String restaurantId);
+    List<TakeAwayFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);
 }

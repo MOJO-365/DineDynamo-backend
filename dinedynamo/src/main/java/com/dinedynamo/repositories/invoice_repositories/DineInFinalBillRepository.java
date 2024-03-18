@@ -12,9 +12,6 @@ public interface DineInFinalBillRepository extends MongoRepository<DineInFinalBi
 
     List<DineInFinalBill> findByRestaurantId(String restaurantId);
 
-    List<DineInFinalBill> findByRestaurantIdAndOrderListItemId(String restaurantId, String itemId);
-    OrderList findTopByRestaurantIdAndOrderListItemId(String restaurantId, String itemId);
-
     long countByRestaurantId(String restaurantId);
 
 

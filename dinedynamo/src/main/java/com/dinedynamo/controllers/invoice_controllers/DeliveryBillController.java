@@ -25,10 +25,7 @@ public class DeliveryBillController {
     @PostMapping("/dinedynamo/restaurant/orders/save/delivery-final-bill")
     public ResponseEntity<ApiResponse> saveDeliveryBill(@RequestBody DeliveryFinalBill deliveryFinalBill) {
         deliveryFinalBill.setDatetime(LocalDateTime.now());
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedDate = formatter.format(today);
-        deliveryFinalBill.setDate(formattedDate);
+        deliveryFinalBill.setDate(LocalDate.now());
         deliveryBillService.saveDeliveryBill(deliveryFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", deliveryFinalBill), HttpStatus.OK);
     }

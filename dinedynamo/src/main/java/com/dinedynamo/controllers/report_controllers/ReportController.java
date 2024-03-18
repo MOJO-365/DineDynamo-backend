@@ -6,6 +6,7 @@ import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.collections.report_collections.ItemSale;
 import com.dinedynamo.collections.report_collections.OrderCounts;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
+import com.dinedynamo.dto.report_dtos.DailySalesReport;
 import com.dinedynamo.services.report_services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,8 +40,9 @@ public class ReportController {
 
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
-    public ResponseEntity<Map<String, Object>> getDailyOverallSalesReport(@RequestBody TakeAwayFinalBill takeAwayFinalBill) {
-        Map<String, Object> report = reportService.generateDailyOverallSalesReport(takeAwayFinalBill);
-        return ResponseEntity.ok(report);
+    public ResponseEntity<DailySalesReport> getDailyOverallSalesReport(@RequestBody TakeAwayFinalBill takeAwayFinalBill) {
+        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(takeAwayFinalBill);
+        return ResponseEntity.ok(dailySalesReport);
     }
+
 }
