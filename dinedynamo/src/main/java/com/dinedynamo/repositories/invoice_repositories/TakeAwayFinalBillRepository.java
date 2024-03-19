@@ -16,7 +16,5 @@ public interface TakeAwayFinalBillRepository extends MongoRepository<TakeAwayFin
 
 
     List<TakeAwayFinalBill> findByRestaurantId(String restaurantId);
-
-    @Query("{ 'restaurantId' : ?0}")
     List<TakeAwayFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);
 }

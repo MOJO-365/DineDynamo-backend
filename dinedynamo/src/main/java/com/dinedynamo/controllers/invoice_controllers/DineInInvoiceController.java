@@ -91,13 +91,21 @@ public class DineInInvoiceController {
 
     private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            Document document = new Document();
+            float contentHeight = calculateContentHeight(order);
+            Document document = new Document(new Rectangle(PageSize.A6.getWidth(), contentHeight), 10, 10, 10, 10);
             PdfWriter.getInstance(document, outputStream);
 
             document.open();
 
             addOrderDetailsToPDF(document, order);
+            String websiteURL = "https://hello.com";
+            addQRCodeToPDF(document, websiteURL);
 
+            Paragraph web = new Paragraph("**THANK YOU FOR VISITING**", new Font(Font.FontFamily.COURIER, 10, Font.BOLD, BaseColor.BLACK));
+            web.setAlignment(Element.ALIGN_CENTER);
+            document.add(web);
+
+            document.close();
             document.close();
 
             return outputStream.toByteArray();
@@ -105,6 +113,47 @@ public class DineInInvoiceController {
     }
 
 
+    private float calculateContentHeight(Order order) {
+        float baseContentHeight = 200;
+        float orderDetailsHeight = calculateOrderDetailsHeight(order);
+        float thankYouHeight = calculateThankYouHeight();
+
+        float totalContentHeight;
+
+        if (orderDetailsHeight > 400) {
+            totalContentHeight = calculateTotalHeightWithIncreasedPageSize(baseContentHeight, orderDetailsHeight, thankYouHeight);
+        } else {
+            totalContentHeight = baseContentHeight + orderDetailsHeight + thankYouHeight;
+        }
+
+        return totalContentHeight;
+    }
+
+    private float calculateTotalHeightWithIncreasedPageSize(float baseContentHeight, float orderDetailsHeight, float thankYouHeight) {
+        int pageSize = 400;
+
+        switch (pageSize) {
+            case 400:
+                return baseContentHeight + orderDetailsHeight + thankYouHeight;
+
+            case 600:
+
+                float additionalHeight = 100;
+                return baseContentHeight + orderDetailsHeight + thankYouHeight + additionalHeight;
+
+            default:
+                return baseContentHeight + orderDetailsHeight + thankYouHeight;
+        }
+    }
+
+    private float calculateOrderDetailsHeight(Order order) {
+        return 250;
+    }
+
+    private float calculateThankYouHeight() {
+        float thankYouHeight = 130;
+        return thankYouHeight;
+    }
 
     private void addOrderDetailsToPDF(Document document, Order order) throws DocumentException {
         Font subtitleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 14);
