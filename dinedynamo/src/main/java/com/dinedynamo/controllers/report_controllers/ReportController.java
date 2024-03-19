@@ -34,10 +34,10 @@ public class ReportController {
 //        return ResponseEntity.ok(highestSellingItems);
 //    }
 //
-    @GetMapping("dinedynamo/reports/orders/total")
+    @PostMapping("/dinedynamo/reports/orders/total")
     public ResponseEntity<ApiResponse> getTotalOrdersCount(@RequestBody Restaurant restaurant) {
         OrderCounts orders = reportService.getTotalOrders(restaurant.getRestaurantId());
-        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", orders);
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "success", orders);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
