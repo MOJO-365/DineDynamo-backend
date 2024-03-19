@@ -100,4 +100,23 @@ public class PurchaseOrderService {
             return purchaseOrder;
         }
     }
+
+    public PurchaseOrder changeStatusToRequested(PurchaseOrder purchaseOrder){
+
+        purchaseOrder = purchaseOrderRepository.findById(purchaseOrder.getPurchaseOrderId()).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(purchaseOrder.getRestaurantEmail()).orElse(null);
+        if(purchaseOrder == null ){
+            System.out.println("NO SUCH PURCHASE ORDER FOUND IN DB");
+            throw new RuntimeException("No purchase order found in database");
+        }
+        if(restaurant == null){
+            System.out.println("RESTAURANT-ID NOT IN DB");
+            throw new RuntimeException("Restaurant not found in db");
+        }
+        else{
+            purchaseOrder.setStatus(PurchaseOrderStatus.REQUESTED);
+            purchaseOrderRepository.save(purchaseOrder);
+            return purchaseOrder;
+        }
+    }
 }
