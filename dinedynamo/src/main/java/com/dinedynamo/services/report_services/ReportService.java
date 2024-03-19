@@ -39,9 +39,10 @@ public class ReportService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public DailySalesReport generateDailyOverallSalesReport(String restaurantId, LocalDate date) {
+    public DailySalesReport generateDailyOverallSalesReport(String restaurantId) {
         List<ItemSale> itemSales = new ArrayList<>();
         double totalRevenue = 0.0;
+        LocalDate date = LocalDate.now(); // Assuming today's date, you can customize this as needed
 
         List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (TakeAwayFinalBill order : takeAwayOrders) {

@@ -42,8 +42,7 @@ public class ReportController {
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
     public ResponseEntity<DailySalesReport> getDailyOverallSalesReport(@RequestBody DailyOverallSalesRequest request) {
-        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(request.getRestaurantId(), request.getDate());
+        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(request.getRestaurantId());
         return ResponseEntity.ok(dailySalesReport);
     }
-
 }
