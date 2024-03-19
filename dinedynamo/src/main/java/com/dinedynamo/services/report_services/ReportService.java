@@ -7,6 +7,7 @@ import com.dinedynamo.collections.menu_collections.Category;
 import com.dinedynamo.collections.menu_collections.MenuItem;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.report_collections.ItemSale;
+import com.dinedynamo.collections.report_collections.OrderCounts;
 import com.dinedynamo.dto.report_dtos.DailySalesReport;
 import com.dinedynamo.dto.report_dtos.OrderType;
 import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
@@ -38,6 +39,15 @@ public class ReportService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+
+    public OrderCounts getTotalOrders(String restaurantId) {
+        long totalDineInOrders = dineInFinalBillRepository.countByRestaurantId(restaurantId);
+        long totalDeliveryOrders = deliveryFinalBillRepository.countByRestaurantId(restaurantId);
+        long totalTakeAwayOrders =  takeAwayFinalBillRepository.countByRestaurantId(restaurantId);
+
+        return new OrderCounts(totalDineInOrders, totalDeliveryOrders, totalTakeAwayOrders);
+    }
 
     public DailySalesReport generateDailyOverallSalesReport(String restaurantId) {
         List<ItemSale> itemSales = new ArrayList<>();

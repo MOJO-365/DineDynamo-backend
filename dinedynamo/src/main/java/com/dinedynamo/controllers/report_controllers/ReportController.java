@@ -34,12 +34,12 @@ public class ReportController {
 //        return ResponseEntity.ok(highestSellingItems);
 //    }
 //
-//    @GetMapping("dinedynamo/reports/orders/total")
-//    public ResponseEntity<ApiResponse> getTotalOrdersCount(@RequestBody Restaurant restaurant) {
-//        OrderCounts orders = reportService.getTotalOrders(restaurant.getRestaurantId());
-//        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", orders);
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @GetMapping("dinedynamo/reports/orders/total")
+    public ResponseEntity<ApiResponse> getTotalOrdersCount(@RequestBody Restaurant restaurant) {
+        OrderCounts orders = reportService.getTotalOrders(restaurant.getRestaurantId());
+        ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", orders);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
     public ResponseEntity<DailySalesReport> getDailyOverallSalesReport(@RequestBody DailyOverallSalesRequest request) {
