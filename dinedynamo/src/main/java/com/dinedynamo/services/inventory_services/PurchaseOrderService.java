@@ -88,10 +88,7 @@ public class PurchaseOrderService {
             System.out.println("NO SUCH PURCHASE ORDER FOUND IN DB");
             throw new RuntimeException("No purchase order found in database");
         }
-        if(restaurant == null){
-            System.out.println("RESTAURANT-ID NOT IN DB");
-            throw new RuntimeException("Restaurant not found in db");
-        }
+
         else{
 
             emailService.sendMailForCancelPurchaseOrder(purchaseOrder, restaurant.getRestaurantName());
