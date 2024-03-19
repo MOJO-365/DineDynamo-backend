@@ -101,7 +101,7 @@ public class PurchaseOrderService {
     public PurchaseOrder changeStatusToRequested(PurchaseOrder purchaseOrder){
 
         purchaseOrder = purchaseOrderRepository.findById(purchaseOrder.getPurchaseOrderId()).orElse(null);
-        Restaurant restaurant = restaurantRepository.findById(purchaseOrder.getRestaurantEmail()).orElse(null);
+        //Restaurant restaurant = restaurantRepository.findById(purchaseOrder.getRestaurantEmail()).orElse(null);
         if(purchaseOrder == null ){
             System.out.println("NO SUCH PURCHASE ORDER FOUND IN DB");
             throw new RuntimeException("No purchase order found in database");
