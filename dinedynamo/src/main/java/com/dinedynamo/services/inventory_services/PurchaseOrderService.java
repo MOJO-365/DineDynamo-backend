@@ -96,7 +96,7 @@ public class PurchaseOrderService {
 
             emailService.sendMailForCancelPurchaseOrder(purchaseOrder, restaurant.getRestaurantName());
             purchaseOrder.setStatus(PurchaseOrderStatus.CANCELLED);
-            purchaseOrderRepository.save(purchaseOrder);
+            purchaseOrderRepository.delete(purchaseOrder);
             return purchaseOrder;
         }
     }
