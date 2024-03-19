@@ -55,7 +55,6 @@ public class ReportService {
         List<ItemSale> itemSales = new ArrayList<>();
         double totalRevenue = 0.0;
 
-        // Fetch TakeAway orders
         List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (TakeAwayFinalBill order : takeAwayOrders) {
             if (order.getDate().isEqual(date)) { // Check if dates match
@@ -63,7 +62,6 @@ public class ReportService {
             }
         }
 
-        // Fetch DineIn orders
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (DineInFinalBill order : dineInOrders) {
             if (order.getDate().isEqual(date)) { // Check if dates match
@@ -71,7 +69,6 @@ public class ReportService {
             }
         }
 
-        // Fetch Delivery orders
         List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (DeliveryFinalBill order : deliveryOrders) {
             if (order.getDate().isEqual(date)) { // Check if dates match
@@ -79,12 +76,10 @@ public class ReportService {
             }
         }
 
-        // Calculate total revenue
         for (ItemSale sale : itemSales) {
             totalRevenue += sale.getTotalSales();
         }
 
-        // Create and return DailySalesReport
         return new DailySalesReport(itemSales, totalRevenue);
     }
 
@@ -96,11 +91,9 @@ public class ReportService {
             int quantity = orderItem.getQty();
             double totalSales = itemPrice * quantity;
 
-            // Check if the item already exists in itemSales
             boolean itemExists = false;
             for (ItemSale sale : itemSales) {
                 if (sale.getItemName().equals(itemName) && sale.getPrice() == itemPrice) {
-                    // Update the quantity and total sales for the existing item
                     sale.setTotalQuantity(sale.getTotalQuantity() + quantity);
                     sale.setTotalSales(sale.getTotalSales() + totalSales);
                     itemExists = true;
@@ -108,7 +101,6 @@ public class ReportService {
                 }
             }
 
-            // If the item doesn't exist, add it to itemSales
             if (!itemExists) {
                 MenuItem menuItem = menuItemRepository.findById(itemId).orElse(null);
                 if (menuItem != null) {
@@ -123,7 +115,6 @@ public class ReportService {
             }
         }
     }
-
 
 
     public List<TopItem> getTopFiveItems(String restaurantId) {
@@ -141,13 +132,11 @@ public class ReportService {
             processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
         }
 
-        // Fetch Delivery orders
         List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantId(restaurantId);
         for (DeliveryFinalBill order : deliveryOrders) {
             processOrder(order.getOrderList(), order.getDate(), OrderType.DELIVERY, itemSales);
         }
 
-        // Group item sales by item name and sum the total sales
         List<TopItem> topItems = itemSales.stream()
                 .collect(Collectors.groupingBy(ItemSale::getItemName,
                         Collectors.summingDouble(ItemSale::getTotalSales)))
@@ -155,16 +144,18 @@ public class ReportService {
                 .map(entry -> new TopItem(entry.getKey(), entry.getValue(), 0))
                 .collect(Collectors.toList());
 
-        // Sort the topItems list by total sales in descending order
         topItems.sort(Comparator.comparingDouble(TopItem::getTotalSales).reversed());
 
-        // Set ranks for the top five items
         for (int i = 0; i < topItems.size() && i < 5; i++) {
             topItems.get(i).setRank(i + 1);
         }
 
         return topItems.stream().limit(5).collect(Collectors.toList());
     }
+
+
+
+
 
 
 
