@@ -11,6 +11,7 @@ import com.dinedynamo.collections.report_collections.OrderCounts;
 import com.dinedynamo.dto.report_dtos.DailySalesReport;
 import com.dinedynamo.dto.report_dtos.OrderType;
 import com.dinedynamo.dto.report_dtos.TopItem;
+import com.dinedynamo.dto.report_dtos.TotalSalesReport;
 import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.DeliveryFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.TakeAwayFinalBillRepository;
@@ -57,21 +58,21 @@ public class ReportService {
 
         List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (TakeAwayFinalBill order : takeAwayOrders) {
-            if (order.getDate().isEqual(date)) { // Check if dates match
+            if (order.getDate().isEqual(date)) {
                 processOrder(order.getOrderList(), order.getDate(), OrderType.TAKEAWAY, itemSales);
             }
         }
 
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (DineInFinalBill order : dineInOrders) {
-            if (order.getDate().isEqual(date)) { // Check if dates match
+            if (order.getDate().isEqual(date)) {
                 processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
             }
         }
 
         List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (DeliveryFinalBill order : deliveryOrders) {
-            if (order.getDate().isEqual(date)) { // Check if dates match
+            if (order.getDate().isEqual(date)) {
                 processOrder(order.getOrderList(), order.getDate(), OrderType.DELIVERY, itemSales);
             }
         }
@@ -93,13 +94,14 @@ public class ReportService {
 
             boolean itemExists = false;
             for (ItemSale sale : itemSales) {
-                if (sale.getItemName().equals(itemName) && sale.getPrice() == itemPrice) {
+                if (sale.getItemName().equals(itemName) && sale.getPrice() == itemPrice && sale.getOrderType() == orderType) {
                     sale.setTotalQuantity(sale.getTotalQuantity() + quantity);
                     sale.setTotalSales(sale.getTotalSales() + totalSales);
                     itemExists = true;
                     break;
                 }
             }
+
 
             if (!itemExists) {
                 MenuItem menuItem = menuItemRepository.findById(itemId).orElse(null);
@@ -154,10 +156,50 @@ public class ReportService {
     }
 
 
+    public TotalSalesReport getTotalSalesReport(String restaurantId) {
+        double totalDineInSales = getTotalSalesByOrderType(restaurantId, OrderType.DINE_IN);
+        double totalDeliverySales = getTotalSalesByOrderType(restaurantId, OrderType.DELIVERY);
+        double totalTakeAwaySales = getTotalSalesByOrderType(restaurantId, OrderType.TAKEAWAY);
 
+        return new TotalSalesReport(totalDineInSales, totalDeliverySales, totalTakeAwaySales);
+    }
 
+    private double getTotalSalesByOrderType(String restaurantId, OrderType orderType) {
+        double totalSales = 0.0;
 
+        switch (orderType) {
+            case DINE_IN:
+                List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantId(restaurantId);
+                for (DineInFinalBill order : dineInOrders) {
+                    totalSales += calculateTotalSales(order.getOrderList());
+                }
+                break;
+            case DELIVERY:
+                List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantId(restaurantId);
+                for (DeliveryFinalBill order : deliveryOrders) {
+                    totalSales += calculateTotalSales(order.getOrderList());
+                }
+                break;
+            case TAKEAWAY:
+                List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantId(restaurantId);
+                for (TakeAwayFinalBill order : takeAwayOrders) {
+                    totalSales += calculateTotalSales(order.getOrderList());
+                }
+                break;
+            default:
+                break;
+        }
 
+        return totalSales;
+    }
+
+    private double calculateTotalSales(List<OrderList> orderList) {
+        double totalSales = 0.0;
+        for (OrderList orderItem : orderList) {
+            totalSales += orderItem.getItemPrice() * orderItem.getQty();
+        }
+        return totalSales;
+    }
 
 
 }
