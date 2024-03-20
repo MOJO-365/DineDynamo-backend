@@ -122,13 +122,11 @@ public class ReportService {
     public List<TopItem> getTopFiveItems(String restaurantId) {
         List<ItemSale> itemSales = new ArrayList<>();
 
-        // Fetch TakeAway orders
         List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantId(restaurantId);
         for (TakeAwayFinalBill order : takeAwayOrders) {
             processOrder(order.getOrderList(), order.getDate(), OrderType.TAKEAWAY, itemSales);
         }
 
-        // Fetch DineIn orders
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantId(restaurantId);
         for (DineInFinalBill order : dineInOrders) {
             processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
