@@ -65,6 +65,8 @@ public class EmailService {
     public boolean sendMailForPurchaseOrder(PurchaseOrder purchaseOrder, String restaurantName){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setSubject("Purchase Order from: "+restaurantName);
+        System.out.println("SUPPLIER DETAILS: "+purchaseOrder.getSupplierDetails());
+        System.out.println("MAIL ID OF SUPPLIER: "+purchaseOrder.getSupplierDetails().getSupplierEmailId());
         message.setTo(purchaseOrder.getSupplierDetails().getSupplierEmailId());
 
         String emailContent = "Purchase order details: "+ "\n"

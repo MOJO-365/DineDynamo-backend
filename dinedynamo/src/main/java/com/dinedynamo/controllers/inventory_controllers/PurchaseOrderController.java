@@ -32,6 +32,7 @@ public class PurchaseOrderController
     @PostMapping("/dinedynamo/restaurant/inventory/purchase-orders/purchase-order-request")
     public ResponseEntity<ApiResponse> raiseTicketForPurchaseOrder(@RequestBody PurchaseOrder purchaseOrder){
 
+        System.out.println("CREATE PURCHASE ORDER REQ: "+purchaseOrder);
         purchaseOrder = purchaseOrderService.save(purchaseOrder);
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",purchaseOrder),HttpStatus.OK);
