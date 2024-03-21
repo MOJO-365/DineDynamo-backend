@@ -23,7 +23,7 @@ public class DineInFinalBill {
     private String dineInBillId;
     private String restaurantId;
     private String tableId;
-    private String date;
+    private LocalDate date;
     private LocalDateTime datetime;
     private double totalAmount;
     private List<OrderList> orderList;

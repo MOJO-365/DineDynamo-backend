@@ -30,8 +30,7 @@ public class DineInBillController {
     @PostMapping("/dinedynamo/restaurant/orders/save/dinein-final-bill")
     public ResponseEntity<ApiResponse> saveDineInBill(@RequestBody DineInFinalBill dineInFinalBill) {
         dineInFinalBill.setDatetime(LocalDateTime.now());
-        String formattedDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        dineInFinalBill.setDate(formattedDate);
+        dineInFinalBill.setDate(LocalDate.now());
         dineInBillService.saveDineInBill(dineInFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", dineInFinalBill), HttpStatus.OK);
     }

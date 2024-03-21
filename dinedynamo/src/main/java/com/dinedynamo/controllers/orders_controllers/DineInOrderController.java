@@ -73,6 +73,20 @@ public class DineInOrderController {
         }
     }
 
+
+    @DeleteMapping("/dinedynamo/restaurant/orders/deleteByTableId")
+    public ResponseEntity<ApiResponse> deleteOrdersByTableId(@RequestBody Order order) {
+        List<Order> orders = orderRepository.findByTableId(order.getTableId());
+
+        if (!orders.isEmpty()) {
+            orderRepository.deleteAll(orders);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Orders associated with table ID " + order.getTableId() + " deleted successfully", "success"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for table ID " + order.getTableId(), "failure"), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     // Update order using orderId
     @PostMapping("/dinedynamo/restaurant/dinein/update")
     public ResponseEntity<ApiResponse> updateOrder(@RequestBody Order updatedOrder) {
