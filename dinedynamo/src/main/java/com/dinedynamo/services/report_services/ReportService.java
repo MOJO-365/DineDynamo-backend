@@ -66,7 +66,7 @@ public class ReportService {
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (DineInFinalBill order : dineInOrders) {
             if (order.getDate().isEqual(date)) {
-                processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
+                processOrder(order.getOrderList(), order.getDate(), OrderType.DINEIN, itemSales);
             }
         }
 
@@ -129,7 +129,7 @@ public class ReportService {
 
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantId(restaurantId);
         for (DineInFinalBill order : dineInOrders) {
-            processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
+            processOrder(order.getOrderList(), order.getDate(), OrderType.DINEIN, itemSales);
         }
 
         List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantId(restaurantId);
@@ -155,7 +155,7 @@ public class ReportService {
 
 
     public TotalSalesReport getTotalSalesReport(String restaurantId) {
-        double totalDineInSales = getTotalSalesByOrderType(restaurantId, OrderType.DINE_IN);
+        double totalDineInSales = getTotalSalesByOrderType(restaurantId, OrderType.DINEIN);
         double totalDeliverySales = getTotalSalesByOrderType(restaurantId, OrderType.DELIVERY);
         double totalTakeAwaySales = getTotalSalesByOrderType(restaurantId, OrderType.TAKEAWAY);
 
@@ -166,7 +166,7 @@ public class ReportService {
         double totalSales = 0.0;
 
         switch (orderType) {
-            case DINE_IN:
+            case DINEIN:
                 List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantId(restaurantId);
                 for (DineInFinalBill order : dineInOrders) {
                     totalSales += calculateTotalSales(order.getOrderList());
