@@ -240,6 +240,7 @@ public class ReportService {
                 .sum();
     }
 
+
     public List<DailySalesReport> generateReportsForDateRange(String restaurantId, LocalDate fromDate, LocalDate toDate) {
         List<DailySalesReport> reports = new ArrayList<>();
 
@@ -248,9 +249,19 @@ public class ReportService {
             reports.add(report);
         }
 
-        return reports;
-    }
+        List<ItemSale> mergedItemSales = new ArrayList<>();
+        double totalRevenue = 0.0;
+        for (DailySalesReport report : reports) {
+            mergedItemSales.addAll(report.getItemSales());
+            totalRevenue += report.getTotalRevenue();
+        }
 
+        DailySalesReport mergedReport = new DailySalesReport(mergedItemSales, totalRevenue);
+        List<DailySalesReport> mergedReports = new ArrayList<>();
+        mergedReports.add(mergedReport);
+
+        return mergedReports;
+    }
 
 
 }
