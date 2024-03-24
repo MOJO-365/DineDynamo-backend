@@ -5,15 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyOverallSalesRequest {
-    private String restaurantId;
-    private LocalDate date;
+public class RevenueAndReports {
 
+    private double totalRevenue;
+    private List<DailySalesReport> dailyReports;
 }

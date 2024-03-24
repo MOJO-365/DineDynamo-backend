@@ -3,10 +3,7 @@ package com.dinedynamo.controllers.report_controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.report_collections.OrderCounts;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.dto.report_dtos.DailyOverallSalesRequest;
-import com.dinedynamo.dto.report_dtos.DailySalesReport;
-import com.dinedynamo.dto.report_dtos.TopItem;
-import com.dinedynamo.dto.report_dtos.TotalSalesReport;
+import com.dinedynamo.dto.report_dtos.*;
 import com.dinedynamo.services.report_services.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +25,7 @@ public class ReportController {
     if (orders != null) {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
     } else {
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the given restaurant", "failure"), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the given restaurant", "failure"), HttpStatus.OK);
     }
    }
 
@@ -40,7 +37,7 @@ public class ReportController {
         if (dailySalesReport != null && !dailySalesReport.getItemSales().isEmpty()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", dailySalesReport), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.OK);
         }
     }
 
@@ -52,7 +49,7 @@ public class ReportController {
         if (topItems != null && !topItems.isEmpty()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", topItems), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.OK);
         }
     }
 
@@ -64,7 +61,33 @@ public class ReportController {
         if (totalSalesReport != null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", totalSalesReport), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No sales data found", "failure"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No sales data found", "failure"), HttpStatus.OK);
         }
     }
+
+
+
+    @PostMapping("/dinedynamo/report/last-five-days-sales")
+    public ResponseEntity<ApiResponse> getLastFiveDaysSales(@RequestBody Restaurant restaurant) {
+        LastFiveDaysSalesReport lastFiveDaysSalesReport = reportService.getLastFiveDaysSales(restaurant.getRestaurantId());
+
+        if (lastFiveDaysSalesReport != null && !lastFiveDaysSalesReport.getLastFiveDaysSales().isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", lastFiveDaysSalesReport), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No reports found for the last five days", "failure"), HttpStatus.OK);
+        }
+    }
+
+
+    @PostMapping("/dinedynamo/report/date-range")
+    public ResponseEntity<ApiResponse> getReportsForDateRange(@RequestBody DateRangeRequest request) {
+        List<DailySalesReport> reports = reportService.generateReportsForDateRange(request.getRestaurantId(), request.getFromDate(), request.getToDate());
+
+        if (reports != null && !reports.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", reports), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No reports found for the given date range", "failure"), HttpStatus.OK);
+        }
+    }
+
 }

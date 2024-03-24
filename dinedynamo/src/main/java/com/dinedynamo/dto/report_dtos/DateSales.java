@@ -7,13 +7,11 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyOverallSalesRequest {
-    private String restaurantId;
+public class DateSales {
     private LocalDate date;
-
+    private double totalSales;
 }

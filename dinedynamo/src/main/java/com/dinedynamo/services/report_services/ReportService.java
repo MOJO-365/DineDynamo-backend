@@ -8,10 +8,7 @@ import com.dinedynamo.collections.menu_collections.MenuItem;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.report_collections.ItemSale;
 import com.dinedynamo.collections.report_collections.OrderCounts;
-import com.dinedynamo.dto.report_dtos.DailySalesReport;
-import com.dinedynamo.dto.report_dtos.OrderType;
-import com.dinedynamo.dto.report_dtos.TopItem;
-import com.dinedynamo.dto.report_dtos.TotalSalesReport;
+import com.dinedynamo.dto.report_dtos.*;
 import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.DeliveryFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.TakeAwayFinalBillRepository;
@@ -66,7 +63,7 @@ public class ReportService {
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
         for (DineInFinalBill order : dineInOrders) {
             if (order.getDate().isEqual(date)) {
-                processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
+                processOrder(order.getOrderList(), order.getDate(), OrderType.DINEIN, itemSales);
             }
         }
 
@@ -129,7 +126,7 @@ public class ReportService {
 
         List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantId(restaurantId);
         for (DineInFinalBill order : dineInOrders) {
-            processOrder(order.getOrderList(), order.getDate(), OrderType.DINE_IN, itemSales);
+            processOrder(order.getOrderList(), order.getDate(), OrderType.DINEIN, itemSales);
         }
 
         List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantId(restaurantId);
@@ -155,7 +152,7 @@ public class ReportService {
 
 
     public TotalSalesReport getTotalSalesReport(String restaurantId) {
-        double totalDineInSales = getTotalSalesByOrderType(restaurantId, OrderType.DINE_IN);
+        double totalDineInSales = getTotalSalesByOrderType(restaurantId, OrderType.DINEIN);
         double totalDeliverySales = getTotalSalesByOrderType(restaurantId, OrderType.DELIVERY);
         double totalTakeAwaySales = getTotalSalesByOrderType(restaurantId, OrderType.TAKEAWAY);
 
@@ -166,7 +163,7 @@ public class ReportService {
         double totalSales = 0.0;
 
         switch (orderType) {
-            case DINE_IN:
+            case DINEIN:
                 List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantId(restaurantId);
                 for (DineInFinalBill order : dineInOrders) {
                     totalSales += calculateTotalSales(order.getOrderList());
@@ -198,6 +195,62 @@ public class ReportService {
         }
         return totalSales;
     }
+
+
+    public LastFiveDaysSalesReport getLastFiveDaysSales(String restaurantId) {
+        LocalDate today = LocalDate.now();
+        LocalDate fiveDaysAgo = today.minusDays(5);
+
+        List<DateSales> lastFiveDaysSales = new ArrayList<>();
+
+        for (LocalDate date = today.minusDays(1); !date.isBefore(fiveDaysAgo); date = date.minusDays(1)) {
+            if (!date.isEqual(today))
+            {
+                double totalSales = getTotalSalesForDate(restaurantId, date);
+                lastFiveDaysSales.add(new DateSales(date, totalSales));
+            }
+        }
+
+        return new LastFiveDaysSalesReport(lastFiveDaysSales);
+    }
+
+
+    private double getTotalSalesForDate(String restaurantId, LocalDate date) {
+        double totalSales = 0.0;
+
+        totalSales += getTotalSalesForDate(dineInFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date));
+        totalSales += getTotalSalesForDate(deliveryFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date));
+        totalSales += getTotalSalesForDate(takeAwayFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date));
+
+        return totalSales;
+    }
+
+    private double getTotalSalesForDate(List<? extends Object> salesReports) {
+        return salesReports.stream()
+                .mapToDouble(order -> {
+                    if (order instanceof DineInFinalBill) {
+                        return calculateTotalSales(((DineInFinalBill) order).getOrderList());
+                    } else if (order instanceof DeliveryFinalBill) {
+                        return calculateTotalSales(((DeliveryFinalBill) order).getOrderList());
+                    } else if (order instanceof TakeAwayFinalBill) {
+                        return calculateTotalSales(((TakeAwayFinalBill) order).getOrderList());
+                    }
+                    return 0.0;
+                })
+                .sum();
+    }
+
+    public List<DailySalesReport> generateReportsForDateRange(String restaurantId, LocalDate fromDate, LocalDate toDate) {
+        List<DailySalesReport> reports = new ArrayList<>();
+
+        for (LocalDate date = fromDate; !date.isAfter(toDate); date = date.plusDays(1)) {
+            DailySalesReport report = generateDailyOverallSalesReport(restaurantId, date);
+            reports.add(report);
+        }
+
+        return reports;
+    }
+
 
 
 }
