@@ -25,17 +25,17 @@ public class WastageLogService {
     @Autowired
     RawMaterialService rawMaterialService;
 
-    boolean isRequestValid(WastageLog wastageLog){
-
-        if(wastageLog.getRawMaterialId() == null || wastageLog.getRawMaterialId().equals(" ") || wastageLog.getRawMaterialId().equals(" ")
-                || wastageLog.getRestaurantId().equals(" ") || wastageLog.getRestaurantId().equals(" ")
-                 || wastageLog.getWastedQuantity() == 0.0
-        ){
-
-            return false;
-        }
-        return true;
-    }
+//    boolean isRequestValid(WastageLog wastageLog){
+//
+//        if(wastageLog.getRawMaterialId() == null || wastageLog.getRawMaterialId().equals(" ") || wastageLog.getRawMaterialId().equals(" ")
+//                || wastageLog.getRestaurantId().equals(" ") || wastageLog.getRestaurantId().equals(" ")
+//                 || wastageLog.getWastedQuantity() == 0.0
+//        ){
+//
+//            return false;
+//        }
+//        return true;
+//    }
 
 
     @Transactional

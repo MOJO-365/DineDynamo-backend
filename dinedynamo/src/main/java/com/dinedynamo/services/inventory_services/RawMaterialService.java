@@ -43,17 +43,17 @@ public class RawMaterialService {
     RestaurantRepository restaurantRepository;
 
 
-    boolean isRequestValid(RawMaterial rawMaterial){
-
-        if(rawMaterial.getRestaurantId().equals(" ") || rawMaterial.getRestaurantId().equals(" ")
-                || rawMaterial.getRestaurantId() == null || rawMaterial.getReorderLevel() == 0.0 || rawMaterial.getCurrentLevel() == 0.0
-        ){
-
-            System.out.println("NO RESTAURANT ID OR NO CURRENT/REORDER LEVEL FOUND IN REQUEST");
-            return false;
-        }
-        return true;
-    }
+//    boolean isRequestValid(RawMaterial rawMaterial){
+//
+//        if(rawMaterial.getRestaurantId().equals(" ") || rawMaterial.getRestaurantId().equals(" ")
+//                || rawMaterial.getRestaurantId() == null || rawMaterial.getReorderLevel() == 0.0 || rawMaterial.getCurrentLevel() == 0.0
+//        ){
+//
+//            System.out.println("NO RESTAURANT ID OR NO CURRENT/REORDER LEVEL FOUND IN REQUEST");
+//            return false;
+//        }
+//        return true;
+//    }
 
     public RawMaterialDTO save(RawMaterial rawMaterial){
 
@@ -128,6 +128,7 @@ public class RawMaterialService {
 
     @Transactional
     public RawMaterialDTO addUsage(String rawMaterialId, double amountUsed){
+
 
         RawMaterial rawMaterial = rawMaterialRepository.findById(rawMaterialId).orElse(null);
         if(rawMaterial == null){
