@@ -28,8 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
 
     String tokenFromRequest=null;
 
-    String userEmail;
-    String userRole;
+    String userEmail=null;
+    String userRole=null;
 
 
 
@@ -38,8 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
 
         tokenFromRequest = request.getHeader("Authorization");
 
-
         if (tokenFromRequest != null && tokenFromRequest.startsWith("Bearer ")) {
+
+            System.out.println("TOKEN FROM REQ: "+tokenFromRequest);
             tokenFromRequest = tokenFromRequest.substring(7);
             //username = jwtService.extractUsername(token);
 
@@ -55,14 +56,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
         if (userEmail != null && userRole != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             System.out.println("USER ROLE IS: "+userRole);
+            System.out.println("USER EMAIL IS: "+userEmail);
             userDetailsServiceImpl.setUserRole(userRole);
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userEmail);
+            System.out.println("USER DETAILS: "+userDetails);
 
-            if (jwtHelper.validateToken(tokenFromRequest, userDetails)) {
+            if (tokenFromRequest!= null && jwtHelper.validateToken(tokenFromRequest, userDetails)) {
+                System.out.println("IF BLOCK");
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("Reached here......");
             }
+
+
         }
         System.out.println("FILTER PASSED");
         filterChain.doFilter(request, response);

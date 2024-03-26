@@ -36,11 +36,13 @@ public class SecurityConfig
     private static final String[] AUTH_WHITELIST = {
 
             "/dinedynamo/**",
-            "/dinedynamo/restaurant/menu/getmenu",
-            "/dinedynamo/signupcustomer",
-            "/dinedynamo/signuprestaurant",
-            "/dinedynamo/refreshtoken",
+            "/dinedynamo/auth/signin",
             "/dinedynamo/signin",
+//            "/dinedynamo/restaurant/menu/getmenu",
+//            "/dinedynamo/signupcustomer",
+//            "/dinedynamo/signuprestaurant",
+            "/dinedynamo/refreshtoken",
+//            "/dinedynamo/signin",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",

@@ -74,12 +74,40 @@ public class SignInController
 //            throw new UsernameNotFoundException("invalid user request !");
 //        }
 //    }
-//
+
+
+    @PostMapping("/dinedynamo/auth/signin")
+    public ResponseEntity<ApiResponse> signInWithJWT(@RequestBody SignInRequestBody signInRequestBody) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        String token = null;
+        String userRole = null;
+        AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
+        boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
+
+        if(appUser == null){
+            throw new RuntimeException("App user not found in DB");
+        }
+
+        if(!isUserAuthenticated){
+            System.out.println("WRONG USERNAME OR PASSWORD");
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
+        }
+        else{
+            userRole = appUser.getUserType();
+            this.userDetailsServiceImpl.setUserRole(userRole);
+            System.out.println("In SignIn controller: USER AUTHENTICATED, NOW TOKEN WILL BE GENERATED");
+            userDetails = this.userDetailsServiceImpl.loadUserByUsername(signInRequestBody.getUserEmail());
+            System.out.println("USER-EMAIL: "+userDetails.getUsername());
+            token = jwtHelper.generateToken(userDetails,signInRequestBody);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",token),HttpStatus.OK);
+        }
+
+    }
 
     @PostMapping("/dinedynamo/signin")
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestBody signInRequestBody) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
+
 
         boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
 
@@ -90,74 +118,19 @@ public class SignInController
         else{
             appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",appUser),HttpStatus.OK);
+
+
         }
 
-
-
-//        if(userRole.toLowerCase().equals("restaurant")){
-//
-//            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
-//
-//            if(restaurant!=null  && restaurant.getRestaurantPassword().equals(userPassword)){
-//
-//                restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
-//                ApiResponse apiResponse = new ApiResponse();
-//                apiResponse.setMessage("success");
-//                apiResponse.setStatus(HttpStatus.OK);
-//                apiResponse.setData(restaurant);
-//
-//                return new ResponseEntity<ApiResponse>(apiResponse,HttpStatus.OK);
-//
-//            }
-//
-//            System.out.println("IN SIGNIN CONTROLLER: INVALID RESTAURANT CREDENTIALS: WRONG USERNAME/PASSWORD");
-//            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
-//
-//
-//        }
-//        else if (userRole.toLowerCase().equals("customer")) {
-//
-//            Customer customer = customerRepository.findByCustomerEmail(signInRequestBody.getUserEmail()).orElse(null);
-//
-//
-//            if(customer!=null && customer.getCustomerPassword().equals(userPassword)){
-//
-//
-//                customer = customerRepository.findByCustomerEmail(signInRequestBody.getUserEmail()).orElse(null);
-//                ApiResponse apiResponse = new ApiResponse();
-//                apiResponse.setMessage("success");
-//                apiResponse.setStatus(HttpStatus.OK);
-//                apiResponse.setData(customer);
-//
-//                return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
-//            }
-//
-//            System.out.println("IN SIGNIN CONTROLLER: INVALID CUSTOMER CREDENTIALS: WRONG USERNAME/PASSWORD");
-//            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
-//
-//        }
-//        else {
-//
-//            boolean isUserAutheticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword(), signInRequestBody.getUserType());
-//
-//            if(!isUserAutheticated){
-//                return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success"),HttpStatus.OK);
-//            }
-//            else {
-//                AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
-//
-//                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", appUser),HttpStatus.OK);
-//            }
-//        }
 
 /////////////////////////////////////
 //        String token = null;
 //
 //        if(signInRequestBody.getUserType().toUpperCase().equals("RESTAURANT")){
 //
-//            boolean isAutheticated = authenticateRestaurantSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
+//            boolean isAuthenticated = authenticateRestaurantSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
 //
-//            if(!isAutheticated){
+//            if(!isAuthenticated){
 //                System.out.println("USER-EMAIL AND PASSWORD OF RESTAURANT ARE INCORRECT - AUTHENTICATION FAILED");
 //                throw new UsernameNotFoundException("invalid user request !");
 //            }
@@ -211,29 +184,7 @@ public class SignInController
 
 
 
-    private boolean authenticateCustomerSignIn(String userEmail, String userPassword){
 
-        return true;
-//        Customer customer = customerRepository.findByCustomerEmail(userEmail).orElse(null);
-//
-//        if(customer == null){
-//            System.out.println("CUSTOMER DOES NOT EXIST IN THE DB, AUTHENTICATION FAILED");
-//            return false;
-//
-//        }
-//
-//        String userPasswordFromDB = customer.getCustomerPassword();
-//
-//        if(userPasswordFromDB.equals(userPassword)){
-//            //Customer customer = customerRepository.findItemByCustomerEmail(userEmail).orElse(null);
-////            if(customer == null){
-////                System.out.println("User data exists in 'users' collection but not in 'customer' collection");
-////                return false;
-////            }
-//            return true;
-//        }
-//        return false;
-    }
 
     private boolean authenticateAppUserSignIn(String userEmail, String userPassword){
 
