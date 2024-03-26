@@ -26,6 +26,7 @@ public class DeliveryBillController {
     public ResponseEntity<ApiResponse> saveDeliveryBill(@RequestBody DeliveryFinalBill deliveryFinalBill) {
         deliveryFinalBill.setDatetime(LocalDateTime.now());
         deliveryFinalBill.setDate(LocalDate.now());
+        deliveryFinalBill.setOrderType("Delivery");
         deliveryBillService.saveDeliveryBill(deliveryFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", deliveryFinalBill), HttpStatus.OK);
     }

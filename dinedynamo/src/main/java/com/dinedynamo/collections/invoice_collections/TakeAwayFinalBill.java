@@ -28,10 +28,10 @@ public class TakeAwayFinalBill {
     private String customerName;
     private String customerEmail;
     private boolean pickedUp;
+    private String orderType;
     private double totalAmount;
     private List<OrderList> orderList;
 }
 
 
 //private String paymentMode;
-//private String orderType;

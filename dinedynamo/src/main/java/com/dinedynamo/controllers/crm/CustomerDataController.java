@@ -13,12 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CustomerDataController {
 
-    private final CustomerDataService customerDataService;
-
     @Autowired
-    public CustomerDataController(CustomerDataService customerDataService) {
-        this.customerDataService = customerDataService;
-    }
+    private  CustomerDataService customerDataService;
 
     @PostMapping("/dinedynamo/crm/fetch")
     public CustomerDataResponse fetchCustomerData(@RequestBody Restaurant restaurant) {
