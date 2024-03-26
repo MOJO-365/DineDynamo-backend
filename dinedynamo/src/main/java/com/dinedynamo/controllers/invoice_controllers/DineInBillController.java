@@ -31,6 +31,7 @@ public class DineInBillController {
     public ResponseEntity<ApiResponse> saveDineInBill(@RequestBody DineInFinalBill dineInFinalBill) {
         dineInFinalBill.setDatetime(LocalDateTime.now());
         dineInFinalBill.setDate(LocalDate.now());
+        dineInFinalBill.setOrderType("DineIn");
         dineInBillService.saveDineInBill(dineInFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", dineInFinalBill), HttpStatus.OK);
     }

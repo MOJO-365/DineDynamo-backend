@@ -26,6 +26,7 @@ public class TakeAwayBillController {
     public ResponseEntity<ApiResponse> saveTakeAwayBill(@RequestBody TakeAwayFinalBill takeAwayFinalBill){
         takeAwayFinalBill.setDatetime(LocalDateTime.now());
         takeAwayFinalBill.setDate( LocalDate.now());
+        takeAwayFinalBill.setOrderType("TakeAway");
         takeAwayBillService.saveTakeAwayBill(takeAwayFinalBill);
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"Data Stored",takeAwayFinalBill),HttpStatus.OK);

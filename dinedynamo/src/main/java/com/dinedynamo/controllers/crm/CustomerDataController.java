@@ -5,22 +5,16 @@ import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.services.crm.CustomerDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin("*")
 @RestController
 public class CustomerDataController {
 
-    private final CustomerDataService customerDataService;
-
     @Autowired
-    public CustomerDataController(CustomerDataService customerDataService) {
-        this.customerDataService = customerDataService;
-    }
+    private  CustomerDataService customerDataService;
 
-    @PostMapping("/dinedynamo/crm/fetch")
+    @PostMapping("/dinedynamo/crm/customer-data")
     public CustomerDataResponse fetchCustomerData(@RequestBody Restaurant restaurant) {
         return customerDataService.getCustomerData(restaurant);
     }

@@ -24,6 +24,7 @@ public class DeliveryFinalBill {
     private String restaurantId;
     private LocalDateTime datetime;
     private LocalDate date;
+    private String orderType;
     private String customerName;
     private String customerPhone;
     private String customerEmail;
