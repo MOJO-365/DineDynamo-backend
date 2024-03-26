@@ -1292,3 +1292,632 @@
 12:01:16.461 [http-nio-0.0.0.0-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 12:01:16.461 [http-nio-0.0.0.0-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 12:01:16.463 [http-nio-0.0.0.0-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+10:25:56.774 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+10:25:56.809 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 16568 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+10:25:56.809 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+10:25:56.809 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+10:25:56.859 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+10:25:56.859 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+10:25:57.696 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+10:25:57.797 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 97 ms. Found 32 MongoDB repository interfaces.
+10:25:58.311 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+10:25:58.320 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+10:25:58.322 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+10:25:58.322 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+10:25:58.368 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+10:25:58.368 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1509 ms
+10:25:59.752 [restartedMain] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.11.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.2+13-58"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='dinedynamo2024', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@56daf6fe, com.mongodb.Jep395RecordCodecProvider@8967e5b, com.mongodb.KotlinCodecProvider@7062f68f]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=cluster0.mldc3nk.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-338qeq-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null}
+10:26:00.154 [restartedMain] DEBUG c.d.filters.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+10:26:00.167 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+10:26:01.044 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71a2bcc7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5bb629c4, org.springframework.security.web.context.SecurityContextHolderFilter@61738249, org.springframework.security.web.header.HeaderWriterFilter@71118f42, org.springframework.web.filter.CorsFilter@4e0343ba, org.springframework.security.web.authentication.logout.LogoutFilter@31794e47, com.dinedynamo.filters.JwtAuthenticationFilter@5bd758d9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6f321a16, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@73bf59a5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@47f2585, org.springframework.security.web.session.SessionManagementFilter@fd689d6, org.springframework.security.web.access.ExceptionTranslationFilter@3b246d6b, org.springframework.security.web.access.intercept.AuthorizationFilter@1f16b512]
+10:26:01.295 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+10:26:01.480 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8080"]
+10:26:01.489 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+10:26:01.497 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Started DinedynamoApplication in 5.058 seconds (process running for 5.751)
+10:26:01.798 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 to client view of cluster
+10:26:01.819 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017 to client view of cluster
+10:26:01.821 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017 to client view of cluster
+10:26:02.213 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=274525900, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az1'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e1f459842d41b96d594c, counter=4}, lastWriteDate=Thu Mar 21 10:26:07 IST 2024, lastUpdateTimeNanos=84908693324600}
+10:26:02.213 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=274525600, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000018, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e247d77c9ef4590264c0, counter=6}, lastWriteDate=Thu Mar 21 10:26:07 IST 2024, lastUpdateTimeNanos=84908693324500}
+10:26:02.213 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=274466100, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e29abf01878837082bcd, counter=3}, lastWriteDate=Thu Mar 21 10:26:07 IST 2024, lastUpdateTimeNanos=84908693324500}
+10:26:02.216 [cluster-ClusterId{value='65fbbddf69c3050ca3201a61', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 with max election id 7fffffff0000000000000018 and max set version 2
+10:26:07.749 [http-nio-0.0.0.0-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+10:26:07.749 [http-nio-0.0.0.0-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+10:26:07.751 [http-nio-0.0.0.0-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+10:34:18.317 [http-nio-0.0.0.0-8080-exec-7] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource dinedynamo/reports/top-items.]
+11:20:44.510 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:20:44.546 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 11068 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+11:20:44.546 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+11:20:44.547 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+11:20:44.588 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+11:20:44.588 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+11:20:45.325 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+11:20:45.445 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 116 ms. Found 32 MongoDB repository interfaces.
+11:20:45.946 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+11:20:45.954 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:20:45.956 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+11:20:45.956 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+11:20:45.998 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+11:20:45.999 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1411 ms
+11:20:46.209 [restartedMain] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.11.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.2+13-58"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='dinedynamo2024', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@207dcec0, com.mongodb.Jep395RecordCodecProvider@4957572d, com.mongodb.KotlinCodecProvider@5051b728]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=cluster0.mldc3nk.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-338qeq-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null}
+11:20:46.212 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 to client view of cluster
+11:20:46.238 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017 to client view of cluster
+11:20:46.242 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017 to client view of cluster
+11:20:46.655 [restartedMain] DEBUG c.d.filters.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:20:46.669 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+11:20:46.683 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=234662500, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az1'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e1f459842d41b96d594c, counter=4}, lastWriteDate=Thu Mar 21 11:20:51 IST 2024, lastUpdateTimeNanos=88193163920100}
+11:20:46.683 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=265326400, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000018, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e247d77c9ef4590264c0, counter=6}, lastWriteDate=Thu Mar 21 11:20:51 IST 2024, lastUpdateTimeNanos=88193163920200}
+11:20:46.683 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=265327700, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e29abf01878837082bcd, counter=3}, lastWriteDate=Thu Mar 21 11:20:51 IST 2024, lastUpdateTimeNanos=88193163920100}
+11:20:46.688 [cluster-ClusterId{value='65fbcab670d6ff0a7f9faed0', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 with max election id 7fffffff0000000000000018 and max set version 2
+11:20:47.563 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@35031533, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@687e927, org.springframework.security.web.context.SecurityContextHolderFilter@325f1ac6, org.springframework.security.web.header.HeaderWriterFilter@535e2b46, org.springframework.web.filter.CorsFilter@1ee60cb2, org.springframework.security.web.authentication.logout.LogoutFilter@7a2e577a, com.dinedynamo.filters.JwtAuthenticationFilter@5f0b27a8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2212627a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@128b36f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2f902a26, org.springframework.security.web.session.SessionManagementFilter@44cf35cd, org.springframework.security.web.access.ExceptionTranslationFilter@79e5f67f, org.springframework.security.web.access.intercept.AuthorizationFilter@731815e9]
+11:20:47.727 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+11:20:47.921 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:20:47.929 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+11:20:47.938 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Started DinedynamoApplication in 3.751 seconds (process running for 4.161)
+11:21:45.516 [http-nio-0.0.0.0-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+11:21:45.517 [http-nio-0.0.0.0-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+11:21:45.518 [http-nio-0.0.0.0-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+11:21:45.605 [http-nio-0.0.0.0-8080-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource dinedynamo/crm/fetch.]
+11:21:52.664 [http-nio-0.0.0.0-8080-exec-3] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource dinedynamo/crm/fetch.]
+11:22:24.096 [http-nio-0.0.0.0-8080-exec-4] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource dinedynamo/crm/fetch.]
+11:22:24.879 [http-nio-0.0.0.0-8080-exec-5] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource dinedynamo/crm/fetch.]
+11:22:25.858 [http-nio-0.0.0.0-8080-exec-6] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource dinedynamo/crm/fetch.]
+11:22:39.152 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:22:39.189 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 10060 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+11:22:39.189 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+11:22:39.190 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+11:22:39.237 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+11:22:39.237 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+11:22:40.020 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+11:22:40.123 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 99 ms. Found 32 MongoDB repository interfaces.
+11:22:40.633 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+11:22:40.640 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:22:40.642 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+11:22:40.643 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+11:22:40.689 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+11:22:40.690 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1452 ms
+11:22:40.864 [restartedMain] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.11.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.2+13-58"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='dinedynamo2024', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@3f4b11ee, com.mongodb.Jep395RecordCodecProvider@4dc0f80c, com.mongodb.KotlinCodecProvider@43b4a9dc]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=cluster0.mldc3nk.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-338qeq-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null}
+11:22:40.935 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 to client view of cluster
+11:22:40.958 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017 to client view of cluster
+11:22:40.960 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017 to client view of cluster
+11:22:41.303 [restartedMain] DEBUG c.d.filters.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:22:41.323 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+11:22:41.447 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=299620800, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000018, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e247d77c9ef4590264c0, counter=6}, lastWriteDate=Thu Mar 21 11:22:46 IST 2024, lastUpdateTimeNanos=88307926411200}
+11:22:41.447 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=297731000, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az1'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e1f459842d41b96d594c, counter=4}, lastWriteDate=Thu Mar 21 11:22:46 IST 2024, lastUpdateTimeNanos=88307926411200}
+11:22:41.447 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=299620700, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e29abf01878837082bcd, counter=3}, lastWriteDate=Thu Mar 21 11:22:46 IST 2024, lastUpdateTimeNanos=88307926411100}
+11:22:41.452 [cluster-ClusterId{value='65fbcb28d8885b6877705f0a', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 with max election id 7fffffff0000000000000018 and max set version 2
+11:22:42.192 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@132ad200, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5657e2be, org.springframework.security.web.context.SecurityContextHolderFilter@53eb9e3d, org.springframework.security.web.header.HeaderWriterFilter@4c0391f3, org.springframework.web.filter.CorsFilter@3a2150cd, org.springframework.security.web.authentication.logout.LogoutFilter@6324e1a5, com.dinedynamo.filters.JwtAuthenticationFilter@517c7943, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@22f2ac2c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@645adf5e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3b0fe0b1, org.springframework.security.web.session.SessionManagementFilter@2d8e240d, org.springframework.security.web.access.ExceptionTranslationFilter@20130371, org.springframework.security.web.access.intercept.AuthorizationFilter@35ae12c1]
+11:22:42.356 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+11:22:42.552 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:22:42.562 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+11:22:42.570 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Started DinedynamoApplication in 3.759 seconds (process running for 4.178)
+11:22:59.208 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:22:59.239 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 11988 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+11:22:59.240 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+11:22:59.240 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+11:22:59.280 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+11:22:59.280 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+11:23:00.008 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+11:23:00.120 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 109 ms. Found 32 MongoDB repository interfaces.
+11:23:00.610 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+11:23:00.618 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:23:00.620 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+11:23:00.620 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+11:23:00.667 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+11:23:00.668 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1387 ms
+11:23:00.798 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 to client view of cluster
+11:23:00.813 [restartedMain] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.11.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.2+13-58"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='dinedynamo2024', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@72e4820e, com.mongodb.Jep395RecordCodecProvider@353b5187, com.mongodb.KotlinCodecProvider@1607b127]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=cluster0.mldc3nk.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-338qeq-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null}
+11:23:00.818 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017 to client view of cluster
+11:23:00.821 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017 to client view of cluster
+11:23:01.214 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=269048700, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000018, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e247d77c9ef4590264c0, counter=6}, lastWriteDate=Thu Mar 21 11:23:06 IST 2024, lastUpdateTimeNanos=88327693743500}
+11:23:01.214 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=269048700, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e29abf01878837082bcd, counter=3}, lastWriteDate=Thu Mar 21 11:23:06 IST 2024, lastUpdateTimeNanos=88327693743500}
+11:23:01.214 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=269047200, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az1'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e1f459842d41b96d594c, counter=4}, lastWriteDate=Thu Mar 21 11:23:06 IST 2024, lastUpdateTimeNanos=88327693743500}
+11:23:01.219 [cluster-ClusterId{value='65fbcb3c6c3ea617b9cec1b4', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 with max election id 7fffffff0000000000000018 and max set version 2
+11:23:01.244 [restartedMain] DEBUG c.d.filters.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:23:01.258 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+11:23:02.084 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@76f9cd9f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@75a8fe84, org.springframework.security.web.context.SecurityContextHolderFilter@2cde0df6, org.springframework.security.web.header.HeaderWriterFilter@25299bf3, org.springframework.web.filter.CorsFilter@6a1febbe, org.springframework.security.web.authentication.logout.LogoutFilter@7bcd4ec5, com.dinedynamo.filters.JwtAuthenticationFilter@6fe8f38b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7a744d77, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4be33fc9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@71458374, org.springframework.security.web.session.SessionManagementFilter@2149dd4e, org.springframework.security.web.access.ExceptionTranslationFilter@2ec0aee5, org.springframework.security.web.access.intercept.AuthorizationFilter@7e6fa7bb]
+11:23:02.249 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+11:23:02.445 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:23:02.454 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+11:23:02.462 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Started DinedynamoApplication in 3.582 seconds (process running for 4.009)
+11:23:05.611 [http-nio-0.0.0.0-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+11:23:05.611 [http-nio-0.0.0.0-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+11:23:05.612 [http-nio-0.0.0.0-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+11:44:42.505 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+11:44:42.538 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 7936 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+11:44:42.538 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+11:44:42.538 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+11:44:42.579 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+11:44:42.579 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+11:44:43.378 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+11:44:43.501 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 118 ms. Found 32 MongoDB repository interfaces.
+11:44:43.983 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+11:44:43.991 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:44:43.993 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+11:44:43.993 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+11:44:44.036 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+11:44:44.036 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1457 ms
+11:44:44.196 [restartedMain] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.11.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.2+13-58"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=majority, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='dinedynamo2024', source='admin', password=<hidden>, mechanismProperties=<hidden>}, transportSettings=null, streamFactoryFactory=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@b1a939c, com.mongodb.Jep395RecordCodecProvider@72e4820e, com.mongodb.KotlinCodecProvider@353b5187]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[127.0.0.1:27017], srvHost=cluster0.mldc3nk.mongodb.net, srvServiceName=mongodb, mode=MULTIPLE, requiredClusterType=REPLICA_SET, requiredReplicaSetName='atlas-338qeq-shard-0', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=true, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null}
+11:44:44.221 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 to client view of cluster
+11:44:44.239 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017 to client view of cluster
+11:44:44.241 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-srv-cluster0.mldc3nk.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017 to client view of cluster
+11:44:44.593 [restartedMain] DEBUG c.d.filters.JwtAuthenticationFilter - Filter 'jwtAuthenticationFilter' configured for use
+11:44:44.609 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+11:44:44.682 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=264589300, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az3'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e29abf01878837082bcd, counter=3}, lastWriteDate=Thu Mar 21 11:44:50 IST 2024, lastUpdateTimeNanos=89631162008900}
+11:44:44.682 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=264589200, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az2'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000018, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e247d77c9ef4590264c0, counter=6}, lastWriteDate=Thu Mar 21 11:44:50 IST 2024, lastUpdateTimeNanos=89631162008900}
+11:44:44.682 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=269283900, setName='atlas-338qeq-shard-0', canonicalAddress=ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, hosts=[ac-t7rdl1f-shard-00-00.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-01.mldc3nk.mongodb.net:27017, ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017], passives=[], arbiters=[], primary='ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017', tagSet=TagSet{[Tag{name='availabilityZone', value='aps1-az1'}, Tag{name='diskState', value='READY'}, Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=2, topologyVersion=TopologyVersion{processId=65f9e1f459842d41b96d594c, counter=4}, lastWriteDate=Thu Mar 21 11:44:50 IST 2024, lastUpdateTimeNanos=89631162008800}
+11:44:44.686 [cluster-ClusterId{value='65fbd054384fa4565747d7f1', description='null'}-ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary ac-t7rdl1f-shard-00-02.mldc3nk.mongodb.net:27017 with max election id 7fffffff0000000000000018 and max set version 2
+11:44:45.386 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@76f9cd9f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@75a8fe84, org.springframework.security.web.context.SecurityContextHolderFilter@2cde0df6, org.springframework.security.web.header.HeaderWriterFilter@25299bf3, org.springframework.web.filter.CorsFilter@6a1febbe, org.springframework.security.web.authentication.logout.LogoutFilter@7bcd4ec5, com.dinedynamo.filters.JwtAuthenticationFilter@296bfcd4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7a744d77, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4be33fc9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@71458374, org.springframework.security.web.session.SessionManagementFilter@2149dd4e, org.springframework.security.web.access.ExceptionTranslationFilter@2ec0aee5, org.springframework.security.web.access.intercept.AuthorizationFilter@7e6fa7bb]
+11:44:45.539 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+11:44:45.714 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8080"]
+11:44:45.722 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+11:44:45.730 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Started DinedynamoApplication in 3.56 seconds (process running for 3.967)
+11:44:47.508 [http-nio-0.0.0.0-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+11:44:47.508 [http-nio-0.0.0.0-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+11:44:47.509 [http-nio-0.0.0.0-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+15:46:03.182 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+15:46:03.250 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 8332 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+15:46:03.250 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+15:46:03.251 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+15:46:03.349 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+15:46:03.349 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+15:46:04.363 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+15:46:04.424 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - Starting DinedynamoApplication using Java 21.0.2 with PID 15356 (C:\Users\sdeep\IdeaProjects\DineDynamo-backend\dinedynamo\target\classes started by sdeep in C:\Users\sdeep\IdeaProjects\DineDynamo-backend)
+15:46:04.424 [restartedMain] DEBUG c.dinedynamo.DinedynamoApplication - Running with Spring Boot v3.2.1, Spring v6.1.2
+15:46:04.424 [restartedMain] INFO  c.dinedynamo.DinedynamoApplication - No active profile set, falling back to 1 default profile: "default"
+15:46:04.499 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+15:46:04.499 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+15:46:05.004 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+15:46:05.226 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 213 ms. Found 32 MongoDB repository interfaces.
+15:46:06.202 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+15:46:06.418 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 210 ms. Found 32 MongoDB repository interfaces.
+15:46:06.422 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+15:46:06.445 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+15:46:06.450 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:46:06.450 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+15:46:06.544 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:46:06.545 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3195 ms
+15:46:06.750 [restartedMain] ERROR o.s.b.w.e.tomcat.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter': Unsatisfied dependency expressed through field 'userDetailsServiceImpl': Error creating bean with name 'userDetailsServiceImpl': Unsatisfied dependency expressed through field 'restaurantRepository': Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+15:46:06.785 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+15:46:06.793 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+15:46:06.808 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+15:46:06.840 [restartedMain] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:619)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347)
+	at com.dinedynamo.DinedynamoApplication.main(DinedynamoApplication.java:13)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:145)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:105)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:499)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:218)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:188)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162)
+	... 11 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthenticationFilter': Unsatisfied dependency expressed through field 'userDetailsServiceImpl': Error creating bean with name 'userDetailsServiceImpl': Unsatisfied dependency expressed through field 'restaurantRepository': Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:787)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:508)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1418)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:210)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:173)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:168)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:153)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:86)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:266)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:240)
+	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:52)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4850)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:845)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:240)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:433)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:917)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:488)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:126)
+	... 16 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userDetailsServiceImpl': Unsatisfied dependency expressed through field 'restaurantRepository': Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:787)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:508)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1418)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:784)
+	... 58 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1684)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1433)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:784)
+	... 72 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mongoTemplate' defined in class path resource [org/springframework/boot/autoconfigure/data/mongo/MongoDatabaseFactoryDependentConfiguration.class]: Unsatisfied dependency expressed through method 'mongoTemplate' parameter 0: Error creating bean with name 'mongoDatabaseFactory' defined in class path resource [org/springframework/boot/autoconfigure/data/mongo/MongoDatabaseFactoryConfiguration.class]: Unsatisfied dependency expressed through method 'mongoDatabaseFactory' parameter 0: Error creating bean with name 'mongo' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration.class]: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:802)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
+	... 85 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mongoDatabaseFactory' defined in class path resource [org/springframework/boot/autoconfigure/data/mongo/MongoDatabaseFactoryConfiguration.class]: Unsatisfied dependency expressed through method 'mongoDatabaseFactory' parameter 0: Error creating bean with name 'mongo' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration.class]: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:802)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:789)
+	... 95 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'mongo' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration.class]: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:655)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:643)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:789)
+	... 109 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:651)
+	... 123 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:655)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:643)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:1696)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1653)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1470)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1392)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.resolveStream(DefaultListableBeanFactory.java:2198)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.orderedStream(DefaultListableBeanFactory.java:2192)
+	at org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration.mongo(MongoAutoConfiguration.java:59)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140)
+	... 124 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:651)
+	... 144 common frames omitted
+Caused by: com.mongodb.MongoConfigurationException: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at com.mongodb.internal.dns.DefaultDnsResolver.resolveAdditionalQueryParametersFromTxtRecords(DefaultDnsResolver.java:137)
+	at com.mongodb.ConnectionString.<init>(ConnectionString.java:434)
+	at com.mongodb.ConnectionString.<init>(ConnectionString.java:321)
+	at org.springframework.boot.autoconfigure.mongo.PropertiesMongoConnectionDetails.getConnectionString(PropertiesMongoConnectionDetails.java:47)
+	at org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration$MongoClientSettingsConfiguration.standardMongoSettingsCustomizer(MongoAutoConfiguration.java:74)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140)
+	... 145 common frames omitted
+Caused by: com.mongodb.spi.dns.DnsException: null
+	at com.mongodb.internal.dns.JndiDnsClient.getResourceRecordData(JndiDnsClient.java:54)
+	at com.mongodb.internal.dns.DefaultDnsResolver.resolveAdditionalQueryParametersFromTxtRecords(DefaultDnsResolver.java:118)
+	... 152 common frames omitted
+Caused by: javax.naming.ConfigurationException: null
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.getDatagramChannel(DnsClient.java:183)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.doUdpQuery(DnsClient.java:432)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.query(DnsClient.java:247)
+	at jdk.naming.dns/com.sun.jndi.dns.Resolver.query(Resolver.java:81)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsContext.c_getAttributes(DnsContext.java:434)
+	at java.naming/com.sun.jndi.toolkit.ctx.ComponentDirContext.p_getAttributes(ComponentDirContext.java:235)
+	at java.naming/com.sun.jndi.toolkit.ctx.PartialCompositeDirContext.getAttributes(PartialCompositeDirContext.java:141)
+	at java.naming/com.sun.jndi.toolkit.ctx.PartialCompositeDirContext.getAttributes(PartialCompositeDirContext.java:129)
+	at java.naming/javax.naming.directory.InitialDirContext.getAttributes(InitialDirContext.java:171)
+	at com.mongodb.internal.dns.JndiDnsClient.getResourceRecordData(JndiDnsClient.java:41)
+	... 153 common frames omitted
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:565)
+	at java.base/sun.nio.ch.DatagramChannelImpl.bindInternal(DatagramChannelImpl.java:1329)
+	at java.base/sun.nio.ch.DatagramChannelImpl.bind(DatagramChannelImpl.java:1299)
+	at jdk.naming.dns/com.sun.jndi.dns.DNSDatagramChannelFactory.openDefault(DNSDatagramChannelFactory.java:213)
+	at jdk.naming.dns/com.sun.jndi.dns.DNSDatagramChannelFactory.open(DNSDatagramChannelFactory.java:168)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.getDatagramChannel(DnsClient.java:181)
+	... 162 common frames omitted
+15:46:07.181 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+15:46:07.202 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8080"]
+15:46:07.205 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:46:07.205 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.17]
+15:46:07.265 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:46:07.266 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2765 ms
+15:46:07.405 [restartedMain] ERROR o.s.b.w.e.tomcat.TomcatStarter - Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter': Unsatisfied dependency expressed through field 'userDetailsServiceImpl': Error creating bean with name 'userDetailsServiceImpl': Unsatisfied dependency expressed through field 'restaurantRepository': Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+15:46:07.432 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+15:46:07.440 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+15:46:07.451 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+15:46:07.472 [restartedMain] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:165)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:619)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347)
+	at com.dinedynamo.DinedynamoApplication.main(DinedynamoApplication.java:13)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Tomcat
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:145)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.<init>(TomcatWebServer.java:105)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getTomcatWebServer(TomcatServletWebServerFactory.java:499)
+	at org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:218)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:188)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:162)
+	... 11 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'jwtAuthenticationFilter': Unsatisfied dependency expressed through field 'userDetailsServiceImpl': Error creating bean with name 'userDetailsServiceImpl': Unsatisfied dependency expressed through field 'restaurantRepository': Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:787)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:508)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1418)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:210)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:173)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAsRegistrationBean(ServletContextInitializerBeans.java:168)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addAdaptableBeans(ServletContextInitializerBeans.java:153)
+	at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:86)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:266)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:240)
+	at org.springframework.boot.web.embedded.tomcat.TomcatStarter.onStartup(TomcatStarter.java:52)
+	at org.apache.catalina.core.StandardContext.startInternal(StandardContext.java:4850)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
+	at org.apache.catalina.core.StandardHost.startInternal(StandardHost.java:845)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1332)
+	at org.apache.catalina.core.ContainerBase$StartChild.call(ContainerBase.java:1322)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
+	at org.apache.tomcat.util.threads.InlineExecutorService.execute(InlineExecutorService.java:75)
+	at java.base/java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:145)
+	at org.apache.catalina.core.ContainerBase.startInternal(ContainerBase.java:866)
+	at org.apache.catalina.core.StandardEngine.startInternal(StandardEngine.java:240)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.StandardService.startInternal(StandardService.java:433)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.core.StandardServer.startInternal(StandardServer.java:917)
+	at org.apache.catalina.util.LifecycleBase.start(LifecycleBase.java:171)
+	at org.apache.catalina.startup.Tomcat.start(Tomcat.java:488)
+	at org.springframework.boot.web.embedded.tomcat.TomcatWebServer.initialize(TomcatWebServer.java:126)
+	... 16 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'userDetailsServiceImpl': Unsatisfied dependency expressed through field 'restaurantRepository': Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:787)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:767)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:145)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:508)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1418)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:784)
+	... 58 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'restaurantRepository' defined in com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository defined in @EnableMongoRepositories declared on MongoRepositoriesRegistrar.EnableMongoRepositoriesConfiguration: Cannot resolve reference to bean 'mongoTemplate' while setting bean property 'mongoOperations'
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:377)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveValueIfNecessary(BeanDefinitionValueResolver.java:135)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyPropertyValues(AbstractAutowireCapableBeanFactory.java:1684)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1433)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:598)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:784)
+	... 72 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mongoTemplate' defined in class path resource [org/springframework/boot/autoconfigure/data/mongo/MongoDatabaseFactoryDependentConfiguration.class]: Unsatisfied dependency expressed through method 'mongoTemplate' parameter 0: Error creating bean with name 'mongoDatabaseFactory' defined in class path resource [org/springframework/boot/autoconfigure/data/mongo/MongoDatabaseFactoryConfiguration.class]: Unsatisfied dependency expressed through method 'mongoDatabaseFactory' parameter 0: Error creating bean with name 'mongo' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration.class]: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:802)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.support.BeanDefinitionValueResolver.resolveReference(BeanDefinitionValueResolver.java:365)
+	... 85 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mongoDatabaseFactory' defined in class path resource [org/springframework/boot/autoconfigure/data/mongo/MongoDatabaseFactoryConfiguration.class]: Unsatisfied dependency expressed through method 'mongoDatabaseFactory' parameter 0: Error creating bean with name 'mongo' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration.class]: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:802)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:789)
+	... 95 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'mongo' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration.class]: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:655)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:643)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1443)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1353)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:911)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:789)
+	... 109 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.mongodb.client.MongoClient]: Factory method 'mongo' threw exception with message: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:651)
+	... 123 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'standardMongoSettingsCustomizer' defined in class path resource [org/springframework/boot/autoconfigure/mongo/MongoAutoConfiguration$MongoClientSettingsConfiguration.class]: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:655)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:643)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1164)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:561)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:521)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:325)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:323)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:1696)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1653)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1470)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1392)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.resolveStream(DefaultListableBeanFactory.java:2198)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.orderedStream(DefaultListableBeanFactory.java:2192)
+	at org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration.mongo(MongoAutoConfiguration.java:59)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140)
+	... 124 common frames omitted
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.springframework.boot.autoconfigure.mongo.StandardMongoClientSettingsBuilderCustomizer]: Factory method 'standardMongoSettingsCustomizer' threw exception with message: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:177)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:651)
+	... 144 common frames omitted
+Caused by: com.mongodb.MongoConfigurationException: Failed looking up TXT record for host cluster0.mldc3nk.mongodb.net
+	at com.mongodb.internal.dns.DefaultDnsResolver.resolveAdditionalQueryParametersFromTxtRecords(DefaultDnsResolver.java:137)
+	at com.mongodb.ConnectionString.<init>(ConnectionString.java:434)
+	at com.mongodb.ConnectionString.<init>(ConnectionString.java:321)
+	at org.springframework.boot.autoconfigure.mongo.PropertiesMongoConnectionDetails.getConnectionString(PropertiesMongoConnectionDetails.java:47)
+	at org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration$MongoClientSettingsConfiguration.standardMongoSettingsCustomizer(MongoAutoConfiguration.java:74)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:140)
+	... 145 common frames omitted
+Caused by: com.mongodb.spi.dns.DnsException: null
+	at com.mongodb.internal.dns.JndiDnsClient.getResourceRecordData(JndiDnsClient.java:54)
+	at com.mongodb.internal.dns.DefaultDnsResolver.resolveAdditionalQueryParametersFromTxtRecords(DefaultDnsResolver.java:118)
+	... 152 common frames omitted
+Caused by: javax.naming.ConfigurationException: null
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.getDatagramChannel(DnsClient.java:183)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.doUdpQuery(DnsClient.java:432)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.query(DnsClient.java:247)
+	at jdk.naming.dns/com.sun.jndi.dns.Resolver.query(Resolver.java:81)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsContext.c_getAttributes(DnsContext.java:434)
+	at java.naming/com.sun.jndi.toolkit.ctx.ComponentDirContext.p_getAttributes(ComponentDirContext.java:235)
+	at java.naming/com.sun.jndi.toolkit.ctx.PartialCompositeDirContext.getAttributes(PartialCompositeDirContext.java:141)
+	at java.naming/com.sun.jndi.toolkit.ctx.PartialCompositeDirContext.getAttributes(PartialCompositeDirContext.java:129)
+	at java.naming/javax.naming.directory.InitialDirContext.getAttributes(InitialDirContext.java:171)
+	at com.mongodb.internal.dns.JndiDnsClient.getResourceRecordData(JndiDnsClient.java:41)
+	... 153 common frames omitted
+Caused by: java.net.BindException: Address already in use: bind
+	at java.base/sun.nio.ch.Net.bind0(Native Method)
+	at java.base/sun.nio.ch.Net.bind(Net.java:565)
+	at java.base/sun.nio.ch.DatagramChannelImpl.bindInternal(DatagramChannelImpl.java:1329)
+	at java.base/sun.nio.ch.DatagramChannelImpl.bind(DatagramChannelImpl.java:1299)
+	at jdk.naming.dns/com.sun.jndi.dns.DNSDatagramChannelFactory.openDefault(DNSDatagramChannelFactory.java:213)
+	at jdk.naming.dns/com.sun.jndi.dns.DNSDatagramChannelFactory.open(DNSDatagramChannelFactory.java:168)
+	at jdk.naming.dns/com.sun.jndi.dns.DnsClient.getDatagramChannel(DnsClient.java:181)
+	... 162 common frames omitted

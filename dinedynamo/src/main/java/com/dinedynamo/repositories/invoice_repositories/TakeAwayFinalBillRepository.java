@@ -1,5 +1,6 @@
 package com.dinedynamo.repositories.invoice_repositories;
 
+import com.dinedynamo.collections.invoice_collections.DeliveryFinalBill;
 import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.order_collections.TakeAway;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -17,4 +18,6 @@ public interface TakeAwayFinalBillRepository extends MongoRepository<TakeAwayFin
 
     List<TakeAwayFinalBill> findByRestaurantId(String restaurantId);
     List<TakeAwayFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);
+
+
 }

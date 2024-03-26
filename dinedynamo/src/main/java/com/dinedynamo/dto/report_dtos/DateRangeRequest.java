@@ -7,13 +7,12 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailyOverallSalesRequest {
+public class DateRangeRequest {
     private String restaurantId;
-    private LocalDate date;
-
+    private LocalDate fromDate;
+    private LocalDate toDate;
 }

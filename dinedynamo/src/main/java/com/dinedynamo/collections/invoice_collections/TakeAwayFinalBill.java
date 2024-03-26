@@ -25,11 +25,11 @@ public class TakeAwayFinalBill {
     private LocalDate date;
     private LocalDateTime datetime;
     private String customerPhone;
+    private String customerName;
+    private String customerEmail;
     private boolean pickedUp;
     private double totalAmount;
     private List<OrderList> orderList;
-
-
 }
 
 
