@@ -16,7 +16,7 @@ public class CustomerDataController {
     @Autowired
     private  CustomerDataService customerDataService;
 
-    @PostMapping("/dinedynamo/crm/fetch")
+    @PostMapping("/dinedynamo/crm/customer-data")
     public CustomerDataResponse fetchCustomerData(@RequestBody Restaurant restaurant) {
         return customerDataService.getCustomerData(restaurant);
     }
