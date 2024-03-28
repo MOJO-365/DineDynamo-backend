@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -48,6 +49,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<ApiResponse> handleBadCredentialsException(BadCredentialsException e)
+    {
+
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success");
+
+        System.out.println("BadCredentialsException Occurred: "+e.getMessage());
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 
     @ExceptionHandler(value = ExpiredJwtException.class)
     public ResponseEntity<ApiResponse> handleExpiredJwtException(ExpiredJwtException e)

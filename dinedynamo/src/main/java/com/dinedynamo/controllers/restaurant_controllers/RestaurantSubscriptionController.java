@@ -2,6 +2,7 @@ package com.dinedynamo.controllers.restaurant_controllers;
 
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.subscriptions_collections.RestaurantSubscription;
 import com.dinedynamo.dto.subscription_dtos.SubscriptionRequestDTO;
 import com.dinedynamo.repositories.subscription_repositories.RestaurantSubscriptionRepository;
 import com.dinedynamo.services.subscription_services.RestaurantSubscriptionService;
@@ -18,6 +19,8 @@ public class RestaurantSubscriptionController
     @Autowired
     RestaurantSubscriptionRepository restaurantSubscriptionRepository;
 
+
+
     @Autowired
     RestaurantSubscriptionService restaurantSubscriptionService;
 
@@ -27,4 +30,14 @@ public class RestaurantSubscriptionController
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantSubscriptionService.save(subscriptionRequestDTO)),HttpStatus.OK);
     }
 
+
+    @PostMapping("/dinedynamo/restaurant/subscriptions/get-subscription-status")
+    public ResponseEntity<ApiResponse> getSubscriptionStatusForRestaurant(@RequestParam String restaurantId){
+
+        RestaurantSubscription restaurantSubscription = restaurantSubscriptionRepository.findByRestaurantId(restaurantId);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantSubscription),HttpStatus.OK);
+
+
+    }
 }

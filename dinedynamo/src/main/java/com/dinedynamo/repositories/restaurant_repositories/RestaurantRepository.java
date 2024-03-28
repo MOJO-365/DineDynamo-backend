@@ -45,4 +45,36 @@ public interface RestaurantRepository extends MongoRepository<Restaurant, String
 
 
 
+    List<Restaurant> findByRestaurantCityOrderByCostForTwoAsc(String restaurantCity);
+
+    List<Restaurant> findByRestaurantCityOrderByCostForTwoDesc(String restaurantCity);
+
+    List<Restaurant> findByRestaurantCityAndCostForTwoBetween(String restaurantCity, double minCost, double maxCost);
+
+    List<Restaurant> findByRestaurantCityAndCostForTwoGreaterThan(String restaurantCity, double cost);
+
+    List<Restaurant> findByRestaurantCityAndRestaurantRatingGreaterThan(String restaurantCity, double restaurantRating);
+
+
+
+    // Combination 1: Pure Veg, Ascending Cost
+    List<Restaurant> findByRestaurantCityAndIsPureVegOrderByCostForTwoAsc(String restaurantCity);
+
+    // Combination 2: Pure Veg, Descending Cost
+    List<Restaurant> findByRestaurantCityAndIsPureVegOrderByCostForTwoDesc(String restaurantCity);
+
+    // Combination 3: Pure Veg, Cost Between
+    List<Restaurant> findByRestaurantCityAndIsPureVegAndCostForTwoBetween(
+            String restaurantCity, boolean isPureVeg, double minCost, double maxCost
+    );
+
+    // Combination 4: Pure Veg, Cost Greater Than
+    List<Restaurant> findByRestaurantCityAndIsPureVegAndCostForTwoGreaterThan(
+            String restaurantCity, boolean isPureVeg, double cost
+    );
+
+    // Combination 5: Pure Veg, Rating Greater Than
+    List<Restaurant> findByRestaurantCityAndRestaurantRatingGreaterThanAndIsPureVeg(
+            String restaurantCity, double rating, boolean isPureVeg
+    );
 }

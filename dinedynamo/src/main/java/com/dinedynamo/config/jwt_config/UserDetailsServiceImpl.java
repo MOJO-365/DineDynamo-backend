@@ -2,9 +2,11 @@ package com.dinedynamo.config.jwt_config;
 
 
 import com.dinedynamo.collections.customer_collections.Customer;
+import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
 import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import lombok.Getter;
@@ -21,14 +23,10 @@ import org.springframework.stereotype.Component;
 public class UserDetailsServiceImpl  implements UserDetailsService {
 
 
-
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    AppUserRepository appUserRepository;
 
-    @Autowired
-    private CustomerRepository customerRepository;
 
-    UserDetails userDetails;
 
     @Setter
     @Getter
@@ -37,61 +35,29 @@ public class UserDetailsServiceImpl  implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 
-        String userRole = getUserRole();
+        System.out.println("IN UserDetailsServiceImpl: "+appUserRepository.findByUserEmail(userEmail));
+        return appUserRepository.findByUserEmail(userEmail).orElseThrow(()-> new UsernameNotFoundException("User not found"));
 
 
-        if (userRole.toUpperCase().equals("RESTAURANT")) {
-            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
-
-            if (restaurant == null) {
-                System.out.println("THIS RESTAURANT DOES NOT EXIST IN DB");
-                return null;
-            }
-
-            return new org.springframework.security.core.userdetails.User(
-                    restaurant.getRestaurantEmail(),
-                    restaurant.getRestaurantPassword(),
-                    AuthorityUtils.createAuthorityList(userRole)
-            );
-
-        } else if (userRole.toUpperCase().equals("CUSTOMER")) {
-            Customer customer = customerRepository.findByCustomerEmail(userEmail).orElse(null);
-
-
-            if (customer == null) {
-                System.out.println("THIS CUSTOMER DOES NOT EXIST IN DB");
-                return null;
-            }
-
-            return new org.springframework.security.core.userdetails.User(
-                    customer.getCustomerEmail(),
-                    customer.getCustomerPassword(),
-                    AuthorityUtils.createAuthorityList(userRole)
-            );
-
-        }
-
-
-        System.out.println("USER DATA NOT FOUND IN DB, INAPPROPRIATE CREDENTIALS");
-        return null;
-    }
-
-//        User user = userRepository.findByUserEmail(userEmail).get(); // Implement this method in your UserRepository
+        //        String userRole = getUserRole();
+//        AppUser appUser = appUserRepository.findByUserEmail(userEmail).orElse(null);
 //
-//        if (user == null) {
-//            throw new UsernameNotFoundException("User not found with email: " + userEmail);
+//        //Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
+//
+//        if(appUser == null){
+//            throw new RuntimeException("App user does not exist in DB");
 //        }
+//
 //        return new org.springframework.security.core.userdetails.User(
-//                user.getUserEmail(),
-//                user.getUserPassword(),
-//                AuthorityUtils.createAuthorityList(user.getUserRole())
+//                appUser.getUserEmail(),
+//                appUser.getUserPassword(),
+//                AuthorityUtils.createAuthorityList(userRole)
 //        );
+
     }
-//        Optional<User> user = userRepository.findByUserEmail(userEmail);
-//        return user.map(UserDetailsImpl::new)
-//                .orElseThrow(() -> new UsernameNotFoundException("USER NOT FOUND " + userEmail));
 
 
+    }
 
 
 

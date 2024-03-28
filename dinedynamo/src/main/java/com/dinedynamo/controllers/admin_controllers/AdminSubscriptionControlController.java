@@ -29,8 +29,12 @@ public class AdminSubscriptionControlController
     @Autowired
     AdminSubscriptionControlService adminSubscriptionControlService;
 
+
+
+
     @PostMapping("/dinedynamo/admin/subscriptions/create-subscription-plan")
     public ResponseEntity<ApiResponse> createSubscriptionPlan(@RequestBody SubscriptionPlan subscriptionPlan){
+
 
         subscriptionPlan = subscriptionPlanService.save(subscriptionPlan);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",subscriptionPlan),HttpStatus.OK);

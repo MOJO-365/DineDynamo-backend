@@ -9,9 +9,11 @@ import com.dinedynamo.dto.subscription_dtos.SubscriptionResponseDTO;
 import com.dinedynamo.repositories.subscription_repositories.RestaurantSubscriptionRepository;
 import com.dinedynamo.repositories.subscription_repositories.SubscriptionPlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class RestaurantSubscriptionService {
@@ -74,5 +76,27 @@ public class RestaurantSubscriptionService {
             return RestaurantSubscriptionStatus.INACTIVE;
         }
 
+    }
+
+
+    //@Scheduled(fixedRate =  24 * 60 * 60 * 1000)
+    public void updateSubscriptionStatusInDatabase(){
+
+        List<RestaurantSubscription> restaurantSubscriptionList = restaurantSubscriptionRepository.findAll();
+
+        for(RestaurantSubscription restaurantSubscription: restaurantSubscriptionList){
+
+            LocalDate currentDate = LocalDate.now();
+            if((currentDate.isBefore(restaurantSubscription.getEndDate()) || currentDate.isEqual(restaurantSubscription.getEndDate())) && (currentDate.isAfter(restaurantSubscription.getStartDate()) || currentDate.isEqual(restaurantSubscription.getStartDate()))){
+                restaurantSubscription.setRestaurantSubscriptionStatus(RestaurantSubscriptionStatus.ACTIVE);
+            }
+            else{
+                restaurantSubscription.setRestaurantSubscriptionStatus(RestaurantSubscriptionStatus.INACTIVE);
+            }
+
+            restaurantSubscriptionRepository.save(restaurantSubscription);
+        }
+
+        System.out.println("UPDATED SUBSCRIPTION STATUS..");
     }
 }

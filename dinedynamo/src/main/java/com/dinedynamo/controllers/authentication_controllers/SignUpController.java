@@ -6,16 +6,24 @@ import com.dinedynamo.collections.customer_collections.Customer;
 import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
+import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
+import com.dinedynamo.helper.JwtHelper;
 import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import com.dinedynamo.services.restaurant_services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 
@@ -33,8 +41,10 @@ public class SignUpController
     AppUserService appUserService;
 
     @Autowired
-    @Qualifier("passwordEncoder")
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    AppUserRepository appUserRepository;
+
+    @Autowired
+    JwtHelper jwtHelper;
 
     @GetMapping("/dinedynamo/home")
     public String testRestaurantController(){
@@ -44,21 +54,36 @@ public class SignUpController
 
 
     @PostMapping("/dinedynamo/signuprestaurant")
-    public ResponseEntity<ApiResponse> restaurantSignUp(@RequestBody Restaurant restaurant) {
+    public ResponseEntity<ApiResponse> restaurantSignUp(@RequestBody Restaurant restaurant) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+
+        System.out.println(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()));
+
         Restaurant existingRestaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
-        if (existingRestaurant != null) {
+        if(existingRestaurant != null){
             System.out.println("Restaurant email already exists in database");
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.CONFLICT, "Email already exists", null), HttpStatus.CONFLICT);
-        } else {
-            String encryptedPassword = bCryptPasswordEncoder.encode(restaurant.getRestaurantPassword());
-            restaurant.setRestaurantPassword(encryptedPassword);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.CONFLICT,"success",null),HttpStatus.OK);
+        }
+
+        else{
+
             restaurantRepository.save(restaurant);
             appUserService.saveRestaurant(restaurant);
+
             System.out.println("Data of restaurant saved");
-            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, "Restaurant signed up successfully", restaurant);
-            return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK,"success",restaurant);
+
+
+            SignInRequestBody signInRequestBody = new SignInRequestBody();
+            signInRequestBody.setUserEmail(restaurant.getRestaurantEmail());
+            signInRequestBody.setUserPassword(restaurant.getRestaurantPassword());
+            String token = jwtHelper.generateToken(appUserRepository.findByUserEmail(restaurant.getRestaurantEmail()).orElse(null), signInRequestBody);
+            System.out.println("TOKEN AFTER SIGNUP: "+token);
+            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
         }
+
+
     }
+
 
     @PostMapping("/dinedynamo/signupcustomer")
     public ResponseEntity<ApiResponse> customerSignUp(@RequestBody Customer customer)

@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,12 +147,21 @@ public class RestaurantReservationAndSettingsController
     ResponseEntity<ApiResponse> editReservationSettings(@RequestBody RestaurantReservationSettings restaurantReservationSettings){
 
 
+        System.out.println(restaurantReservationSettings.getSecondSlotEndTime());
+        System.out.println(restaurantReservationSettings.getSecondSlotStartTime());
+        System.out.println(restaurantReservationSettings.getFirstSlotEndTime());
+        System.out.println(restaurantReservationSettings.getFirstSlotStartTime());
+
         String restaurantId = restaurantReservationSettings.getRestaurantId();
 
+        System.out.println("REST ID: "+restaurantId);
+
         RestaurantReservationSettings existingRestaurantReservationSettings = restaurantReservationSettingsRepository.findByRestaurantId(restaurantId).orElse(null);
+        System.out.println("existing: "+existingRestaurantReservationSettings);
 
         if(existingRestaurantReservationSettings != null){
 
+            System.out.println("existing: "+existingRestaurantReservationSettings);
             restaurantReservationSettings.setReservationSettingsId(existingRestaurantReservationSettings.getReservationSettingsId());
 
             restaurantReservationSettingsRepository.delete(existingRestaurantReservationSettings);
@@ -159,6 +169,7 @@ public class RestaurantReservationAndSettingsController
         }
 
         else{
+            System.out.println("no existing settings.......");
             restaurantReservationSettingsRepository.save(restaurantReservationSettings);
         }
 

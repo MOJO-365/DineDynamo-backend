@@ -24,10 +24,9 @@ public class Restaurant
     @Id
     String restaurantId;
 
-
     String restaurantName;
-    @Indexed(unique = true)
 
+    @Indexed(unique = true)
     String restaurantEmail;
 
     String restaurantPassword;
@@ -50,7 +49,6 @@ public class Restaurant
     double costForTwo=0.0;
 
     boolean isPureVeg;
-
 
     String restaurantABN;
 

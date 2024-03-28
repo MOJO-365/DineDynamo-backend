@@ -5,20 +5,24 @@ import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
 //@EnableMethodSecurity
 
 public class SecurityConfig
@@ -36,11 +40,13 @@ public class SecurityConfig
     private static final String[] AUTH_WHITELIST = {
 
             "/dinedynamo/**",
-            "/dinedynamo/restaurant/menu/getmenu",
-            "/dinedynamo/signupcustomer",
-            "/dinedynamo/signuprestaurant",
-            "/dinedynamo/refreshtoken",
+            "/dinedynamo/auth/signin",
             "/dinedynamo/signin",
+//            "/dinedynamo/restaurant/menu/getmenu",
+//            "/dinedynamo/signupcustomer",
+//            "/dinedynamo/signuprestaurant",
+            "/dinedynamo/refreshtoken",
+//            "/dinedynamo/signin",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
@@ -55,41 +61,58 @@ public class SecurityConfig
 //            "/login","/refreshToken", "/download"
     };
 
-    @Bean
-    //authentication
-    public UserDetailsService userDetailsService() {
-
-        return new UserDetailsServiceImpl();
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//
+//        return new UserDetailsServiceImpl();
+//    }
 
     @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
 
-        return http.csrf()
-                .disable()
-                .authorizeHttpRequests()
-                .requestMatchers(AUTH_WHITELIST).permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
-                .and()
-                .addFilterBefore((Filter) this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider=new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsServiceImpl);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        req->req.requestMatchers(AUTH_WHITELIST).permitAll()
+                                .requestMatchers("/dinedynamo/restaurant/**").hasAuthority("ADMIN")
+                                .anyRequest()
+                                .authenticated()
+                ).userDetailsService(userDetailsServiceImpl)
+                .sessionManagement(session->session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(
+                        e->e.accessDeniedHandler(
+                                        (request, response, accessDeniedException)->response.setStatus(403)
+                                )
+                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+//                .logout(l->l
+//                        .logoutUrl("/logout")
+//                        .addLogoutHandler(logoutHandler)
+//                        .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
+//                        ))
+                .build();
+
+
+//        return http.csrf()
+//                .disable()
+//                .authorizeHttpRequests()
+//                .requestMatchers(AUTH_WHITELIST).permitAll()
+//                .anyRequest()
+//                .authenticated()
+//
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
+//                .and()
+//                .addFilterBefore((Filter) this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .build();
     }
 
 
@@ -102,20 +125,6 @@ public class SecurityConfig
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        UrlBasedCorsConfigurationSource source =
-//            new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("*");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
-
 
 
 }

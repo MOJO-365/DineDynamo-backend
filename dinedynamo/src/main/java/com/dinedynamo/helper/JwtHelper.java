@@ -15,10 +15,12 @@ import javax.crypto.NoSuchPaddingException;
 
 
 import com.dinedynamo.collections.customer_collections.Customer;
+import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +42,14 @@ public class JwtHelper
     @Autowired
     RestaurantRepository restaurantRepository;
 
+    @Autowired
+    AppUserRepository appUserRepository;
 
 
     @Autowired
     CustomerRepository customerRepository;
 
-    public static final long TOKEN_VALIDITY = 100*60*100*60; //60minutes 	//specify after how many milisec, token expires
+    public static final long TOKEN_VALIDITY = 100 * 60 * 1000 * 10; // 10 minutes in milliseconds;
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
@@ -92,11 +96,43 @@ public class JwtHelper
 
 
     // Generates token for user:
-//    public String generateToken(UserDetails userDetails, SignInRequestBody signInRequestBody) throws NoSuchAlgorithmException, InvalidKeyException, java.security.InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException
-//    {
-//        String token = null;
-//        Map<String, Object> claims = new HashMap<>();
-//
+    public String generateToken(UserDetails userDetails, SignInRequestBody signInRequestBody) throws NoSuchAlgorithmException, InvalidKeyException, java.security.InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException
+    {
+        String token = null;
+        Map<String, Object> claims = new HashMap<>();
+        String userRole = null;
+        Restaurant restaurant = null;
+        AppUser appUser = null;
+
+        appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
+
+        if(appUser == null){
+            throw new RuntimeException("App User Not Found in DB");
+        }
+
+        else{
+
+            restaurant = restaurantRepository.findById(appUser.getRestaurantId()).orElse(null);
+
+            if(restaurant == null){
+                throw new RuntimeException("Restaurant not found in DB");
+            }
+            else{
+                userRole = appUser.getUserType();
+
+                claims.put("userEmail", signInRequestBody.getUserEmail());
+                claims.put("restaurantId",restaurant.getRestaurantId());
+                claims.put("userRole",userRole);
+
+                token =  doGenerateToken(claims, signInRequestBody.getUserEmail());
+
+                return token;
+            }
+
+
+
+        }
+
 //        if(signInRequestBody.getUserType().toUpperCase().equals("RESTAURANT")){
 //
 //            Restaurant restaurant = restaurantRepository.findByRestaurantEmail(signInRequestBody.getUserEmail()).orElse(null);
@@ -132,9 +168,9 @@ public class JwtHelper
 //        token =  doGenerateToken(claims, signInRequestBody.getUserEmail());
 //
 //        return token;
-//
-//    }
-//
+
+    }
+
 
     // This will set all claims of token
     private String doGenerateToken(Map<String, Object> claims, String subject)
