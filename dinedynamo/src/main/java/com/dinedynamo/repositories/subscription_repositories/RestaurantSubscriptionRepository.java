@@ -13,4 +13,6 @@ public interface RestaurantSubscriptionRepository extends MongoRepository<Restau
 
 
     List<RestaurantSubscription> findByRestaurantSubscriptionStatus(RestaurantSubscriptionStatus status);
+
+    RestaurantSubscription findByRestaurantId(String restaurantId);
 }

@@ -62,11 +62,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
             System.out.println("USER DETAILS: "+userDetails);
 
             if (tokenFromRequest!= null && jwtHelper.validateToken(tokenFromRequest, userDetails)) {
-                System.out.println("IF BLOCK");
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-                System.out.println("Reached here......");
+
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+//                System.out.println("IF BLOCK");
+//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                SecurityContextHolder.getContext().setAuthentication(authToken);
+//                System.out.println("Reached here......");
+//
+                request.setAttribute("restId",jwtHelper.extractRestaurantId(tokenFromRequest));
             }
 
 

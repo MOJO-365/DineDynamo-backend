@@ -6,7 +6,10 @@ import com.dinedynamo.collections.customer_collections.Customer;
 import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
+import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
+import com.dinedynamo.helper.JwtHelper;
 import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import com.dinedynamo.services.restaurant_services.AppUserService;
@@ -14,6 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 
@@ -30,6 +40,12 @@ public class SignUpController
     @Autowired
     AppUserService appUserService;
 
+    @Autowired
+    AppUserRepository appUserRepository;
+
+    @Autowired
+    JwtHelper jwtHelper;
+
     @GetMapping("/dinedynamo/home")
     public String testRestaurantController(){
         return "Restaurant controller working";
@@ -38,8 +54,7 @@ public class SignUpController
 
 
     @PostMapping("/dinedynamo/signuprestaurant")
-    public ResponseEntity<ApiResponse> restaurantSignUp(@RequestBody Restaurant restaurant)
-    {
+    public ResponseEntity<ApiResponse> restaurantSignUp(@RequestBody Restaurant restaurant) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         System.out.println(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()));
 
@@ -57,6 +72,12 @@ public class SignUpController
             System.out.println("Data of restaurant saved");
             ApiResponse apiResponse = new ApiResponse(HttpStatus.OK,"success",restaurant);
 
+
+            SignInRequestBody signInRequestBody = new SignInRequestBody();
+            signInRequestBody.setUserEmail(restaurant.getRestaurantEmail());
+            signInRequestBody.setUserPassword(restaurant.getRestaurantPassword());
+            String token = jwtHelper.generateToken(appUserRepository.findByUserEmail(restaurant.getRestaurantEmail()).orElse(null), signInRequestBody);
+            System.out.println("TOKEN AFTER SIGNUP: "+token);
             return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
         }
 

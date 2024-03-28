@@ -37,6 +37,7 @@ public class SearchService {
 
         List<Menus> matchedMenus = new ArrayList<>();
         List<Restaurant> matchedRestaurants = new ArrayList<>();
+
         MongoDatabase database = mongoClient.getDatabase("cluster0");
         MongoCollection<Document> collection = database.getCollection("menus");
         AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$search",
@@ -46,7 +47,7 @@ public class SearchService {
                                         .append("path",
                                                 new Document("wildcard", "*"))))));
 
-
+        System.out.println("search result: "+result);
         result.forEach(doc -> matchedMenus.add(mongoConverter.read(Menus.class,doc)));
 
         for(Menus menus: matchedMenus){
@@ -55,6 +56,7 @@ public class SearchService {
 
             Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
+            System.out.println("IN SEARCH API, RESTAURANT: "+restaurant);
             if(restaurant!= null){
 
                 if(!matchedRestaurants.contains(restaurant)){

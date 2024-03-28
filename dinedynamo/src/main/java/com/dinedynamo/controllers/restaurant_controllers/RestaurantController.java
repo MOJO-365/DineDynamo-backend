@@ -6,6 +6,7 @@ import com.dinedynamo.dto.restaurant_dtos.EditRestaurantDTO;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.services.restaurant_services.AppUserService;
 import com.dinedynamo.services.restaurant_services.RestaurantService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -61,10 +62,11 @@ public class RestaurantController
      * Pass only restaurantId in request body to get the corresponding Restaurant object in response
      */
     @PostMapping("/dinedynamo/restaurant/findrestaurantbyid")
-    public ResponseEntity<ApiResponse> findRestaurantById(@RequestBody Restaurant restaurant){
+    public ResponseEntity<ApiResponse> findRestaurantById(HttpServletRequest request, @RequestBody Restaurant restaurant){
 
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
 
+        System.out.println("RESTAURANT ID FROM HttpServletRequest"+request.getAttribute("restId"));
         if(restaurant == null){
             System.out.println("RESTAURANT-ID DOES NOT EXIST");
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
