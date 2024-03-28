@@ -13,10 +13,12 @@ import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import com.dinedynamo.services.restaurant_services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -48,6 +50,11 @@ public class SignInController
     AppUserService appUserService;
 
     @Autowired
+    @Qualifier("passwordEncoder")
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+    @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Autowired
@@ -77,21 +84,25 @@ public class SignInController
 //
 
     @PostMapping("/dinedynamo/signin")
-    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestBody signInRequestBody) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-
+    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestBody signInRequestBody) {
         AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
 
-        boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
-
-        if(!isUserAuthenticated){
-            System.out.println("WRONG USERNAME OR PASSWORD");
-            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
-        }
-        else{
+        if (appUser == null) {
+            boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
+            if (!isUserAuthenticated) {
+                System.out.println("WRONG USERNAME OR PASSWORD");
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.UNAUTHORIZED, "Wrong username or password", null), HttpStatus.UNAUTHORIZED);
+            }
             appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
-            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",appUser),HttpStatus.OK);
-        }
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User authenticated successfully", appUser), HttpStatus.OK);
+        } else {
+            if (bCryptPasswordEncoder.matches(signInRequestBody.getUserPassword(), appUser.getUserPassword())) {
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "User authenticated successfully", appUser), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.UNAUTHORIZED, "Invalid password", null), HttpStatus.UNAUTHORIZED);
+            }
 
+        }
 
 
 //        if(userRole.toLowerCase().equals("restaurant")){
@@ -235,34 +246,23 @@ public class SignInController
 //        return false;
     }
 
-    private boolean authenticateAppUserSignIn(String userEmail, String userPassword){
-
+    private boolean authenticateAppUserSignIn(String userEmail, String userPassword) {
         AppUser appUserFromDB = appUserRepository.findByUserEmail(userEmail).orElse(null);
-        if(appUserFromDB == null){
 
+        if (appUserFromDB == null) {
             Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
 
-            if(restaurant==null){
-                throw new RuntimeException("No such user/restaurant found in database");
-
-            }
-            else{
+            if (restaurant == null) {
+                return false;
+            } else {
                 AppUser appUser = appUserService.saveRestaurant(restaurant);
-
-                appUserFromDB = appUserRepository.findByUserEmail(userEmail).orElse(null);
-
-                if(appUser.getUserPassword().equals(userPassword)){
-                    return true;
-                }
-                else{
-                    return false;
-                }
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                return passwordEncoder.matches(userPassword, appUser.getUserPassword());
             }
-
-
-        }
-        else {
-            return appUserFromDB.getUserPassword().equals(userPassword);
+        } else {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            return passwordEncoder.matches(userPassword, appUserFromDB.getUserPassword());
         }
     }
+
 }

@@ -3,6 +3,7 @@ package com.dinedynamo.controllers.invoice_controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.repositories.order_repositories.DineInOrderRepository;
+import com.dinedynamo.services.external_services.SmsService;
 import com.dinedynamo.services.invoice_services.DineInBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ public class DineInBillController {
 
     @Autowired
     private DineInOrderRepository dineInOrderRepository;
+
+    @Autowired
+    private SmsService smsService;
 
     @PostMapping("/dinedynamo/restaurant/orders/save/dinein-final-bill")
     public ResponseEntity<ApiResponse> saveDineInBill(@RequestBody DineInFinalBill dineInFinalBill) {

@@ -6,6 +6,7 @@ import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.repositories.order_repositories.TakeAwayOrderRepository;
+import com.dinedynamo.services.external_services.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,9 @@ public class TakeAwayOrderController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private SmsService smsService;
+
     @PostMapping("/dinedynamo/restaurant/takeaway/place")
     public ResponseEntity<ApiResponse> createTakeAwayOrder(@RequestBody TakeAway takeAway) {
         takeAway.setDateTime(LocalDateTime.now());
@@ -35,9 +39,21 @@ public class TakeAwayOrderController {
             }
         }
         TakeAway savedOrder = takeAwayOrderRepository.save(takeAway);
+
+        String customerPhone = takeAway.getCustomerPhone();
+        if (!customerPhone.startsWith("+91")) {
+            customerPhone = "+91" + customerPhone;
+        }
+
+        String messageContent = "Dear " + takeAway.getCustomerName() + ",\n\n"
+                + "Thank you for placing your order with us! We're delighted to inform you that your order has been successfully placed.\n\n";
+
+        smsService.sendMessageToCustomer(customerPhone, messageContent);
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", savedOrder);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 
     @PostMapping("/dinedynamo/restaurant/takeaway/all")
     public ResponseEntity<ApiResponse> getAllTakeAwayOrders(@RequestBody Restaurant restaurant) {
