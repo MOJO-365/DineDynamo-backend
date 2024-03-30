@@ -15,6 +15,9 @@ public interface DeliveryFinalBillRepository extends MongoRepository<DeliveryFin
 
     List<DeliveryFinalBill> findByRestaurantId(String restaurantId);
 
+    List<DeliveryFinalBill> findByCustomerPhone(String customerPhone);
+
+
     long countByRestaurantId(String restaurantId);
     List<DeliveryFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);
 

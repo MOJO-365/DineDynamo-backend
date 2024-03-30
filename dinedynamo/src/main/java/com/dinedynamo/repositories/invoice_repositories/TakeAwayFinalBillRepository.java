@@ -15,6 +15,7 @@ public interface TakeAwayFinalBillRepository extends MongoRepository<TakeAwayFin
 
     long countByRestaurantId(String restaurantId);
 
+    List<TakeAwayFinalBill> findByCustomerPhone(String customerPhone);
 
     List<TakeAwayFinalBill> findByRestaurantId(String restaurantId);
     List<TakeAwayFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);

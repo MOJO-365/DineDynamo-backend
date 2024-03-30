@@ -34,6 +34,7 @@ public class DineInOrderController {
     public ResponseEntity<ApiResponse> placeOrder(@RequestBody Order order) {
         order.setDateTime(LocalDateTime.now());
         orderRepository.save(order);
+
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Success", order);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

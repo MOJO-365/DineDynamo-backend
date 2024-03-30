@@ -1,4 +1,4 @@
-package com.dinedynamo.collections.invoice_collections;
+package com.dinedynamo.collections.report_collections;
 
 import lombok.Getter;
 import lombok.Setter;
