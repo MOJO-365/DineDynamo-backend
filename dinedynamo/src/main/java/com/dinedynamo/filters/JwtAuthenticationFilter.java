@@ -42,22 +42,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
 
             System.out.println("TOKEN FROM REQ: "+tokenFromRequest);
             tokenFromRequest = tokenFromRequest.substring(7);
-            //username = jwtService.extractUsername(token);
 
             userEmail = jwtHelper.getUsernameFromToken(tokenFromRequest);
             userRole = jwtHelper.extractUserRole(tokenFromRequest);
-
 
             System.out.println("In filter-UserEmail from token is: "+userEmail);
             System.out.println("In filter-UserRole from token is: "+userRole);
         }
 
-
         if (userEmail != null && userRole != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             System.out.println("USER ROLE IS: "+userRole);
             System.out.println("USER EMAIL IS: "+userEmail);
-            userDetailsServiceImpl.setUserRole(userRole);
+
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(userEmail);
             System.out.println("USER DETAILS: "+userDetails);
 
@@ -69,12 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-//                System.out.println("IF BLOCK");
-//                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
-//                System.out.println("Reached here......");
-//
                 request.setAttribute("restId",jwtHelper.extractRestaurantId(tokenFromRequest));
             }
 

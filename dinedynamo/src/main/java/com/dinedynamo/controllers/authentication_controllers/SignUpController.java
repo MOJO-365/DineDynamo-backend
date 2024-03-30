@@ -4,18 +4,23 @@ package com.dinedynamo.controllers.authentication_controllers;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.customer_collections.Customer;
 import com.dinedynamo.collections.restaurant_collections.AppUser;
+import com.dinedynamo.collections.restaurant_collections.RefreshToken;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 
+import com.dinedynamo.dto.authentication_dtos.JwtResponseDTO;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
 import com.dinedynamo.helper.JwtHelper;
 import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
 import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
+import com.dinedynamo.repositories.restaurant_repositories.RefreshTokenRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import com.dinedynamo.services.restaurant_services.AppUserService;
+import com.dinedynamo.services.restaurant_services.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -46,6 +51,12 @@ public class SignUpController
     @Autowired
     JwtHelper jwtHelper;
 
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     @GetMapping("/dinedynamo/home")
     public String testRestaurantController(){
         return "Restaurant controller working";
@@ -59,6 +70,7 @@ public class SignUpController
         System.out.println(restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()));
 
         Restaurant existingRestaurant = restaurantRepository.findByRestaurantEmail(restaurant.getRestaurantEmail()).orElse(null);
+
         if(existingRestaurant != null){
             System.out.println("Restaurant email already exists in database");
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.CONFLICT,"success",null),HttpStatus.OK);
@@ -66,19 +78,22 @@ public class SignUpController
 
         else{
 
+            String password = restaurant.getRestaurantPassword();
+            restaurant.setRestaurantPassword(passwordEncoder.encode(password));
             restaurantRepository.save(restaurant);
             appUserService.saveRestaurant(restaurant);
 
             System.out.println("Data of restaurant saved");
-            ApiResponse apiResponse = new ApiResponse(HttpStatus.OK,"success",restaurant);
 
+//            String accessToken = jwtHelper.generateToken(appUserRepository.findByUserEmail(restaurant.getRestaurantEmail()).orElse(null));
+//            System.out.println("TOKEN AFTER SIGNUP: "+accessToken);
+//
+//            RefreshToken refreshToken = refreshTokenService.createRefreshToken(restaurant.getRestaurantEmail());
+//            JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
+//            jwtResponseDTO.setAccessToken(accessToken);
+//            jwtResponseDTO.setRefreshToken(refreshToken.getRefreshToken());
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",true),HttpStatus.OK);
 
-            SignInRequestBody signInRequestBody = new SignInRequestBody();
-            signInRequestBody.setUserEmail(restaurant.getRestaurantEmail());
-            signInRequestBody.setUserPassword(restaurant.getRestaurantPassword());
-            String token = jwtHelper.generateToken(appUserRepository.findByUserEmail(restaurant.getRestaurantEmail()).orElse(null), signInRequestBody);
-            System.out.println("TOKEN AFTER SIGNUP: "+token);
-            return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
         }
 
 

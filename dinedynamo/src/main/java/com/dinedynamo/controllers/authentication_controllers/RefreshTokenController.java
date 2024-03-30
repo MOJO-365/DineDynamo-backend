@@ -1,10 +1,16 @@
 package com.dinedynamo.controllers.authentication_controllers;
 
 import com.dinedynamo.api.ApiResponse;
-import com.dinedynamo.dto.authentication_dtos.RefreshJWTRequest;
+
+import com.dinedynamo.collections.restaurant_collections.AppUser;
+import com.dinedynamo.collections.restaurant_collections.RefreshToken;
+import com.dinedynamo.dto.authentication_dtos.JwtResponseDTO;
+import com.dinedynamo.dto.authentication_dtos.RefreshTokenRequestDTO;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.helper.JwtHelper;
+import com.dinedynamo.repositories.restaurant_repositories.RefreshTokenRepository;
+import com.dinedynamo.services.restaurant_services.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +39,16 @@ public class RefreshTokenController
     @Autowired
     UserDetailsServiceImpl userDetailsServiceImpl;
 
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
+    @Autowired
+    RefreshTokenRepository refreshTokenRepository;
+
+
     /**
      *
-     * @param refreshJWTRequest
+
      * @return
      * @throws InvalidAlgorithmParameterException
      * @throws NoSuchPaddingException
@@ -47,19 +60,28 @@ public class RefreshTokenController
      * Use: get a refresh token. This api needs to be hit before the old token expires else user will have to login again using password and username
      */
     @PostMapping("/dinedynamo/refreshtoken")
-    public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshJWTRequest refreshJWTRequest) throws Exception {
-        String oldToken = refreshJWTRequest.getToken();
+    public ResponseEntity<ApiResponse> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        String userEmailFromToken = jwtHelper.getUsernameFromToken(oldToken);
-        String userRole = jwtHelper.extractUserRole(oldToken);
-        userDetailsServiceImpl.setUserRole(userRole);
-        userDetails = this.userDetailsServiceImpl.loadUserByUsername(userEmailFromToken);
-        SignInRequestBody signInRequestBody = new SignInRequestBody();
-        signInRequestBody.setUserEmail(userEmailFromToken);
+        RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(refreshTokenRequestDTO.getRefreshToken()).orElse(null);
 
-        String refreshedToken = jwtHelper.generateToken(userDetails,signInRequestBody);
-        System.out.println("REFRESH TOKEN GENERATED : "+refreshedToken);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",refreshedToken),HttpStatus.OK);
+
+        if(refreshToken == null){
+            throw new RuntimeException("Invalid refresh token-not found in db, signin again");
+        }
+
+        else{
+            refreshToken = refreshTokenService.verifyExpiration(refreshToken);
+
+            AppUser appUser = refreshToken.getAppUser();
+
+            String accessToken = jwtHelper.generateToken(appUser);
+
+            JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
+            jwtResponseDTO.setAccessToken(accessToken);
+            jwtResponseDTO.setRefreshToken(refreshTokenRequestDTO.getRefreshToken());
+
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",jwtResponseDTO),HttpStatus.OK);
+        }
 
 
     }

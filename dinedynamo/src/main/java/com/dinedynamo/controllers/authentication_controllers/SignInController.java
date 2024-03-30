@@ -3,6 +3,7 @@ package com.dinedynamo.controllers.authentication_controllers;
 
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.restaurant_collections.AppUser;
+import com.dinedynamo.collections.restaurant_collections.RefreshToken;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
@@ -12,12 +13,15 @@ import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
 import com.dinedynamo.services.restaurant_services.AppUserService;
+import com.dinedynamo.services.restaurant_services.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
@@ -26,6 +30,8 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
+import com.dinedynamo.dto.authentication_dtos.JwtResponseDTO;
 
 @RestController
 @CrossOrigin("*")
@@ -45,89 +51,39 @@ public class SignInController
     AppUserService appUserService;
 
     @Autowired
-    UserDetailsServiceImpl userDetailsServiceImpl;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    //UserDetails userDetails;
+    @Autowired
+    RefreshTokenService refreshTokenService;
 
 
-//    @PostMapping("/generateToken")
-//    public String authenticateAndGetToken(@RequestBody JwtAuthRequest jwtAuthRequest) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-//
-//        boolean isUserAuthenticated = authenticate(jwtAuthRequest.getUserEmail(), jwtAuthRequest.getUserPassword());
-//
-//        System.out.println("Before if block.....");
-//        if (isUserAuthenticated) {
-//            System.out.println("AUTHENTICATED..");
-//            userDetails = this.userDetailsServiceImpl.loadUserByUsername(jwtAuthRequest.getUserEmail());
-//            System.out.println(userDetails.getUsername());
-//            return jwtHelper.generateToken(userDetails,jwtAuthRequest);
-//        }
-//
-//        else {
-//            System.out.println("reached else block");
-//            throw new UsernameNotFoundException("invalid user request !");
-//        }
-//    }
 
 
     @PostMapping("/dinedynamo/auth/signin")
     public ResponseEntity<ApiResponse> signInWithJWT(@RequestBody SignInRequestBody signInRequestBody) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
-        String token=null;
-        String userRole=null;
-
         System.out.println("in signin controller: "+signInRequestBody.getUserEmail());
         System.out.println("in signin controller: "+signInRequestBody.getUserPassword());
 
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         signInRequestBody.getUserEmail(),
                         signInRequestBody.getUserPassword()
                 )
         );
 
-
-        System.out.println("line 93");
-
-        AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
-
-        if(appUser == null){
-            throw new RuntimeException("User not found in db");
+        if(authentication.isAuthenticated()){
+            String accessToken = jwtHelper.generateToken(appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null));
+            RefreshToken refreshToken = refreshTokenService.createRefreshToken(signInRequestBody.getUserEmail());
+            JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
+            jwtResponseDTO.setAccessToken(accessToken);
+            jwtResponseDTO.setRefreshToken(refreshToken.getRefreshToken());
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",jwtResponseDTO),HttpStatus.OK);
+        }
+        else{
+            throw new UsernameNotFoundException("Invalid User request");
         }
 
-        userRole = appUser.getUserType();
-        this.userDetailsServiceImpl.setUserRole(userRole);
-
-        token = jwtHelper.generateToken(appUser, signInRequestBody);
-
-        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",token),HttpStatus.OK);
-
-
-        //        String token = null;
-//        String userRole = null;
-//        AppUser appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
-//        boolean isUserAuthenticated = authenticateAppUserSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
-//
-//        if(appUser == null){
-//            throw new RuntimeException("App user not found in DB");
-//        }
-//
-//        if(!isUserAuthenticated){
-//            System.out.println("WRONG USERNAME OR PASSWORD");
-//            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.NOT_FOUND,"success",null),HttpStatus.OK);
-//        }
-//        else{
-//            userRole = appUser.getUserType();
-//            this.userDetailsServiceImpl.setUserRole(userRole);
-//            System.out.println("In SignIn controller: USER AUTHENTICATED, NOW TOKEN WILL BE GENERATED");
-//            userDetails = this.userDetailsServiceImpl.loadUserByUsername(signInRequestBody.getUserEmail());
-//            System.out.println("USER-EMAIL: "+userDetails.getUsername());
-//            token = jwtHelper.generateToken(userDetails,signInRequestBody);
-//            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",token),HttpStatus.OK);
-//        }
 
     }
 
@@ -151,67 +107,7 @@ public class SignInController
         }
 
 
-/////////////////////////////////////
-//        String token = null;
-//
-//        if(signInRequestBody.getUserType().toUpperCase().equals("RESTAURANT")){
-//
-//            boolean isAuthenticated = authenticateRestaurantSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
-//
-//            if(!isAuthenticated){
-//                System.out.println("USER-EMAIL AND PASSWORD OF RESTAURANT ARE INCORRECT - AUTHENTICATION FAILED");
-//                throw new UsernameNotFoundException("invalid user request !");
-//            }
-//
-//            this.userDetailsServiceImpl.setUserRole(userRole);
-//            System.out.println("In SignIn controller: USER AUTHENTICATED, NOW TOKEN WILL BE GENERATED");
-//            userDetails = this.userDetailsServiceImpl.loadUserByUsername(signInRequestBody.getUserEmail());
-//            System.out.println("USER-EMAIL: "+userDetails.getUsername());
-//            token = jwtHelper.generateToken(userDetails,signInRequestBody);
-//
-//        }
-//        else if(signInRequestBody.getUserType().toUpperCase().equals("CUSTOMER")){
-//
-//
-//            boolean isAutheticated = authenticateCustomerSignIn(signInRequestBody.getUserEmail(), signInRequestBody.getUserPassword());
-//
-//            if(!isAutheticated){
-//                System.out.println("USER-EMAIL AND PASSWORD OF CUSTOMER ARE INCORRECT - AUTHENTICATION FAILED");
-//                throw new UsernameNotFoundException("invalid user request !");
-//            }
-//
-//            this.userDetailsServiceImpl.setUserRole(userRole);
-//            System.out.println("In SignIn controller: USER AUTHENTICATED, NOW TOKEN WILL BE GENERATED");
-//            userDetails = this.userDetailsServiceImpl.loadUserByUsername(signInRequestBody.getUserEmail());
-//            System.out.println("USER-EMAIL: "+userDetails.getUsername());
-//            token = jwtHelper.generateToken(userDetails,signInRequestBody);
-//
-//        }
-//
-//        System.out.println("GENERATED TOKEN: "+token);
-//        return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",token),HttpStatus.OK);
-
     }
-
-    private boolean authenticateRestaurantSignIn(String userEmail, String userPassword){
-
-        return true;
-//        Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
-//        if (restaurant == null){
-//            System.out.println("RESTAURANT DOES NOT EXIST IN THE DB, AUTHENTICATION FAILED");
-//            return false;
-//        }
-//        String userPasswordFromDB = restaurant.getRestaurantPassword();
-//
-//
-//        if(userPasswordFromDB.equals(userPassword)){
-//            return true;
-//        }
-//        return false;
-    }
-
-
-
 
 
     private boolean authenticateAppUserSignIn(String userEmail, String userPassword){

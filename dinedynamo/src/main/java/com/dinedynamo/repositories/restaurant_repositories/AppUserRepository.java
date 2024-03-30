@@ -3,7 +3,6 @@ package com.dinedynamo.repositories.restaurant_repositories;
 
 import com.dinedynamo.collections.restaurant_collections.AppUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -49,7 +49,8 @@ public class JwtHelper
     @Autowired
     CustomerRepository customerRepository;
 
-    public static final long TOKEN_VALIDITY = 100 * 60 * 1000 * 10; // 10 minutes in milliseconds;
+    public static final long TOKEN_VALIDITY =   1000  * 60 * 100 * 10;  // 10 minutes
+    //public static final long TOKEN_VALIDITY = 100 * 60 * 1000 * 10; // 10 minutes in milliseconds;
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
@@ -96,15 +97,16 @@ public class JwtHelper
 
 
     // Generates token for user:
-    public String generateToken(UserDetails userDetails, SignInRequestBody signInRequestBody) throws NoSuchAlgorithmException, InvalidKeyException, java.security.InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException
+    public String generateToken(AppUser appUser) throws NoSuchAlgorithmException, InvalidKeyException, java.security.InvalidKeyException, NoSuchPaddingException, InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException
     {
         String token = null;
         Map<String, Object> claims = new HashMap<>();
         String userRole = null;
         Restaurant restaurant = null;
-        AppUser appUser = null;
 
-        appUser = appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null);
+
+
+        appUser = appUserRepository.findByUserEmail(appUser.getUserEmail()).orElse(null);
 
         if(appUser == null){
             throw new RuntimeException("App User Not Found in DB");
@@ -120,11 +122,11 @@ public class JwtHelper
             else{
                 userRole = appUser.getUserType();
 
-                claims.put("userEmail", signInRequestBody.getUserEmail());
+                claims.put("userEmail", appUser.getUserEmail());
                 claims.put("restaurantId",restaurant.getRestaurantId());
                 claims.put("userRole",userRole);
 
-                token =  doGenerateToken(claims, signInRequestBody.getUserEmail());
+                token =  doGenerateToken(claims, appUser.getUserEmail());
 
                 return token;
             }

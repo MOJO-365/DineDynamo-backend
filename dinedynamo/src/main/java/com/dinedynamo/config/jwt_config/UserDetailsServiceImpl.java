@@ -27,32 +27,11 @@ public class UserDetailsServiceImpl  implements UserDetailsService {
     AppUserRepository appUserRepository;
 
 
-
-    @Setter
-    @Getter
-    String userRole;
-
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 
         System.out.println("IN UserDetailsServiceImpl: "+appUserRepository.findByUserEmail(userEmail));
         return appUserRepository.findByUserEmail(userEmail).orElseThrow(()-> new UsernameNotFoundException("User not found"));
-
-
-        //        String userRole = getUserRole();
-//        AppUser appUser = appUserRepository.findByUserEmail(userEmail).orElse(null);
-//
-//        //Restaurant restaurant = restaurantRepository.findByRestaurantEmail(userEmail).orElse(null);
-//
-//        if(appUser == null){
-//            throw new RuntimeException("App user does not exist in DB");
-//        }
-//
-//        return new org.springframework.security.core.userdetails.User(
-//                appUser.getUserEmail(),
-//                appUser.getUserPassword(),
-//                AuthorityUtils.createAuthorityList(userRole)
-//        );
 
     }
 

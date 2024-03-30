@@ -6,6 +6,7 @@ import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +20,16 @@ public class AppUserService {
     @Autowired
     RestaurantRepository restaurantRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public AppUser save(AppUser appUser){
 
+        String password = appUser.getUserPassword();
         AppUser existingAppUser = appUserRepository.findByUserEmail(appUser.getUserEmail()).orElse(null);
 
         if(existingAppUser!=null){
+
             System.out.println("NO DUPLICATE EMAILS ALLOWED IN APP USER COLLECTION");
             return null;
         }
@@ -38,6 +44,8 @@ public class AppUserService {
             }
 
             else{
+                System.out.println("else block...........");
+                appUser.setUserPassword(passwordEncoder.encode(password));
                 appUserRepository.save(appUser);
                 return appUser;
             }
