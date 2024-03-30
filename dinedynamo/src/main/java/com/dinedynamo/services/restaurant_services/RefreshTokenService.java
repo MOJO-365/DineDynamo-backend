@@ -33,7 +33,7 @@ public class RefreshTokenService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .appUser(appUser)
                 .refreshToken(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(432000000)) // expiry of refresh token is 5 days
+                .expiryDate(Instant.now().plusMillis(1000  * 60  * 10)) // expiry of refresh token is 5 days
                 .build();
         return refreshTokenRepository.save(refreshToken);
     }
