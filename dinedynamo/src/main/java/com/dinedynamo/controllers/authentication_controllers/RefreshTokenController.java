@@ -74,7 +74,7 @@ public class RefreshTokenController
 
             if(refreshToken == null){
 
-                System.out.println("Refresh token expired");
+                System.out.println("Refresh token expired, redirect to signin");
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.UNAUTHORIZED, "success","TOKEN_EXPIRED"),HttpStatus.OK);
 
             }
