@@ -54,7 +54,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<ApiResponse> handleBadCredentialsException(BadCredentialsException e)
     {
 
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success");
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success", "BAD_CREDENTIALS");
 
         System.out.println("BadCredentialsException Occurred: "+e.getMessage());
 
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<ApiResponse> handleExpiredJwtException(ExpiredJwtException e)
     {
 
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success");
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success","TOKEN_EXPIRED");
 
         System.out.println("EXCEPTION: JWT TOKEN EXPIRED: "+e.getMessage());
 
@@ -77,7 +77,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     public ResponseEntity<ApiResponse> handleMalformedJwtException(MalformedJwtException e)
     {
 
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success");
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND,"success", "MALFORMED_TOKEN");
 
         System.out.println("EXCEPTION: MALFORMED JWT TOKEN: "+e.getMessage());
 
