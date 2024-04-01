@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-                request.setAttribute("restId",jwtHelper.extractRestaurantId(tokenFromRequest));
+
             }
 
 

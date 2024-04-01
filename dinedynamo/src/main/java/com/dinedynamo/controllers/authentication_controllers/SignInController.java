@@ -78,9 +78,11 @@ public class SignInController
             JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
             jwtResponseDTO.setAccessToken(accessToken);
             jwtResponseDTO.setRefreshToken(refreshToken.getRefreshToken());
+            jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",jwtResponseDTO),HttpStatus.OK);
         }
         else{
+
             throw new UsernameNotFoundException("Invalid User request");
         }
 

@@ -14,4 +14,6 @@ public class JwtResponseDTO {
     String accessToken;
 
     String refreshToken;
+
+    String restaurantId;
 }

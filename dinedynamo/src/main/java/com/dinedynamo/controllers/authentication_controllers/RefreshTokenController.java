@@ -78,6 +78,7 @@ public class RefreshTokenController
 
             JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
             jwtResponseDTO.setAccessToken(accessToken);
+            jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
             jwtResponseDTO.setRefreshToken(refreshTokenRequestDTO.getRefreshToken());
 
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",jwtResponseDTO),HttpStatus.OK);
