@@ -3,6 +3,7 @@ package com.dinedynamo.filters;
 import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
 import com.dinedynamo.exceptions.GlobalExceptionHandler;
+import com.dinedynamo.helper.EncryptionDecryptionUtil;
 import com.dinedynamo.helper.JwtHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -42,6 +43,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
     String userRole=null;
 
     @Autowired
+    EncryptionDecryptionUtil encryptionDecryptionUtil;
+
+    @Autowired
     GlobalExceptionHandler globalExceptionHandler;
 
 
@@ -54,7 +58,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter
             if (tokenFromRequest != null && tokenFromRequest.startsWith("Bearer ")) {
 
                 System.out.println("TOKEN FROM REQ: "+tokenFromRequest);
-                tokenFromRequest = tokenFromRequest.substring(7);
+
+                //Decrypting token here
+                tokenFromRequest = encryptionDecryptionUtil.decrypt(tokenFromRequest.substring(7));
 
                 userEmail = jwtHelper.getUsernameFromToken(tokenFromRequest);
                 userRole = jwtHelper.extractUserRole(tokenFromRequest);

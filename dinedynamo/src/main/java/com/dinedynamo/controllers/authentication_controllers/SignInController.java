@@ -5,10 +5,11 @@ import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.RefreshToken;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
+
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
+import com.dinedynamo.helper.EncryptionDecryptionUtil;
 import com.dinedynamo.helper.JwtHelper;
-import com.dinedynamo.repositories.customer_repositories.CustomerRepository;
+
 import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 
@@ -20,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +37,8 @@ import com.dinedynamo.dto.authentication_dtos.JwtResponseDTO;
 @CrossOrigin("*")
 public class SignInController
 {
+    @Autowired
+    EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     @Autowired
     RestaurantRepository restaurantRepository;
@@ -76,7 +78,7 @@ public class SignInController
             String accessToken = jwtHelper.generateToken(appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null));
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(signInRequestBody.getUserEmail());
             JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
-            jwtResponseDTO.setAccessToken(accessToken);
+            jwtResponseDTO.setAccessToken(encryptionDecryptionUtil.encrypt(accessToken));
             jwtResponseDTO.setRefreshToken(refreshToken.getRefreshToken());
             jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",jwtResponseDTO),HttpStatus.OK);
@@ -110,6 +112,7 @@ public class SignInController
 
 
     }
+
 
 
     private boolean authenticateAppUserSignIn(String userEmail, String userPassword){

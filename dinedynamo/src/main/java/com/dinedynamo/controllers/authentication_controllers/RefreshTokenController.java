@@ -8,6 +8,7 @@ import com.dinedynamo.dto.authentication_dtos.JwtResponseDTO;
 import com.dinedynamo.dto.authentication_dtos.RefreshTokenRequestDTO;
 import com.dinedynamo.dto.authentication_dtos.SignInRequestBody;
 import com.dinedynamo.config.jwt_config.UserDetailsServiceImpl;
+import com.dinedynamo.helper.EncryptionDecryptionUtil;
 import com.dinedynamo.helper.JwtHelper;
 import com.dinedynamo.repositories.restaurant_repositories.RefreshTokenRepository;
 import com.dinedynamo.services.restaurant_services.RefreshTokenService;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -45,6 +43,8 @@ public class RefreshTokenController
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
 
+    @Autowired
+    EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     /**
      *
@@ -72,17 +72,35 @@ public class RefreshTokenController
         else{
             refreshToken = refreshTokenService.verifyExpiration(refreshToken);
 
-            AppUser appUser = refreshToken.getAppUser();
+            if(refreshToken == null){
 
-            String accessToken = jwtHelper.generateToken(appUser);
+                System.out.println("Refresh token expired");
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.UNAUTHORIZED, "success","TOKEN_EXPIRED"),HttpStatus.OK);
 
-            JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
-            jwtResponseDTO.setAccessToken(accessToken);
-            jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
-            jwtResponseDTO.setRefreshToken(refreshTokenRequestDTO.getRefreshToken());
+            }
+            else{
+                AppUser appUser = refreshToken.getAppUser();
 
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",jwtResponseDTO),HttpStatus.OK);
+                String accessToken = jwtHelper.generateToken(appUser);
+
+                JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
+                jwtResponseDTO.setAccessToken(encryptionDecryptionUtil.encrypt(accessToken));
+                jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
+                jwtResponseDTO.setRefreshToken(refreshTokenRequestDTO.getRefreshToken());
+
+                return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",jwtResponseDTO),HttpStatus.OK);
+            }
         }
+
+
+    }
+
+    @PostMapping("/dinedynamo/restaurant/delete-restaurant-refreshtoken")
+    ResponseEntity<ApiResponse> deleteRefreshTokenByRestaurantId(@RequestParam String refreshToken){
+
+        refreshTokenRepository.deleteByRefreshToken(refreshToken);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",true),HttpStatus.OK);
 
 
     }

@@ -25,16 +25,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptionDecryptionUtil {
 
-    @Value("${aes.secretKey}")
-    private static String SECRET_KEY;
+        //@Value("${aes.secretKey}")
+    private  String SECRET_KEY="my_secret_key";
 
-    @Value("${aes.salt}")
-    private static String SALT;
+    //@Value("${aes.salt}")
+    private  String SALT="my_salt_key";
 
-    public static String encrypt(String strToEncrypt)
+    public  String encrypt(String strToEncrypt)
     {
         try {
 
+            System.out.println("SECRET KEY: "+SECRET_KEY);
             // Create default byte array
             byte[] iv = { 0, 0, 0, 0, 0, 0, 0, 0,
                     0, 0, 0, 0, 0, 0, 0, 0 };
@@ -73,8 +74,9 @@ public class EncryptionDecryptionUtil {
     }
 
     // This method use to decrypt to string
-    public static String decrypt(String strToDecrypt)
+    public String decrypt(String strToDecrypt)
     {
+
         try {
 
             // Default byte array

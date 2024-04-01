@@ -5,6 +5,8 @@ import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.RefreshToken;
 import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RefreshTokenRepository;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -45,10 +47,12 @@ public class RefreshTokenService {
     }
 
     public RefreshToken verifyExpiration(RefreshToken refreshToken){
+
         if(refreshToken.getExpiryDate().compareTo(Instant.now())<0){
-            //if token is expired, it deletes it from the db
+            //if token is expired, it deletes it from the db and return null
             refreshTokenRepository.delete(refreshToken);
-            throw new RuntimeException(refreshToken.getRefreshToken() + " Refresh token is expired. Please make a new login..!");
+            return null;
+            //throw new RuntimeException(refreshToken.getRefreshToken() + " Refresh token is expired. Please make a new login..!");
         }
         return refreshToken;
     }
