@@ -87,7 +87,7 @@ public class RefreshTokenController
                 jwtResponseDTO.setAccessToken(encryptionDecryptionUtil.encrypt(accessToken));
                 jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
                 jwtResponseDTO.setRefreshToken(refreshTokenRequestDTO.getRefreshToken());
-
+                jwtResponseDTO.setAppUser(appUser);
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",jwtResponseDTO),HttpStatus.OK);
             }
         }

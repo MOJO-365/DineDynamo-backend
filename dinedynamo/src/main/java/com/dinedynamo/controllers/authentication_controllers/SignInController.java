@@ -81,6 +81,7 @@ public class SignInController
             jwtResponseDTO.setAccessToken(encryptionDecryptionUtil.encrypt(accessToken));
             jwtResponseDTO.setRefreshToken(refreshToken.getRefreshToken());
             jwtResponseDTO.setRestaurantId(jwtHelper.extractRestaurantId(accessToken));
+            jwtResponseDTO.setAppUser(appUserRepository.findByUserEmail(signInRequestBody.getUserEmail()).orElse(null));
             return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",jwtResponseDTO),HttpStatus.OK);
         }
         else{

@@ -130,6 +130,7 @@ public class JwtHelper
                 claims.put("restaurantId",restaurant.getRestaurantId());
                 claims.put("userRole",userRole);
 
+
                 token =  doGenerateToken(claims, appUser.getUserEmail());
 
                 return token;
@@ -211,6 +212,7 @@ public class JwtHelper
     public String extractUserRole(String token) {
         return extractClaim(token, claims -> claims.get("userRole", String.class));
     }
+
 
 
 
