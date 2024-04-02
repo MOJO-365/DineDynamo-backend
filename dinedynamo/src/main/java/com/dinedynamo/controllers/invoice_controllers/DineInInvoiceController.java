@@ -54,7 +54,7 @@ public class DineInInvoiceController {
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("inline", "invoice.pdf");
+                headers.setContentDispositionFormData("attachment", "invoice.pdf");
 
                 return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
             } else {
@@ -92,7 +92,7 @@ public class DineInInvoiceController {
     private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             float contentHeight = calculateContentHeight(order);
-            Document document = new Document(new Rectangle(PageSize.A6.getWidth(), contentHeight), 10, 10, 10, 10);
+            Document document = new Document(new Rectangle(300, contentHeight), 10, 10, 10, 10);
             PdfWriter.getInstance(document, outputStream);
 
             document.open();
