@@ -96,9 +96,9 @@ public class RefreshTokenController
     }
 
     @PostMapping("/dinedynamo/restaurant/delete-restaurant-refreshtoken")
-    ResponseEntity<ApiResponse> deleteRefreshTokenByRestaurantId(@RequestParam String refreshToken){
+    ResponseEntity<ApiResponse> deleteRefreshTokenByRestaurantId(@RequestBody RefreshTokenRequestDTO refreshToken){
 
-        refreshTokenRepository.deleteByRefreshToken(refreshToken);
+        refreshTokenRepository.deleteByRefreshToken(refreshToken.getRefreshToken());
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success",true),HttpStatus.OK);
 
