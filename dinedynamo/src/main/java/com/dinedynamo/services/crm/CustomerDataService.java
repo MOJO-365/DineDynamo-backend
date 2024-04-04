@@ -34,7 +34,7 @@ public class CustomerDataService {
         List<DineInFinalBill> dineInFinalBills = dineInFinalBillRepository.findByRestaurantId(restaurantId);
         List<DeliveryFinalBill> deliveryFinalBills = deliveryFinalBillRepository.findByRestaurantId(restaurantId);
         List<TakeAwayFinalBill> takeAwayFinalBills = takeAwayFinalBillRepository.findByRestaurantId(restaurantId);
-        List<Object> mergedBills = mergeBills(dineInFinalBills,deliveryFinalBills, takeAwayFinalBills);
+        List<Object> mergedBills = mergeBills(dineInFinalBills, deliveryFinalBills, takeAwayFinalBills);
 
         return new CustomerDataResponse(mergedBills);
     }

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,7 +34,9 @@ public class ReportController {
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
     public ResponseEntity<ApiResponse> getDailyOverallSalesReport(@RequestBody DailyOverallSalesRequest request) {
-        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(request.getRestaurantId(),request.getDate());
+        request.setDate(LocalDate.now());
+
+        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(request.getRestaurantId(), request.getDate());
 
         if (dailySalesReport != null && !dailySalesReport.getItemSales().isEmpty()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", dailySalesReport), HttpStatus.OK);
