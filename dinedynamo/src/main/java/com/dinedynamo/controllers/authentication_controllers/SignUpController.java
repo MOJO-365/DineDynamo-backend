@@ -92,7 +92,7 @@ public class SignUpController
 //            JwtResponseDTO jwtResponseDTO = new JwtResponseDTO();
 //            jwtResponseDTO.setAccessToken(accessToken);
 //            jwtResponseDTO.setRefreshToken(refreshToken.getRefreshToken());
-            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",true),HttpStatus.OK);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(HttpStatus.OK,"success",restaurant),HttpStatus.OK);
 
         }
 
