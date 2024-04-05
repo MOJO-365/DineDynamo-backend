@@ -33,6 +33,9 @@ public class RestaurantSubscription {
     String subscriptionPlanId;
 
 
+    // false when the restaurant subscribes for the first time, true when the restaurant has extends (takes new subscription)
+    boolean isRenewed;
+
 
 }
 

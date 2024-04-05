@@ -25,43 +25,50 @@ public class RestaurantSubscriptionService {
     @Autowired
     SubscriptionPlanRepository subscriptionPlanRepository;
 
-    public SubscriptionResponseDTO save(SubscriptionRequestDTO subscriptionRequestDTO){
+    public RestaurantSubscription save(SubscriptionRequestDTO subscriptionRequestDTO){
 
-        SubscriptionPlan subscriptionPlan = subscriptionPlanRepository.findById(subscriptionRequestDTO.getSubscriptionPlanId()).orElse(null);
+        SubscriptionPlan requestedSubscriptionPlan = subscriptionPlanRepository.findById(subscriptionRequestDTO.getSubscriptionPlanId()).orElse(null);
 
-        if(subscriptionPlan == null){
+        RestaurantSubscription existingRestaurantSubscription = restaurantSubscriptionRepository.findByRestaurantId(subscriptionRequestDTO.getRestaurantId()).orElse(null);
+
+        if(requestedSubscriptionPlan == null){
             throw new RuntimeException("Subscription Plan id not found in db");
         }
+
+        //If the restaurant takes subscription for the first time
+        if(existingRestaurantSubscription == null){
+
+            RestaurantSubscription restaurantSubscription = new RestaurantSubscription();
+            restaurantSubscription.setSubscriptionPlanId(subscriptionRequestDTO.getSubscriptionPlanId());
+            restaurantSubscription.setRestaurantId(subscriptionRequestDTO.getRestaurantId());
+            restaurantSubscription.setStartDate(LocalDate.now());
+
+            System.out.println("-------------> After setter mtd: "+restaurantSubscription.getStartDate());
+            restaurantSubscription.setEndDate(LocalDate.now().plusMonths((long) requestedSubscriptionPlan.getNoOfMonths()));
+            restaurantSubscription.setRestaurantSubscriptionStatus(getCurrentRestaurantSubscriptionStatus(restaurantSubscription.getStartDate(), restaurantSubscription.getEndDate()));
+
+            restaurantSubscription.setRenewed(false);
+            restaurantSubscriptionRepository.save(restaurantSubscription);
+            return restaurantSubscription;
+        }
+
         else{
 
-            SubscriptionResponseDTO subscriptionResponseDTO = new SubscriptionResponseDTO();
-
-            if(subscriptionRequestDTO.isPaymentDone()){
-
-                RestaurantSubscription restaurantSubscription = new RestaurantSubscription();
-                restaurantSubscription.setSubscriptionPlanId(subscriptionRequestDTO.getSubscriptionPlanId());
-                restaurantSubscription.setRestaurantId(subscriptionRequestDTO.getRestaurantId());
-                restaurantSubscription.setStartDate(subscriptionRequestDTO.getStartDate());
-                restaurantSubscription.setEndDate(subscriptionRequestDTO.getEndDate());
-                restaurantSubscription.setRestaurantSubscriptionStatus(getCurrentRestaurantSubscriptionStatus(subscriptionRequestDTO.getStartDate(), subscriptionRequestDTO.getEndDate()));
-
-                restaurantSubscriptionRepository.save(restaurantSubscription);
-
-                subscriptionResponseDTO.setRestaurantSubscription(restaurantSubscription);
-                subscriptionResponseDTO.setSavedToDb(true);
-                subscriptionResponseDTO.setPaymentDone(true);
+            existingRestaurantSubscription.setSubscriptionPlanId(requestedSubscriptionPlan.getSubscriptionPlanId());
 
 
-            }
-            else{
-                System.out.println("PAYMENT FOR SUBSCRIPTION NOT DONE");
-                subscriptionResponseDTO.setRestaurantSubscription(null);
-                subscriptionResponseDTO.setSavedToDb(false);
-                subscriptionResponseDTO.setPaymentDone(false);
+            existingRestaurantSubscription.setEndDate(existingRestaurantSubscription.getEndDate().
+                    plusMonths((long)requestedSubscriptionPlan.
+                            getNoOfMonths()));
 
-            }
+            existingRestaurantSubscription.setRestaurantSubscriptionStatus(getCurrentRestaurantSubscriptionStatus(existingRestaurantSubscription.getStartDate(), existingRestaurantSubscription.getEndDate()));
 
-            return subscriptionResponseDTO;
+            existingRestaurantSubscription.setRenewed(true);
+            restaurantSubscriptionRepository.save(existingRestaurantSubscription);
+
+            return existingRestaurantSubscription;
+
+
         }
     }
 
@@ -79,7 +86,7 @@ public class RestaurantSubscriptionService {
     }
 
 
-    //@Scheduled(fixedRate =  24 * 60 * 60 * 1000)
+    @Scheduled(fixedRate =  24 * 60 * 60 * 1000)
     public void updateSubscriptionStatusInDatabase(){
 
         List<RestaurantSubscription> restaurantSubscriptionList = restaurantSubscriptionRepository.findAll();

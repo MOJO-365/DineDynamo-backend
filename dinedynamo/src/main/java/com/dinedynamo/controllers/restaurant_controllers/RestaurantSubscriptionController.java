@@ -24,20 +24,28 @@ public class RestaurantSubscriptionController
     @Autowired
     RestaurantSubscriptionService restaurantSubscriptionService;
 
-    @PostMapping("/dinedynamo/restaurant/subscriptions/take-subscription")
+    @PostMapping("/dinedynamo/restaurant/subscriptions/take-or-renew-subscription")
     public ResponseEntity<ApiResponse> takeSubscription(@RequestBody SubscriptionRequestDTO subscriptionRequestDTO){
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantSubscriptionService.save(subscriptionRequestDTO)),HttpStatus.OK);
     }
 
 
+
+
     @PostMapping("/dinedynamo/restaurant/subscriptions/get-subscription-status")
     public ResponseEntity<ApiResponse> getSubscriptionStatusForRestaurant(@RequestParam String restaurantId){
 
-        RestaurantSubscription restaurantSubscription = restaurantSubscriptionRepository.findByRestaurantId(restaurantId);
+        RestaurantSubscription restaurantSubscription = restaurantSubscriptionRepository.findByRestaurantId(restaurantId).orElse(null);
+
+        if(restaurantSubscription == null){
+            System.out.println("NO SUBSCRIPTION EXISTS FOR THIS RESTAURANT");
+        }
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantSubscription),HttpStatus.OK);
 
 
     }
+
+
 }

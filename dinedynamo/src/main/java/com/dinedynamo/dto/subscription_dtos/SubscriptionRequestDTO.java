@@ -13,8 +13,6 @@ public class SubscriptionRequestDTO
 {
     String subscriptionPlanId;
 
-    boolean isPaymentDone;
-
     String restaurantId;
 
     LocalDate startDate;
