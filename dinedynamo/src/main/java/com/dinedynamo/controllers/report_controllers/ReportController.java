@@ -29,32 +29,6 @@ public class ReportController {
     } else {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for the given restaurant", "failure"), HttpStatus.OK);
     }
-   }
-
-
-    @PostMapping("/dinedynamo/reports/dailyOverallSales")
-    public ResponseEntity<ApiResponse> getDailyOverallSalesReport(@RequestBody DailyOverallSalesRequest request) {
-        request.setDate(LocalDate.now());
-
-        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(request.getRestaurantId(), request.getDate());
-
-        if (dailySalesReport != null && !dailySalesReport.getItemSales().isEmpty()) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", dailySalesReport), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.OK);
-        }
-    }
-
-
-    @PostMapping("/dinedynamo/report/top-five-popular-items")
-    public ResponseEntity<ApiResponse> getTopFiveItems(@RequestBody Restaurant restaurant) {
-        List<TopItem> topItems = reportService.getTopFiveItems(restaurant.getRestaurantId());
-
-        if (topItems != null && !topItems.isEmpty()) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", topItems), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.OK);
-        }
     }
 
 
@@ -71,14 +45,19 @@ public class ReportController {
 
 
 
-    @PostMapping("/dinedynamo/report/last-five-days-sales")
-    public ResponseEntity<ApiResponse> getLastFiveDaysSales(@RequestBody Restaurant restaurant) {
-        LastFiveDaysSalesReport lastFiveDaysSalesReport = reportService.getLastFiveDaysSales(restaurant.getRestaurantId());
+//"This API will generate today's sales report for ordered items."
 
-        if (lastFiveDaysSalesReport != null && !lastFiveDaysSalesReport.getLastFiveDaysSales().isEmpty()) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", lastFiveDaysSalesReport), HttpStatus.OK);
+
+    @PostMapping("/dinedynamo/reports/dailyOverallSales")
+    public ResponseEntity<ApiResponse> getDailyOverallSalesReport(@RequestBody DailyOverallSalesRequest request) {
+        request.setDate(LocalDate.now());
+
+        DailySalesReport dailySalesReport = reportService.generateDailyOverallSalesReport(request.getRestaurantId(), request.getDate());
+
+        if (dailySalesReport != null && !dailySalesReport.getItemSales().isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", dailySalesReport), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No reports found for the last five days", "failure"), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", "No report data present"), HttpStatus.OK);
         }
     }
 
@@ -93,5 +72,44 @@ public class ReportController {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No reports found for the given date range", "failure"), HttpStatus.OK);
         }
     }
+
+
+
+    @PostMapping("/dinedynamo/report/top-five-popular-items")
+    public ResponseEntity<ApiResponse> getTopFiveItems(@RequestBody Restaurant restaurant) {
+        List<TopItem> topItems = reportService.getTopFiveItems(restaurant.getRestaurantId());
+
+        if (topItems != null && !topItems.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", topItems), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "failure", null), HttpStatus.OK);
+        }
+    }
+
+
+
+
+
+    /**
+     * Retrieves the last five days' sales report for the specified restaurant.
+     *
+     * @param restaurant The restaurant entity containing the restaurant ID.
+     * @return ResponseEntity containing ApiResponse with the last five days' sales report if found,
+     *         or a failure message if no reports are found for the last five days.
+     */
+    @PostMapping("/dinedynamo/report/last-five-days-sales")
+    public ResponseEntity<ApiResponse> getLastFiveDaysSales(@RequestBody Restaurant restaurant) {
+        LastFiveDaysSalesReport lastFiveDaysSalesReport = reportService.getLastFiveDaysSales(restaurant.getRestaurantId());
+
+        if (lastFiveDaysSalesReport != null && !lastFiveDaysSalesReport.getLastFiveDaysSales().isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", lastFiveDaysSalesReport), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No reports found for the last five days", "failure"), HttpStatus.OK);
+        }
+    }
+
+
+
+
 
 }
