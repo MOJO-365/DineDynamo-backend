@@ -62,7 +62,7 @@ public class RestaurantController
      * Pass only restaurantId in request body to get the corresponding Restaurant object in response
      */
     @PostMapping("/dinedynamo/restaurant/findrestaurantbyid")
-    public ResponseEntity<ApiResponse> findRestaurantById(HttpServletRequest request, @RequestBody Restaurant restaurant){
+    public ResponseEntity<ApiResponse> findRestaurantById(@RequestBody Restaurant restaurant){
 
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
 
@@ -99,6 +99,7 @@ public class RestaurantController
 
         Restaurant newRestaurantDetails = editRestaurantDTO.getRestaurant();
         newRestaurantDetails.setRestaurantId(restaurantIdFromRequest);
+        newRestaurantDetails.setRestaurantPassword(oldRestaurantDetails.getRestaurantPassword());
 
         restaurantRepository.save(newRestaurantDetails);
         Restaurant updatedRestaurant = restaurantRepository.findByRestaurantId(editRestaurantDTO.getRestaurantId());
