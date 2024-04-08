@@ -25,7 +25,7 @@ public class RestaurantReviewController {
      * @param restaurantReview The review object containing review details.
      * @return ResponseEntity containing ApiResponse with success or failure message.
      */
-    @PostMapping("dinedynamo/restaurant/reviews/add")
+    @PostMapping("dinedynamo/customer/reviews/add")
     public ResponseEntity<ApiResponse> addReview(@RequestBody RestaurantReview restaurantReview) {
         String restaurantId = restaurantReview.getRestaurantId();
         Optional<Restaurant> optionalRestaurant = restaurantRepository.findById(restaurantId);
@@ -43,7 +43,7 @@ public class RestaurantReviewController {
      * @param restaurant The restaurant object for which reviews are requested.
      * @return ResponseEntity containing ApiResponse with the list of reviews retrieved.
      */
-    @PostMapping("dinedynamo/restaurant/show/reviews")
+    @PostMapping("dinedynamo/customer/show/reviews")
     public ResponseEntity<ApiResponse> getReviewsByRestaurant(@RequestBody Restaurant restaurant) {
         List<RestaurantReview> restaurantReviews = restaurantReviewRepository.findByRestaurantId(restaurant.getRestaurantId());
         ApiResponse response = new ApiResponse(HttpStatus.OK, "Reviews retrieved successfully", restaurantReviews);
@@ -55,7 +55,7 @@ public class RestaurantReviewController {
      * @param restaurantReview The review object containing updated review details.
      * @return ResponseEntity containing ApiResponse with success or failure message.
      */
-    @PostMapping("dinedynamo/restaurant/update-review")
+    @PostMapping("dinedynamo/customer/update-review")
     public ResponseEntity<ApiResponse> updateReview(@RequestBody RestaurantReview restaurantReview) {
         Optional<RestaurantReview> optionalReview = restaurantReviewRepository.findById(restaurantReview.getFeedbackId());
 
@@ -76,7 +76,7 @@ public class RestaurantReviewController {
      * @param restaurant The restaurant object for which average rating and total ratings are requested.
      * @return ResponseEntity containing ApiResponse with average rating and total ratings.
      */
-    @PostMapping("dinedynamo/restaurant/show/average-rating")
+    @PostMapping("dinedynamo/customer/show/average-rating")
     public ResponseEntity<ApiResponse> getAverageRatingForRestaurant(@RequestBody Restaurant restaurant) {
         List<RestaurantReview> reviews = restaurantReviewRepository.findByRestaurantId(restaurant.getRestaurantId());
 
@@ -102,7 +102,7 @@ public class RestaurantReviewController {
      * @param restaurantReview The review object to be deleted.
      * @return ResponseEntity containing ApiResponse with success or failure message.
      */
-    @DeleteMapping("dinedynamo/restaurant/delete-rating")
+    @DeleteMapping("dinedynamo/customer/delete-rating")
     public ResponseEntity<ApiResponse> deleteRating(@RequestBody RestaurantReview restaurantReview){
 
         Optional<RestaurantReview> optionalReview = restaurantReviewRepository.findById(restaurantReview.getFeedbackId());

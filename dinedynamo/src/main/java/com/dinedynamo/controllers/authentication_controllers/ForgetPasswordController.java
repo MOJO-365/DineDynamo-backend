@@ -1,8 +1,10 @@
 package com.dinedynamo.controllers.authentication_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.restaurant_collections.AppUser;
 import com.dinedynamo.collections.restaurant_collections.ResetPasswordRequest;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
+import com.dinedynamo.repositories.restaurant_repositories.AppUserRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.services.external_services.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ForgetPasswordController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
     @PostMapping("/dinedynamo/forget-password")
     public ResponseEntity<ApiResponse> forgetPassword(@RequestBody Restaurant restaurant) {
         String email = restaurant.getRestaurantEmail();
@@ -34,13 +39,11 @@ public class ForgetPasswordController {
         if (optionalRestaurant.isPresent()) {
             Restaurant existingRestaurant = optionalRestaurant.get();
 
-            // Generate a unique token for password reset
             String resetToken = UUID.randomUUID().toString();
             existingRestaurant.setResetToken(resetToken);
             restaurantRepository.save(existingRestaurant);
 
-            // Send email with reset link
-            String resetLink = "http://localhost:5173/set-password?token=" + resetToken;
+            String resetLink = "http://localhost:5173/newpassword?token=" + resetToken;
             emailService.sendPasswordResetEmail(email, resetLink);
 
             ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset link has been sent to your email");
@@ -51,8 +54,6 @@ public class ForgetPasswordController {
         }
     }
 
-
-
     @PostMapping("/dinedynamo/reset-password")
     public ResponseEntity<ApiResponse> resetPassword(@RequestBody ResetPasswordRequest requestBody) {
         String resetToken = requestBody.getResetToken();
@@ -60,10 +61,19 @@ public class ForgetPasswordController {
 
         Restaurant existingRestaurant = restaurantRepository.findByResetToken(resetToken);
         if (existingRestaurant != null) {
-            existingRestaurant.setRestaurantPassword(passwordEncoder.encode(newPassword));
+            String encodedNewPassword = passwordEncoder.encode(newPassword);
 
+            existingRestaurant.setRestaurantPassword(encodedNewPassword);
             existingRestaurant.setResetToken(null);
             restaurantRepository.save(existingRestaurant);
+
+            Optional<AppUser> optionalAppUser = appUserRepository.findByUserEmail(existingRestaurant.getRestaurantEmail());
+            if (optionalAppUser.isPresent()) {
+                AppUser appUser = optionalAppUser.get();
+                appUser.setUserPassword(encodedNewPassword);
+                appUserRepository.save(appUser);
+            }
+
             ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset successfully");
             return ResponseEntity.ok(response);
         } else {
@@ -71,36 +81,4 @@ public class ForgetPasswordController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
-
-
-
-    //    @PostMapping("/dinedynamo/forget-password")
-//    public ResponseEntity<ApiResponse> forgetPassword(@RequestBody Restaurant restaurant, HttpServletRequest request) {
-//        String email = restaurant.getRestaurantEmail();
-//        Optional<Restaurant> optionalRestaurant = restaurantRepository.findByRestaurantEmail(email);
-//        if (optionalRestaurant.isPresent()) {
-//            Restaurant existingRestaurant = optionalRestaurant.get();
-//
-//            // Generate a unique token for password reset
-//            String resetToken = UUID.randomUUID().toString();
-//
-//            // Store token and email in session
-//            HttpSession session = request.getSession();
-//            session.setAttribute("resetToken", resetToken);
-//            session.setAttribute("email", email);
-//
-//            // Send email with reset link
-//            String resetLink = "http://localhost:5173/reset-password";
-//            emailService.sendPasswordResetEmail(email, resetLink);
-//
-//            ApiResponse response = new ApiResponse(HttpStatus.OK, "success", "Password reset link has been sent to your email");
-//            return ResponseEntity.ok(response);
-//        } else {
-//            ApiResponse response = new ApiResponse(HttpStatus.NOT_FOUND, "failure", "No restaurant found with this email");
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-//        }
-//    }
-
-
-
 }

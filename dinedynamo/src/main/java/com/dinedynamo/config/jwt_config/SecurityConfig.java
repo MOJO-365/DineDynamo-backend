@@ -41,6 +41,9 @@ public class SecurityConfig
 
 //            "/dinedynamo/**",
             "/dinedynamo/customer",
+            "dinedynamo/send-otp",
+            "/dinedynamo/forget-password",
+            "/dinedynamo/reset-password",
             "/dinedynamo/auth/signin",
             "/dinedynamo/signin",
             "/dinedynamo/signuprestaurant",
