@@ -65,17 +65,17 @@ public class NewMenusController
     }
 
 
-    @PostMapping("/dinedynamo/restaurant/menu/categories")
-    public List<Category> getCategories(){
-
-        Menus menus = menusRepository.findById("65d198e184210b4917ef7761").orElse(null);
-
-        assert menus != null;
-        List<Category> l = menus.getListOfCategories();
-
-        return l;
-
-    }
+//    @PostMapping("/dinedynamo/restaurant/menu/categories")
+//    public List<Category> getCategories(){
+//
+//        Menus menus = menusRepository.findById("65d198e184210b4917ef7761").orElse(null);
+//
+//        assert menus != null;
+//        List<Category> l = menus.getListOfCategories();
+//
+//        return l;
+//
+//    }
 
 
     @PostMapping("/dinedynamo/restaurant/menu/add-item-to-category")

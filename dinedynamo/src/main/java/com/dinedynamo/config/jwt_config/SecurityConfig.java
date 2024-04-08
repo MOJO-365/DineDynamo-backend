@@ -39,14 +39,32 @@ public class SecurityConfig
 
     private static final String[] AUTH_WHITELIST = {
 
-            "/dinedynamo/**",
+//            "/dinedynamo/**",
+            "/dinedynamo/customer",
             "/dinedynamo/auth/signin",
             "/dinedynamo/signin",
-//            "/dinedynamo/restaurant/menu/getmenu",
-//            "/dinedynamo/signupcustomer",
-//            "/dinedynamo/signuprestaurant",
+            "/dinedynamo/signuprestaurant",
+            "/dinedynamo/signupcustomer",
+            "/dinedynamo/customer/favourites/**",
             "/dinedynamo/refreshtoken",
-//            "/dinedynamo/signin",
+            "/dinedynamo/restaurant/getall",
+            "/dinedynamo/customer/findrestaurantsbycity",
+            "/dinedynamo/restaurant/findrestaurantbyid",
+            "/dinedynamo/restaurant/subscriptions/take-or-renew-subscription",
+            "/dinedynamo/restaurant/table/findbytableid",
+            "/dinedynamo/restaurant/table/get-groupby-tables",
+            "/dinedynamo/restaurant/menu/get-menu",
+            "/dinedynamo/restaurant/menu/get-all-items",
+            "dinedynamo/create-payment-intent", //for payment gateway
+            "/dinedynamo/customer/filters/**",
+            "/dinedynamo/customer/reservations/**",
+            "/dinedynamo/restaurant/reservations/get-reservation-settings",
+            "/dinedynamo/restaurant/offers/get-bogo-offer-by-id",
+            "/dinedynamo/restaurant/offers/get-all-bogo-offers",
+            "/dinedynamo/restaurant/offers/get-bogp-offer-by-id",
+            "/dinedynamo/restaurant/offers/get-all-bogp-offers",
+            "/dinedynamo/restaurant/offers/get-percentage-discount-by-id",
+            "/dinedynamo/restaurant/offers/get-all-percentage-discounts",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
@@ -57,8 +75,7 @@ public class SecurityConfig
             "/api/public/**",
             "/api/public/authenticate",
             "/actuator/*",
-            "/swagger-ui/**",
-//            "/login","/refreshToken", "/download"
+            "/swagger-ui/**"
     };
 
 //    @Bean
