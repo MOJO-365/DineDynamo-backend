@@ -13,6 +13,6 @@ import java.util.List;
 @Setter
 public class CustomerDataResponse {
 
-    private List<Object> customersData;
+    private List<CustomerOrderInfo> customersData;
 
 }
