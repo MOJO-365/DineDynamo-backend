@@ -5,13 +5,13 @@ import com.dinedynamo.collections.invoice_collections.DeliveryFinalBill;
 import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
+import com.dinedynamo.collections.crm.CustomerOrderInfo;
 import com.dinedynamo.repositories.invoice_repositories.DeliveryFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.TakeAwayFinalBillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +22,7 @@ public class CustomerDataService {
 
     @Autowired
     private DineInFinalBillRepository dineInFinalBillRepository;
+
     @Autowired
     private DeliveryFinalBillRepository deliveryFinalBillRepository;
 
@@ -31,46 +32,58 @@ public class CustomerDataService {
     public CustomerDataResponse getCustomerData(Restaurant restaurantRequest) {
         String restaurantId = restaurantRequest.getRestaurantId();
 
-        List<DineInFinalBill> dineInFinalBills = dineInFinalBillRepository.findByRestaurantId(restaurantId);
-        List<DeliveryFinalBill> deliveryFinalBills = deliveryFinalBillRepository.findByRestaurantId(restaurantId);
-        List<TakeAwayFinalBill> takeAwayFinalBills = takeAwayFinalBillRepository.findByRestaurantId(restaurantId);
-        List<Object> mergedBills = mergeBills(dineInFinalBills, deliveryFinalBills, takeAwayFinalBills);
+        List<CustomerOrderInfo> customerOrders = new ArrayList<>();
 
-        return new CustomerDataResponse(mergedBills);
+        List<Object> allFinalBills = new ArrayList<>();
+        allFinalBills.addAll(dineInFinalBillRepository.findByRestaurantId(restaurantId));
+        allFinalBills.addAll(deliveryFinalBillRepository.findByRestaurantId(restaurantId));
+        allFinalBills.addAll(takeAwayFinalBillRepository.findByRestaurantId(restaurantId));
+
+        customerOrders.addAll(mapToCustomerOrderInfoList(allFinalBills));
+
+        Collections.sort(customerOrders, Comparator.comparing(CustomerOrderInfo::getDate));
+
+        return new CustomerDataResponse(customerOrders);
     }
 
-
-    private List<Object> mergeBills(List<DineInFinalBill> dineInFinalBills, List<DeliveryFinalBill> deliveryFinalBills, List<TakeAwayFinalBill> takeAwayFinalBills) {
-        List<Object> mergedBills = new ArrayList<>();
-
-        mergedBills.addAll(dineInFinalBills);
-        mergedBills.addAll(deliveryFinalBills);
-        mergedBills.addAll(takeAwayFinalBills);
-
-        Collections.sort(mergedBills, new Comparator<Object>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                LocalDateTime dateTime1, dateTime2;
-                if (o1 instanceof DineInFinalBill) {
-                    dateTime1 = ((DineInFinalBill) o1).getDatetime();
-                } else if (o1 instanceof DeliveryFinalBill) {
-                    dateTime1 = ((DeliveryFinalBill) o1).getDatetime();
-                } else {
-                    dateTime1 = ((TakeAwayFinalBill) o1).getDatetime();
-                }
-
-                if (o2 instanceof DineInFinalBill) {
-                    dateTime2 = ((DineInFinalBill) o2).getDatetime();
-                } else if (o2 instanceof DeliveryFinalBill) {
-                    dateTime2 = ((DeliveryFinalBill) o2).getDatetime();
-                } else {
-                    dateTime2 = ((TakeAwayFinalBill) o2).getDatetime();
-                }
-
-                return dateTime1.compareTo(dateTime2);
+    private List<CustomerOrderInfo> mapToCustomerOrderInfoList(List<? extends Object> finalBills) {
+        List<CustomerOrderInfo> customerOrders = new ArrayList<>();
+        for (Object bill : finalBills) {
+            if (bill instanceof DineInFinalBill) {
+                DineInFinalBill dineInBill = (DineInFinalBill) bill;
+                customerOrders.add(new CustomerOrderInfo(
+                        dineInBill.getCustomerName(),
+                        null,
+                        dineInBill.getCustomerPhone(),
+                        dineInBill.getOrderType(),
+                        dineInBill.getDatetime(),
+                        dineInBill.getTotalAmount(),
+                        null
+                ));
+            } else if (bill instanceof DeliveryFinalBill) {
+                DeliveryFinalBill deliveryBill = (DeliveryFinalBill) bill;
+                customerOrders.add(new CustomerOrderInfo(
+                        deliveryBill.getCustomerName(),
+                        deliveryBill.getCustomerAddress(),
+                        deliveryBill.getCustomerPhone(),
+                        deliveryBill.getOrderType(),
+                        deliveryBill.getDatetime(),
+                        deliveryBill.getTotalAmount(),
+                        deliveryBill.getCustomerEmail()
+                ));
+            } else if (bill instanceof TakeAwayFinalBill) {
+                TakeAwayFinalBill takeAwayBill = (TakeAwayFinalBill) bill;
+                customerOrders.add(new CustomerOrderInfo(
+                        takeAwayBill.getCustomerName(),
+                        null,
+                        takeAwayBill.getCustomerPhone(),
+                        takeAwayBill.getOrderType(),
+                        takeAwayBill.getDatetime(),
+                        takeAwayBill.getTotalAmount(),
+                        takeAwayBill.getCustomerEmail()
+                ));
             }
-        });
-
-        return mergedBills;
+        }
+        return customerOrders;
     }
 }
