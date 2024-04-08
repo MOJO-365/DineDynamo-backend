@@ -41,7 +41,6 @@ public class CustomerDataService {
 
         customerOrders.addAll(mapToCustomerOrderInfoList(allFinalBills));
 
-        // Sort customer orders by date
         Collections.sort(customerOrders, Comparator.comparing(CustomerOrderInfo::getDate));
 
         return new CustomerDataResponse(customerOrders);
@@ -70,18 +69,18 @@ public class CustomerDataService {
                         deliveryBill.getOrderType(),
                         deliveryBill.getDatetime(),
                         deliveryBill.getTotalAmount(),
-                        deliveryBill.getCustomerEmail() // Assuming there's a getter for customerEmail
+                        deliveryBill.getCustomerEmail()
                 ));
             } else if (bill instanceof TakeAwayFinalBill) {
                 TakeAwayFinalBill takeAwayBill = (TakeAwayFinalBill) bill;
                 customerOrders.add(new CustomerOrderInfo(
                         takeAwayBill.getCustomerName(),
-                        null, // No customer address for Take-Away
+                        null,
                         takeAwayBill.getCustomerPhone(),
                         takeAwayBill.getOrderType(),
                         takeAwayBill.getDatetime(),
                         takeAwayBill.getTotalAmount(),
-                        takeAwayBill.getCustomerEmail() // Assuming there's a getter for customerEmail
+                        takeAwayBill.getCustomerEmail()
                 ));
             }
         }
