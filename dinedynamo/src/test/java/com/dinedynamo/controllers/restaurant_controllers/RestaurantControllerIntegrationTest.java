@@ -1,7 +1,5 @@
 package com.dinedynamo.controllers.restaurant_controllers;
-import com.dinedynamo.api.ApiResponse;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
-import com.dinedynamo.controllers.restaurant_controllers.RestaurantController;
 import com.dinedynamo.dto.restaurant_dtos.EditRestaurantDTO;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.services.restaurant_services.AppUserService;
@@ -9,8 +7,6 @@ import com.dinedynamo.services.restaurant_services.RestaurantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,9 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -66,7 +60,7 @@ public class RestaurantControllerIntegrationTest {
         String requestBody = objectMapper.writeValueAsString(restaurant);
 
         // Mock the behavior of the service to return the list of restaurants
-        when(restaurantRepository.findByRestaurantCity(restaurant.getRestaurantCity())).thenReturn(restaurants);
+        when(restaurantRepository.findByRestaurantCityRegexIgnoreCase(restaurant.getRestaurantCity())).thenReturn(restaurants);
 
         // Perform a POST request to the controller endpoint
         mockMvc.perform(MockMvcRequestBuilders.post("/dinedynamo/customer/findrestaurantsbycity")

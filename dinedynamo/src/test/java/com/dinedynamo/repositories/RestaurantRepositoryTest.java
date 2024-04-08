@@ -69,7 +69,7 @@ class RestaurantRepositoryTest {
         restaurant.setRestaurantId(restaurantId);
         restaurant.setRestaurantCity(restaurantCity);
         restaurantRepository.save(restaurant);
-        List<Restaurant> result = restaurantRepository.findByRestaurantCity(restaurantCity);
+        List<Restaurant> result = restaurantRepository.findByRestaurantCityRegexIgnoreCase(restaurantCity);
 
         assertEquals(1, result.size());
         assertEquals(restaurant, result.get(0));

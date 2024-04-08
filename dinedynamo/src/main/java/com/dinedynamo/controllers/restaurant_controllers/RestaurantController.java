@@ -48,7 +48,7 @@ public class RestaurantController
         }
 
 
-        List<Restaurant> listFilteredByCity = restaurantRepository.findByRestaurantCity(restaurant.getRestaurantCity());
+        List<Restaurant> listFilteredByCity = restaurantRepository.findByRestaurantCityRegexIgnoreCase(restaurant.getRestaurantCity());
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",listFilteredByCity),HttpStatus.OK);
 
@@ -66,7 +66,7 @@ public class RestaurantController
 
         restaurant = restaurantRepository.findById(restaurant.getRestaurantId()).orElse(null);
 
-        System.out.println("RESTAURANT ID FROM HttpServletRequest"+request.getAttribute("restId"));
+
         if(restaurant == null){
             System.out.println("RESTAURANT-ID DOES NOT EXIST");
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",null),HttpStatus.OK);
