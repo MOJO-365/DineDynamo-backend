@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Setter
 public class CustomerOrderInfo {
     private String customerName;
-    private String address;
-    private String phone;
+    private String customerAddress;
+    private String customerPhone;
     private String orderType;
     private LocalDateTime date;
     private double totalAmount;
