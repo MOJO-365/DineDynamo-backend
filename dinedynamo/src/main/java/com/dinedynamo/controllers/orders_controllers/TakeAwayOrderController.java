@@ -29,7 +29,7 @@ public class TakeAwayOrderController {
     @Autowired
     private SmsService smsService;
 
-    @PostMapping("/dinedynamo/restaurant/takeaway/place")
+    @PostMapping("/dinedynamo/customer/takeaway/place")
     public ResponseEntity<ApiResponse> createTakeAwayOrder(@RequestBody TakeAway takeAway) {
         takeAway.setDateTime(LocalDateTime.now());
         takeAway.setPickedUp(false);
