@@ -40,6 +40,9 @@ public class RestaurantController
     public ResponseEntity<ApiResponse> findRestaurantsByCity(@RequestBody Restaurant restaurant){
 
         String restaurantCity = restaurant.getRestaurantCity();
+                
+
+
 
         if(restaurantCity.equals("") || restaurantCity.equals(" ") || restaurantCity == null){
 

@@ -105,16 +105,14 @@ class CustomerFavouriteRestaurantsServiceTest {
         existingFavourites.setListOfRestaurantIds(List.of("abc123", "def456"));
 
         when(customerFavouriteRestaurantsRespository.findById(customerPhone)).thenReturn(Optional.of(existingFavourites));
-        when(restaurantRepository.findById("abc123")).thenReturn(Optional.of(createRestaurant("abc123", "Restaurant1", "test@example.com", "password", "resetToken", "Test Location", "Test City", "Test Highlight", 4.5, LocalTime.of(8, 0), LocalTime.of(22, 0), 0.0, true, "123456789", "987654321")));
-        when(restaurantRepository.findById("def456")).thenReturn(Optional.of(createRestaurant("def456", "Restaurant2", "test2@example.com", "password2", "resetToken2", "Test Location 2", "Test City 2", "Test Highlight 2", 4.0, LocalTime.of(9, 0), LocalTime.of(23, 0), 0.0, false, "987654321", "123456789")));
 
         // Act
-        List<Restaurant> result = customerFavouriteRestaurantsService.getAllFavourites(customerPhone);
+        List<String> result = customerFavouriteRestaurantsService.getAllFavourites(customerPhone);
 
         // Assert
         assertEquals(2, result.size());
-        assertEquals("Restaurant1", result.get(0).getRestaurantName());
-        assertEquals("Restaurant2", result.get(1).getRestaurantName());
+        assertEquals("abc123", result.get(0));
+        assertEquals("def456", result.get(1));
     }
 
     @Test
