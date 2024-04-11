@@ -53,6 +53,7 @@ public class SecurityConfig
             "/dinedynamo/forget-password",
             "/dinedynamo/reset-password",
             "/dinedynamo/customer/**",
+            "/dinedynamo/restaurant/**",
             "/dinedynamo/auth/signin",
             "/dinedynamo/signin",
             "/dinedynamo/admin/**",

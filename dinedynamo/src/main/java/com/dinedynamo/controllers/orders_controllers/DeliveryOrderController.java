@@ -28,7 +28,7 @@ public class DeliveryOrderController {
 
 
     // for Creating delivery order
-    @PostMapping("/dinedynamo/restaurant/orders/delivery/create")
+    @PostMapping("/dinedynamo/customer/delivery-order-place")
     public ResponseEntity<ApiResponse> createDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder) {
         deliveryOrder.setDateTime(LocalDateTime.now());
         deliveryOrder.setDeliveryStatus(false);
