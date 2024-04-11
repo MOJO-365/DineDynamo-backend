@@ -49,6 +49,17 @@ public class ReportService {
         return new OrderCounts(totalDineInOrders, totalDeliveryOrders, totalTakeAwayOrders);
     }
 
+
+    public OrderCounts getOrdersCountForToday(String restaurantId) {
+        LocalDate today = LocalDate.now();
+
+        long totalDineInOrders = dineInFinalBillRepository.countByRestaurantIdAndDate(restaurantId, today);
+        long totalDeliveryOrders = deliveryFinalBillRepository.countByRestaurantIdAndDate(restaurantId, today);
+        long totalTakeAwayOrders = takeAwayFinalBillRepository.countByRestaurantIdAndDate(restaurantId, today);
+
+        return new OrderCounts(totalDineInOrders, totalDeliveryOrders, totalTakeAwayOrders);
+    }
+
     public DailySalesReport generateDailyOverallSalesReport(String restaurantId, LocalDate date) {
         List<ItemSale> itemSales = new ArrayList<>();
         double totalRevenue = 0.0;
@@ -159,6 +170,15 @@ public class ReportService {
         return new TotalSalesReport(totalDineInSales, totalDeliverySales, totalTakeAwaySales);
     }
 
+    public TotalSalesReport getTotalSalesForToday(String restaurantId) {
+        LocalDate today = LocalDate.now();
+        double totalDineInSales = getTotalSalesByOrderTypeForDate(restaurantId, OrderType.DINEIN, today);
+        double totalDeliverySales = getTotalSalesByOrderTypeForDate(restaurantId, OrderType.DELIVERY, today);
+        double totalTakeAwaySales = getTotalSalesByOrderTypeForDate(restaurantId, OrderType.TAKEAWAY, today);
+
+        return new TotalSalesReport(totalDineInSales, totalDeliverySales, totalTakeAwaySales);
+    }
+
     private double getTotalSalesByOrderType(String restaurantId, OrderType orderType) {
         double totalSales = 0.0;
 
@@ -177,6 +197,35 @@ public class ReportService {
                 break;
             case TAKEAWAY:
                 List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantId(restaurantId);
+                for (TakeAwayFinalBill order : takeAwayOrders) {
+                    totalSales += calculateTotalSales(order.getOrderList());
+                }
+                break;
+            default:
+                break;
+        }
+
+        return totalSales;
+    }
+
+    private double getTotalSalesByOrderTypeForDate(String restaurantId, OrderType orderType, LocalDate date) {
+        double totalSales = 0.0;
+
+        switch (orderType) {
+            case DINEIN:
+                List<DineInFinalBill> dineInOrders = dineInFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
+                for (DineInFinalBill order : dineInOrders) {
+                    totalSales += calculateTotalSales(order.getOrderList());
+                }
+                break;
+            case DELIVERY:
+                List<DeliveryFinalBill> deliveryOrders = deliveryFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
+                for (DeliveryFinalBill order : deliveryOrders) {
+                    totalSales += calculateTotalSales(order.getOrderList());
+                }
+                break;
+            case TAKEAWAY:
+                List<TakeAwayFinalBill> takeAwayOrders = takeAwayFinalBillRepository.findByRestaurantIdAndDate(restaurantId, date);
                 for (TakeAwayFinalBill order : takeAwayOrders) {
                     totalSales += calculateTotalSales(order.getOrderList());
                 }

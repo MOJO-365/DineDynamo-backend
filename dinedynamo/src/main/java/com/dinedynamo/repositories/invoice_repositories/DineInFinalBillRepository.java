@@ -18,11 +18,14 @@ public interface DineInFinalBillRepository extends MongoRepository<DineInFinalBi
 
     long countByRestaurantId(String restaurantId);
 
+    long countByRestaurantIdAndDate(String restaurantId,LocalDate date);
+
+
     List<DineInFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);
 
 
 
 
 
-    List<DineInFinalBill> findByTableIdAndDatetimeAndCustomerPhone(String tableId, LocalDateTime datetime, String customerPhone);
+    List<DineInFinalBill> findByTableIdAndCustomerPhone(String tableId, String customerPhone);
 }
