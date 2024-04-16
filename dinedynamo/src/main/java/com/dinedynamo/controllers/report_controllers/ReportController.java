@@ -21,8 +21,6 @@ public class ReportController {
     private ReportService reportService;
 
 
-
-
     @PostMapping("/dinedynamo/customer/report/total-sales/today")
     public ResponseEntity<ApiResponse> getTotalSalesForToday(@RequestBody Restaurant restaurant) {
         TotalSalesReport totalSalesReport = reportService.getTotalSalesForToday(restaurant.getRestaurantId());
