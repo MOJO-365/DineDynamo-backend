@@ -37,28 +37,6 @@ public class TakeAwayBillController {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"Data Stored",takeAwayFinalBill),HttpStatus.OK);
     }
 
-    @PostMapping("/dinedynamo/customer/takeaway-orders")
-    public ResponseEntity<ApiResponse> getCustomerOrders(@RequestBody DeliveryFinalBill deliveryFinalBill) {
-        String customerPhone = deliveryFinalBill.getCustomerPhone();
 
-        List<TakeAwayFinalBill> customerOrders = takeAwayBillService.getCustomerOrdersByPhone(customerPhone);
-
-        if (customerOrders.isEmpty()) {
-            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "No orders found for this customer", null));
-        }
-
-        Collections.sort(customerOrders, (o1, o2) -> o2.getDatetime().compareTo(o1.getDatetime()));
-
-        List<TakeAwayOrderDetails> orderedOrderDetails = customerOrders.stream()
-                .map(order -> new TakeAwayOrderDetails(
-                        order.getTakeAwayBillId(),
-                        order.getDatetime(),
-                        order.getOrderList(),
-                        order.getTotalAmount()
-                ))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Data Retrieved", orderedOrderDetails));
-    }
 
 }
