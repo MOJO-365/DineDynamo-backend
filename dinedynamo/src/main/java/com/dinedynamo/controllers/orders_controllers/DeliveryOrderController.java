@@ -67,11 +67,12 @@ public class DeliveryOrderController {
             existingDeliveryOrder.setDeliveryStatus(updatedDeliveryOrder.isDeliveryStatus());
             existingDeliveryOrder.setOrderList(updatedDeliveryOrder.getOrderList());
 
-            if (existingDeliveryOrder.getOrderList() != null) {
-                for (OrderList orderListItem : existingDeliveryOrder.getOrderList()) {
-                    orderListItem.setPrepared(true);
-                }
-            }
+
+//            if (existingDeliveryOrder.getOrderList() != null) {
+//                for (OrderList orderListItem : existingDeliveryOrder.getOrderList()) {
+//                    orderListItem.setPrepared(true);
+//                }
+//            }
 
             deliveryOrderRepository.save(existingDeliveryOrder);
             return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Delivery order updated successfully", null));
