@@ -1,5 +1,6 @@
 package com.dinedynamo.repositories.invoice_repositories;
 
+import com.dinedynamo.collections.invoice_collections.DeliveryFinalBill;
 import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.invoice_collections.TakeAwayFinalBill;
 import com.dinedynamo.collections.order_collections.OrderList;
@@ -23,6 +24,7 @@ public interface DineInFinalBillRepository extends MongoRepository<DineInFinalBi
 
     List<DineInFinalBill> findByRestaurantIdAndDate(String restaurantId, LocalDate date);
 
+    List<DineInFinalBill> findByCustomerPhone(String customerPhone);
 
 
 

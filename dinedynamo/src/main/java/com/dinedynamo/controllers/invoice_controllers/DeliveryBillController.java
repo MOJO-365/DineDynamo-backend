@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -31,29 +33,31 @@ public class DeliveryBillController {
 
 
 
+
+
+
     @PostMapping("/dinedynamo/customer/delivery-orders")
-    public ResponseEntity<ApiResponse> getCustomerOrders(@RequestParam String customerPhone) {
+    public ResponseEntity<ApiResponse> getCustomerOrders(@RequestBody DeliveryFinalBill deliveryFinalBill) {
+        String customerPhone = deliveryFinalBill.getCustomerPhone();
+
         List<DeliveryFinalBill> customerOrders = deliveryBillService.getCustomerOrdersByPhone(customerPhone);
 
         if (customerOrders.isEmpty()) {
             return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "No orders found for this customer", null));
         }
 
-        List<DeliveryOrderDetails> basicOrderDetails = extractOrderDetails(customerOrders);
-        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Data Retrieved", basicOrderDetails));
+        Collections.sort(customerOrders, (o1, o2) -> o2.getDatetime().compareTo(o1.getDatetime()));
+
+        List<DeliveryOrderDetails> orderedOrderDetails = customerOrders.stream()
+                .map(order -> new DeliveryOrderDetails(
+                        order.getDeliveryBillId(),
+                        order.getDatetime(),
+                        order.getOrderList(),
+                        order.getTotalAmount()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Data Retrieved", orderedOrderDetails));
     }
 
-    private List<DeliveryOrderDetails> extractOrderDetails(List<DeliveryFinalBill> orders) {
-        List<DeliveryOrderDetails> deliveryOrderDetails = new ArrayList<>();
-        for (DeliveryFinalBill order : orders) {
-            DeliveryOrderDetails basicOrder = new DeliveryOrderDetails(
-                    order.getDeliveryBillId(),
-                    order.getDatetime(),
-                    order.getOrderList(),
-                    order.getTotalAmount()
-            );
-            deliveryOrderDetails.add(basicOrder);
-        }
-        return deliveryOrderDetails;
-    }
 }

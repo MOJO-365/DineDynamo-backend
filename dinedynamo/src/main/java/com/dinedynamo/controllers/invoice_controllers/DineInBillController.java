@@ -1,7 +1,9 @@
 package com.dinedynamo.controllers.invoice_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.invoice_collections.DeliveryFinalBill;
 import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
+import com.dinedynamo.dto.order_details.DeliveryOrderDetails;
 import com.dinedynamo.repositories.order_repositories.DineInOrderRepository;
 import com.dinedynamo.services.external_services.SmsService;
 import com.dinedynamo.services.invoice_services.DineInBillService;
@@ -16,7 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -39,4 +44,30 @@ public class DineInBillController {
         dineInBillService.saveDineInBill(dineInFinalBill);
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "Data Stored", dineInFinalBill), HttpStatus.OK);
     }
+
+
+
+//    @PostMapping("/dinedynamo/customer/delivery-orders")
+//    public ResponseEntity<ApiResponse> getCustomerOrders(@RequestBody DeliveryFinalBill deliveryFinalBill) {
+//        String customerPhone = deliveryFinalBill.getCustomerPhone();
+//
+//        List<DineInFinalBill> customerOrders = dineInBillService.getCustomerOrdersByPhone(customerPhone);
+//
+//        if (customerOrders.isEmpty()) {
+//            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "No orders found for this customer", null));
+//        }
+//
+//        Collections.sort(customerOrders, (o1, o2) -> o2.getDatetime().compareTo(o1.getDatetime()));
+//
+//        List<DeliveryOrderDetails> orderedOrderDetails = customerOrders.stream()
+//                .map(order -> new DeliveryOrderDetails(
+//                        order.getDineInBillId(),
+//                        order.getDatetime(),
+//                        order.getOrderList(),
+//                        order.getTotalAmount()
+//                ))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "Data Retrieved", orderedOrderDetails));
+//    }
 }

@@ -5,6 +5,8 @@ import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DineInBillService {
     @Autowired
@@ -13,4 +15,9 @@ public class DineInBillService {
     public void saveDineInBill(DineInFinalBill dineInFinalBill) {
         dineInFinalBillRepository.save(dineInFinalBill);
     }
+
+//    public List<DineInFinalBill> getCustomerOrdersByPhone(String customerPhone) {
+//        return dineInFinalBillRepository.findByCustomerPhone(customerPhone);
+//    }
+
 }
