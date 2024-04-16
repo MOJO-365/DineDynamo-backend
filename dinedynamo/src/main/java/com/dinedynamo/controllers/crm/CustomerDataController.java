@@ -26,7 +26,7 @@ public class CustomerDataController {
     }
 
 
-    @PostMapping("/dinedynamo/customer/past-orders-info")
+    @PostMapping("/dinedynamo/customer/order-history")
     public ResponseEntity<ApiResponse> getPastOrderHistory(@RequestBody PastOrderInfo pastOrderInfo) {
         String customerPhone = pastOrderInfo.getCustomerPhone();
         PastOrderHistoryResponse orderHistoryResponse = orderHistoryService.getPastOrderHistory(customerPhone);
