@@ -20,6 +20,36 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
+
+
+
+    @PostMapping("/dinedynamo/customer/report/total-sales/today")
+    public ResponseEntity<ApiResponse> getTotalSalesForToday(@RequestBody Restaurant restaurant) {
+        TotalSalesReport totalSalesReport = reportService.getTotalSalesForToday(restaurant.getRestaurantId());
+
+        if (totalSalesReport != null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", totalSalesReport), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No sales data found for today", "failure"), HttpStatus.OK);
+        }
+    }
+
+
+
+    @PostMapping("/dinedynamo/customer/report/orders-count/today")
+    public ResponseEntity<ApiResponse> getOrdersCountForToday(@RequestBody Restaurant restaurant) {
+        OrderCounts orders = reportService.getOrdersCountForToday(restaurant.getRestaurantId());
+
+        if (orders != null) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for today", "failure"), HttpStatus.OK);
+        }
+    }
+
+
+
+
     @PostMapping("/dinedynamo/reports/orders/total")
     public ResponseEntity<ApiResponse> getTotalOrdersCount(@RequestBody Restaurant restaurant) {
     OrderCounts orders = reportService.getTotalOrders(restaurant.getRestaurantId());
@@ -31,17 +61,6 @@ public class ReportController {
     }
     }
 
-
-    @PostMapping("/dinedynamo/customer/reports/orders/total-today")
-    public ResponseEntity<ApiResponse> getOrdersCountForToday(@RequestBody Restaurant restaurant) {
-        OrderCounts orders = reportService.getOrdersCountForToday(restaurant.getRestaurantId());
-
-        if (orders != null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", orders), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No orders found for today", "failure"), HttpStatus.OK);
-        }
-    }
 
 
     @PostMapping("/dinedynamo/report/all-orders-total-sales")
@@ -55,20 +74,6 @@ public class ReportController {
         }
     }
 
-
-    @PostMapping("/dinedynamo/customer/report/sales/total/today")
-    public ResponseEntity<ApiResponse> getTotalSalesForToday(@RequestBody Restaurant restaurant) {
-        TotalSalesReport totalSalesReport = reportService.getTotalSalesForToday(restaurant.getRestaurantId());
-
-        if (totalSalesReport != null) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, "success", totalSalesReport), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, "No sales data found for today", "failure"), HttpStatus.OK);
-        }
-    }
-
-
-//"This API will generate today's sales report for ordered items."
 
 
     @PostMapping("/dinedynamo/reports/dailyOverallSales")
