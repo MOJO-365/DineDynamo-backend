@@ -103,6 +103,8 @@ public class RestaurantReservationService
      * Main purpose: clearing the collection
      */
     public boolean clearOldReservationsFromDb(String restaurantId){
+
+        System.out.println("RESTAURANT ID: "+restaurantId);
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
 
         if(restaurant == null){

@@ -45,7 +45,7 @@ public class QRCodeService
         hintsMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
         BitMatrix bitMatrix;
         try {
-            bitMatrix = qrCodeWriter.encode("http://192.168.77.253:5173/qrdashboard?tableId="+content, BarcodeFormat.QR_CODE, width, height, hintsMap);
+            bitMatrix = qrCodeWriter.encode("http://localhost:5173/qrdashboard?tableId="+content, BarcodeFormat.QR_CODE, width, height, hintsMap);
 
 
         } catch (Exception e) {

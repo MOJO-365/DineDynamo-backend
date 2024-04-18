@@ -92,6 +92,7 @@ public class RestaurantReservationAndSettingsController
     @PostMapping("/dinedynamo/restaurant/reservations/get-accepted-reservations")
     ResponseEntity<ApiResponse> getAllAcceptedReservations(@RequestBody Restaurant restaurant){
 
+        System.out.println("In controller's get-accepted-reservations methods, restaurantId: "+restaurant.getRestaurantId());
         boolean isRestaurantPresent = restaurantService.isRestaurantPresentinDb(restaurant.getRestaurantId());
         if(!isRestaurantPresent){
             throw new RuntimeException("RESTAURANT-ID NOT IN DB");
@@ -222,6 +223,7 @@ public class RestaurantReservationAndSettingsController
     @PostMapping("/dinedynamo/restaurant/reservations/clear-old-reservations")
     ResponseEntity<ApiResponse> clearOldReservations(@RequestBody Restaurant restaurant){
 
+        System.out.println("Restaurant-id in controller: "+restaurant.getRestaurantId());
         boolean isDeleted = restaurantReservationService.clearOldReservationsFromDb(restaurant.getRestaurantId());
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",isDeleted),HttpStatus.OK);
