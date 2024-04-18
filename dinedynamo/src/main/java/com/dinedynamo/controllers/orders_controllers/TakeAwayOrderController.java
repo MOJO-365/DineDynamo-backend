@@ -7,7 +7,6 @@ import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.repositories.order_repositories.TakeAwayOrderRepository;
 import com.dinedynamo.services.external_services.SmsService;
-import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,24 +68,22 @@ public class TakeAwayOrderController {
 
     @PostMapping("/dinedynamo/restaurant/takeaway/update")
     public ResponseEntity<ApiResponse> updateTakeAwayOrder(@RequestBody TakeAway updatedTakeAway) {
-        TakeAway existingTakeAwayOptional = takeAwayOrderRepository.findById(updatedTakeAway.getTakeAwayId()).orElse(null);
+        Optional<TakeAway> existingTakeAwayOptional = takeAwayOrderRepository.findById(updatedTakeAway.getTakeAwayId());
 
-        if (existingTakeAwayOptional!= null) {
-            //TakeAway existingTakeAway = existingTakeAwayOptional;
-            existingTakeAwayOptional.setPickedUp(updatedTakeAway.isPickedUp());
-            existingTakeAwayOptional.setOrderList(updatedTakeAway.getOrderList());
+        if (existingTakeAwayOptional.isPresent()) {
+            TakeAway existingTakeAway = existingTakeAwayOptional.get();
+            existingTakeAway.setPickedUp(updatedTakeAway.isPickedUp());
+            existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
 
 //            if (existingTakeAway.getOrderList() != null) {
 //                for (OrderList orderListItem : existingTakeAway.getOrderList()) {
 //                    orderListItem.setPrepared(true);
 //                }
 //            }
-            updatedTakeAway.setTakeAwayId(existingTakeAwayOptional.getTakeAwayId());
-            updatedTakeAway.setDateTime(LocalDateTime.now());
-            takeAwayOrderRepository.save(updatedTakeAway);
-            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", updatedTakeAway));
-        } else {
 
+            takeAwayOrderRepository.save(existingTakeAway);
+            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", null));
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, "TakeAway order not found", null));
         }
     }
