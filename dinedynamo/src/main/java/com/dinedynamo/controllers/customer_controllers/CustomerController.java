@@ -40,8 +40,8 @@ public class CustomerController {
     ResponseEntity<ApiResponse> getAllFavourites(@RequestParam String customerPhone){
 
         System.out.println("CUSTOMER PHONE: "+customerPhone);
-        List<String> restaurantIdList = customerFavouriteRestaurantsService.getAllFavourites(customerPhone);
-        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantIdList),HttpStatus.OK);
+        List<Restaurant> restaurantList = customerFavouriteRestaurantsService.getAllFavourites(customerPhone);
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK,"success",restaurantList),HttpStatus.OK);
     }
 
 

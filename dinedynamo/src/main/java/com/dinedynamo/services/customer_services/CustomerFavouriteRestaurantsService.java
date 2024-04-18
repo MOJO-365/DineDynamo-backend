@@ -44,22 +44,22 @@ public class CustomerFavouriteRestaurantsService {
         return customerFavouriteRestaurants;
     }
 
-    public List<String> getAllFavourites(String customerPhone){
+    public List<Restaurant> getAllFavourites(String customerPhone){
         CustomerFavouriteRestaurants customerFavouriteRestaurants = customerFavouriteRestaurantsRespository.findById(customerPhone).orElse(null);
 
-        return customerFavouriteRestaurants.getListOfRestaurantIds();
-//        List<Restaurant> restaurantList = new ArrayList<>();
-//
-//       if(customerFavouriteRestaurants == null){
-//           return new ArrayList<>();
-//       }
-//
-//
-//        for(String restaurantId: customerFavouriteRestaurants.getListOfRestaurantIds()){
-//
-//            restaurantList.add(restaurantRepository.findById(restaurantId).orElse(null));
-//        }
-//        return restaurantList;
+        //return customerFavouriteRestaurants.getListOfRestaurantIds();
+        List<Restaurant> restaurantList = new ArrayList<>();
+
+       if(customerFavouriteRestaurants == null){
+           return new ArrayList<>();
+       }
+
+
+        for(String restaurantId: customerFavouriteRestaurants.getListOfRestaurantIds()){
+
+            restaurantList.add(restaurantRepository.findById(restaurantId).orElse(null));
+        }
+        return restaurantList;
     }
 
     public List<String> deleteFromFavourites(String customerPhone, String restaurantId){

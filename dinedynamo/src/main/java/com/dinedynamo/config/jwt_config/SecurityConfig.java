@@ -42,6 +42,7 @@ public class SecurityConfig
 //            "/dinedynamo/**",
             "dinedynamo/customer/reviews/add",
             "dinedynamo/item/review/get-reviews",
+            "dinedynamo/customer/show/average-rating",
             "dinedynamo/item/review/update",
             "dinedynamo/item/review/delete",
             "/dinedynamo/customer",
