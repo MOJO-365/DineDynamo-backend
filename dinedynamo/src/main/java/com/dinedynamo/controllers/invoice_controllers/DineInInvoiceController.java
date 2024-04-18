@@ -1,10 +1,12 @@
 package com.dinedynamo.controllers.invoice_controllers;
 
 import com.dinedynamo.api.ApiResponse;
+import com.dinedynamo.collections.invoice_collections.DineInFinalBill;
 import com.dinedynamo.collections.order_collections.Order;
 import com.dinedynamo.collections.order_collections.OrderList;
 import com.dinedynamo.collections.restaurant_collections.Restaurant;
 import com.dinedynamo.collections.table_collections.Table;
+import com.dinedynamo.repositories.invoice_repositories.DineInFinalBillRepository;
 import com.dinedynamo.repositories.invoice_repositories.InvoiceRepository;
 import com.dinedynamo.repositories.order_repositories.DineInOrderRepository;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
@@ -38,18 +40,22 @@ public class DineInInvoiceController {
     private DineInOrderRepository dineInOrderRepository;
 
     @Autowired
+    private DineInFinalBillRepository dineInFinalBillRepository;
+
+
+    @Autowired
     private RestaurantRepository restaurantRepository;
 
     @Autowired
     private TableRepository tableRepository;
 
     @PostMapping("/dinedynamo/invoice/getinvoice")
-    public ResponseEntity<byte[]> generateInvoicePDF(@RequestBody Order requestOrder) {
+    public ResponseEntity<byte[]> generateInvoicePDF(@RequestBody DineInFinalBill requestOrder) {
         try {
-            List<Order> orderListForTable = dineInOrderRepository.findByTableId(requestOrder.getTableId());
+            List<DineInFinalBill> orderListForTable = dineInFinalBillRepository.findByTableIdAndCustomerPhone(requestOrder.getTableId(),requestOrder.getCustomerPhone());
 
             if (!orderListForTable.isEmpty()) {
-                Order consolidatedOrder = consolidateOrders(orderListForTable);
+                DineInFinalBill consolidatedOrder = consolidateOrders(orderListForTable);
                 byte[] pdfBytes = generatePDFBytes(consolidatedOrder);
 
                 HttpHeaders headers = new HttpHeaders();
@@ -65,16 +71,16 @@ public class DineInInvoiceController {
         }
     }
 
-    private Order consolidateOrders(List<Order> orderList) {
+    private DineInFinalBill consolidateOrders(List<DineInFinalBill> orderList) {
         if (orderList.isEmpty()) {
             return null;
         }
 
-        Order consolidatedOrder = new Order();
+        DineInFinalBill consolidatedOrder = new DineInFinalBill();
 
-        Order firstOrder = orderList.get(0);
-        consolidatedOrder.setOrderId(firstOrder.getOrderId());
-        consolidatedOrder.setDateTime(firstOrder.getDateTime());
+        DineInFinalBill firstOrder = orderList.get(0);
+        consolidatedOrder.setDineInBillId(firstOrder.getDineInBillId());
+        consolidatedOrder.setDatetime(firstOrder.getDatetime());
         consolidatedOrder.setTableId(firstOrder.getTableId());
         consolidatedOrder.setRestaurantId(firstOrder.getRestaurantId());
         consolidatedOrder.setOrderList(consolidateOrderLists(orderList));
@@ -82,14 +88,14 @@ public class DineInInvoiceController {
         return consolidatedOrder;
     }
 
-    private List<OrderList> consolidateOrderLists(List<Order> orderList) {
+    private List<OrderList> consolidateOrderLists(List<DineInFinalBill> orderList) {
         return orderList.stream()
-                .map(Order::getOrderList)
+                .map(DineInFinalBill::getOrderList)
                 .flatMap(List::stream)
                 .toList();
     }
 
-    private byte[] generatePDFBytes(Order order) throws IOException, DocumentException {
+    private byte[] generatePDFBytes(DineInFinalBill order) throws IOException, DocumentException {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             float contentHeight = calculateContentHeight(order);
             Document document = new Document(new Rectangle(300, contentHeight), 10, 10, 10, 10);
@@ -113,7 +119,7 @@ public class DineInInvoiceController {
     }
 
 
-    private float calculateContentHeight(Order order) {
+    private float calculateContentHeight(DineInFinalBill order) {
         float baseContentHeight = 200;
         float orderDetailsHeight = calculateOrderDetailsHeight(order);
         float thankYouHeight = calculateThankYouHeight();
@@ -146,7 +152,7 @@ public class DineInInvoiceController {
         }
     }
 
-    private float calculateOrderDetailsHeight(Order order) {
+    private float calculateOrderDetailsHeight(DineInFinalBill order) {
         return 250;
     }
 
@@ -155,7 +161,7 @@ public class DineInInvoiceController {
         return thankYouHeight;
     }
 
-    private void addOrderDetailsToPDF(Document document, Order order) throws DocumentException {
+    private void addOrderDetailsToPDF(Document document, DineInFinalBill order) throws DocumentException {
         Font subtitleFont = FontFactory.getFont(FontFactory.COURIER_BOLD, 14);
         Font normalFont = FontFactory.getFont(FontFactory.COURIER, 13);
 

@@ -74,11 +74,12 @@ public class TakeAwayOrderController {
             TakeAway existingTakeAway = existingTakeAwayOptional.get();
             existingTakeAway.setPickedUp(updatedTakeAway.isPickedUp());
             existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
-            if (existingTakeAway.getOrderList() != null) {
-                for (OrderList orderListItem : existingTakeAway.getOrderList()) {
-                    orderListItem.setPrepared(true);
-                }
-            }
+
+//            if (existingTakeAway.getOrderList() != null) {
+//                for (OrderList orderListItem : existingTakeAway.getOrderList()) {
+//                    orderListItem.setPrepared(true);
+//                }
+//            }
 
             takeAwayOrderRepository.save(existingTakeAway);
             return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", null));

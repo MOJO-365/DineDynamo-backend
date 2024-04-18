@@ -14,6 +14,7 @@ import java.util.List;
 public interface TakeAwayFinalBillRepository extends MongoRepository<TakeAwayFinalBill,String> {
 
     long countByRestaurantId(String restaurantId);
+    long countByRestaurantIdAndDate(String restaurantId,LocalDate date);
 
     List<TakeAwayFinalBill> findByCustomerPhone(String customerPhone);
 
