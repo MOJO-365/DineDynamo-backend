@@ -7,6 +7,7 @@ import com.dinedynamo.collections.order_collections.TakeAway;
 import com.dinedynamo.repositories.restaurant_repositories.RestaurantRepository;
 import com.dinedynamo.repositories.order_repositories.TakeAwayOrderRepository;
 import com.dinedynamo.services.external_services.SmsService;
+import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,6 +82,7 @@ public class TakeAwayOrderController {
 //                }
 //            }
             updatedTakeAway.setTakeAwayId(existingTakeAwayOptional.getTakeAwayId());
+            updatedTakeAway.setDateTime(LocalDateTime.now());
             takeAwayOrderRepository.save(updatedTakeAway);
             return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", updatedTakeAway));
         } else {
