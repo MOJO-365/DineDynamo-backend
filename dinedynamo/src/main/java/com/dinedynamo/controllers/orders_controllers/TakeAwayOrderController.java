@@ -68,22 +68,23 @@ public class TakeAwayOrderController {
 
     @PostMapping("/dinedynamo/restaurant/takeaway/update")
     public ResponseEntity<ApiResponse> updateTakeAwayOrder(@RequestBody TakeAway updatedTakeAway) {
-        Optional<TakeAway> existingTakeAwayOptional = takeAwayOrderRepository.findById(updatedTakeAway.getTakeAwayId());
+        TakeAway existingTakeAwayOptional = takeAwayOrderRepository.findById(updatedTakeAway.getTakeAwayId()).orElse(null);
 
-        if (existingTakeAwayOptional.isPresent()) {
-            TakeAway existingTakeAway = existingTakeAwayOptional.get();
-            existingTakeAway.setPickedUp(updatedTakeAway.isPickedUp());
-            existingTakeAway.setOrderList(updatedTakeAway.getOrderList());
+        if (existingTakeAwayOptional!= null) {
+            //TakeAway existingTakeAway = existingTakeAwayOptional;
+            existingTakeAwayOptional.setPickedUp(updatedTakeAway.isPickedUp());
+            existingTakeAwayOptional.setOrderList(updatedTakeAway.getOrderList());
 
 //            if (existingTakeAway.getOrderList() != null) {
 //                for (OrderList orderListItem : existingTakeAway.getOrderList()) {
 //                    orderListItem.setPrepared(true);
 //                }
 //            }
-
-            takeAwayOrderRepository.save(existingTakeAway);
-            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", null));
+            updatedTakeAway.setTakeAwayId(existingTakeAwayOptional.getTakeAwayId());
+            takeAwayOrderRepository.save(updatedTakeAway);
+            return ResponseEntity.ok(new ApiResponse(HttpStatus.OK, "TakeAway order updated successfully", updatedTakeAway));
         } else {
+
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(HttpStatus.NOT_FOUND, "TakeAway order not found", null));
         }
     }

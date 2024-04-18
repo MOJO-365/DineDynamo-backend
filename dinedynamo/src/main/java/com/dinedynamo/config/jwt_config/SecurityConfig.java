@@ -40,6 +40,9 @@ public class SecurityConfig
     private static final String[] AUTH_WHITELIST = {
 
 //            "/dinedynamo/**",
+            "dinedynamo/restaurant/orders/place",
+            "/dinedynamo/restaurant/table/gettable",
+            "/dinedynamo/restaurant/takeaway/update",
             "dinedynamo/customer/reviews/add",
             "dinedynamo/item/review/get-reviews",
             "dinedynamo/customer/show/average-rating",
