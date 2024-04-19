@@ -49,7 +49,7 @@ public class JwtHelper
     @Autowired
     CustomerRepository customerRepository;
 
-    public static final long TOKEN_VALIDITY =   1000  * 60  * 5;  // 5 minutes
+    public static final long TOKEN_VALIDITY =   10800000;
     //public static final long TOKEN_VALIDITY = 100 * 60 * 1000 * 10; // 10 minutes in milliseconds;
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
